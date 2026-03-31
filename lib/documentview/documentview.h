@@ -25,11 +25,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QGraphicsWidget>
+#include <QSharedPointer>
 
 // KF
 
 // Local
 #include <lib/document/document.h>
+
+class QBuffer;
 
 class QPropertyAnimation;
 class QUrl;
@@ -237,6 +240,7 @@ private Q_SLOTS:
     void finishOpenUrl();
     void slotCompleted();
     void slotLoadingFailed();
+    void slotPlayMotionPhoto();
 
     void zoomContinuous(int delta, QPointF center = QPointF(-1, -1));
     void zoomIn(QPointF center = QPointF(-1, -1));

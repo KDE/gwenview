@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // Qt
 #include <QApplication>
+#include <QBuffer>
 #include <QDrag>
 #include <QGraphicsLinearLayout>
 #include <QGraphicsOpacityEffect>
@@ -39,6 +40,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPainter>
 #include <QPointer>
 #include <QPropertyAnimation>
+#include <QSharedPointer>
 #include <QStyleHints>
 #include <QTimer>
 #include <QUrl>
@@ -65,6 +67,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <lib/hud/hudbutton.h>
 #include <lib/hud/hudwidget.h>
 #include <lib/mimetypeutils.h>
+#include <lib/motionphotoutil.h>
 #include <lib/thumbnailprovider/thumbnailprovider.h>
 #include <lib/thumbnailview/dragpixmapgenerator.h>
 #include <lib/touch/touch.h>
@@ -99,6 +102,8 @@ struct DocumentViewPrivate {
     DocumentView *q = nullptr;
     int mSortKey; // Used to sort views when displayed in compare mode
     HudWidget *mHud = nullptr;
+    HudWidget *mMotionPhotoHud = nullptr;
+    QSharedPointer<QBuffer> mMotionPhotoBuffer;
     BirdEyeView *mBirdEyeView = nullptr;
     QPointer<QPropertyAnimation> mMoveAnimation;
     QPointer<QPropertyAnimation> mFadeAnimation;
@@ -227,6 +232,27 @@ struct DocumentViewPrivate {
         QObject::connect(deselectButton, &HudButton::clicked, q, &DocumentView::emitHudDeselectClicked);
 
         mHud->hide();
+    }
+
+    void setupMotionPhotoHud()
+    {
+        auto playButton = createHudButton(i18nc("@action:button", "Play Motion Photo"), QStringLiteral("media-playback-start"), true);
+
+        auto content = new QGraphicsWidget;
+        auto layout = new QGraphicsLinearLayout(content);
+        layout->addItem(playButton);
+
+        mMotionPhotoHud = new HudWidget(q);
+        mMotionPhotoHud->init(content, HudWidget::OptionNone);
+        mMotionPhotoHud->setZValue(1);
+
+        auto floater = new GraphicsWidgetFloater(q);
+        floater->setChildWidget(mMotionPhotoHud);
+        floater->setAlignment(Qt::AlignBottom | Qt::AlignHCenter);
+
+        QObject::connect(playButton, &HudButton::clicked, q, &DocumentView::slotPlayMotionPhoto);
+
+        mMotionPhotoHud->hide();
     }
 
     void setupBirdEyeView()
@@ -595,6 +621,7 @@ void DocumentView::finishOpenUrl()
         return;
     }
     createAdapterForDocument();
+    d->mMotionPhotoBuffer.reset();
 
     connect(d->mDocument.data(), &Document::loadingFailed, this, &DocumentView::slotLoadingFailed);
     d->mAdapter->setDocument(d->mDocument);
@@ -622,6 +649,21 @@ void DocumentView::slotCompleted()
             d->mAdapter->setZoom(min);
         }
     }
+
+    if (d->mAdapter->kind() == MimeTypeUtils::KIND_RASTER_IMAGE && d->mDocument) {
+        const QString path = d->mDocument->url().toLocalFile();
+        if (!path.isEmpty() && MotionPhotoUtil::isMotionPhoto(path)) {
+            if (!d->mMotionPhotoHud) {
+                d->setupMotionPhotoHud();
+            }
+            d->mMotionPhotoHud->show();
+        } else if (d->mMotionPhotoHud) {
+            d->mMotionPhotoHud->hide();
+        }
+    } else if (d->mMotionPhotoHud) {
+        d->mMotionPhotoHud->hide();
+    }
+
     Q_EMIT completed();
 }
 
@@ -649,6 +691,34 @@ void DocumentView::slotLoadingFailed()
     adapter->setErrorMessage(message, d->mDocument->errorString());
     d->setCurrentAdapter(adapter);
     Q_EMIT completed();
+}
+
+void DocumentView::slotPlayMotionPhoto()
+{
+    if (!d->mDocument) {
+        return;
+    }
+
+    const QString path = d->mDocument->url().toLocalFile();
+    const QByteArray videoData = MotionPhotoUtil::extractVideo(path);
+
+    if (videoData.isEmpty()) {
+        qCWarning(GWENVIEW_LIB_LOG) << "Failed to extract motion photo video from" << path;
+        return;
+    }
+
+    if (d->mMotionPhotoHud) {
+        d->mMotionPhotoHud->hide();
+    }
+
+    d->mMotionPhotoBuffer.reset(new QBuffer);
+    d->mMotionPhotoBuffer->setData(videoData);
+    d->mMotionPhotoBuffer->open(QIODevice::ReadOnly);
+
+    auto adapter = new VideoViewAdapter;
+    connect(adapter, SIGNAL(videoFinished()), SIGNAL(videoFinished()));
+    d->setCurrentAdapter(adapter);
+    adapter->setSourceDevice(d->mMotionPhotoBuffer.data(), d->mDocument->url());
 }
 
 bool DocumentView::canZoom() const

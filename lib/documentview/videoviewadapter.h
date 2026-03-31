@@ -49,6 +49,12 @@ public:
 
     void setDocument(const Document::Ptr &) override;
 
+    /**
+     * Play video in-memory device (e.g. a motion photo's embedded MP4).
+     * The device must remain valid for the lifetime of this adapter.
+     */
+    void setSourceDevice(QIODevice *device, const QUrl &url);
+
 Q_SIGNALS:
     void videoFinished();
 

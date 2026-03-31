@@ -29,10 +29,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QGraphicsProxyWidget>
 #include <QGraphicsSceneHoverEvent>
 #include <QGraphicsVideoItem>
+#include <QIODevice>
 #include <QIcon>
 #include <QLabel>
 #include <QMediaPlayer>
 #include <QMouseEvent>
+#include <QUrl>
 
 // KF
 
@@ -69,6 +71,9 @@ struct VideoViewAdapterPrivate {
     QElapsedTimer mLastVolumeSliderChangeTime;
 
     Document::Ptr mDocument;
+
+    QIODevice *mMotionPhotoDevice = nullptr;
+    QUrl mMotionPhotoUrl;
 
     void setupActions()
     {
@@ -200,9 +205,16 @@ VideoViewAdapter::VideoViewAdapter()
 {
     d->q = this;
     d->mMediaPlayer = new QMediaPlayer(this);
-    connect(d->mMediaPlayer, &QMediaPlayer::mediaStatusChanged, this, [=](QMediaPlayer::MediaStatus status) {
+    connect(d->mMediaPlayer, &QMediaPlayer::mediaStatusChanged, this, [this](QMediaPlayer::MediaStatus status) {
         if (status == QMediaPlayer::EndOfMedia) {
-            Q_EMIT videoFinished();
+            if (d->mMotionPhotoDevice) {
+                // Loop motion photo video
+                d->mMotionPhotoDevice->seek(0);
+                d->mMediaPlayer->setSourceDevice(d->mMotionPhotoDevice, d->mMotionPhotoUrl);
+                d->mMediaPlayer->play();
+            } else {
+                Q_EMIT videoFinished();
+            }
         }
     });
 
@@ -262,6 +274,17 @@ void VideoViewAdapter::setDocument(const Document::Ptr &doc)
 Document::Ptr VideoViewAdapter::document() const
 {
     return d->mDocument;
+}
+
+void VideoViewAdapter::setSourceDevice(QIODevice *device, const QUrl &url)
+{
+    d->mHud->show();
+    d->mWidget->setAcceptHoverEvents(true);
+    d->mMotionPhotoDevice = device;
+    d->mMotionPhotoUrl = url;
+    d->mMediaPlayer->setSourceDevice(device, url);
+    d->mMediaPlayer->play();
+    QMetaObject::invokeMethod(this, &VideoViewAdapter::completed, Qt::QueuedConnection);
 }
 
 void VideoViewAdapter::slotPlayPauseClicked()

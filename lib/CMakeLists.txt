@@ -95,6 +95,7 @@ set(gwenviewlib_SRCS
     decoratedtag/decoratedtag.cpp
     exiv2imageloader.cpp
     flowlayout.cpp
+    motionphotoutil.cpp
     fullscreenbar.cpp
     hud/hudbutton.cpp
     hud/hudbuttonbox.cpp
@@ -245,6 +246,7 @@ endif()
 
 kde_source_files_enable_exceptions(
     exiv2imageloader.cpp
+    motionphotoutil.cpp
     imagemetainfomodel.cpp
     timeutils.cpp
     cms/cmsprofile.cpp
