@@ -1,0 +1,173 @@
+# SPDX-FileCopyrightText: 2024, 2026 Scarlett Moore <sgmoore@kde.org>
+#
+# SPDX-License-Identifier: CC0-1.0
+---
+name: gwenview
+confinement: strict
+grade: stable
+base: core24
+adopt-info: gwenview
+apps:
+  gwenview:
+    extensions:
+      - kde-neon-6
+    common-id: org.kde.gwenview.desktop
+    desktop: usr/share/applications/org.kde.gwenview.desktop
+    command: usr/bin/gwenview
+    plugs:
+      - home
+      - cups-control
+      - removable-media
+      - udisks2
+      - pulseaudio
+      - mount-observe
+environment:
+  LD_LIBRARY_PATH: "/snap/kf6-core24/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$SNAP/usr/lib:$SNAP/lib/:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR:$SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/pulseaudio:$SNAP/kf6/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/vlc:/usr/lib:/lib"
+  VLC_PLUGIN_PATH: "/snap/kf6-core24/current/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/vlc/plugins"
+layout:
+  /usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/alsa-lib:
+    bind: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET_BUILD_FOR/alsa-lib
+slots:
+  session-dbus-interface:
+    interface: dbus
+    name: org.kde.gwenview
+    bus: session
+parts:
+  kcolorpicker:
+    plugin: cmake
+    source: https://github.com/ksnip/kColorPicker.git
+    source-tag: v0.3.1
+    build-snaps:
+      - kde-qt6-core24-sdk/latest/beta
+      - kf6-core24-sdk/latest/beta
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DQT_MAJOR_VERSION=6
+      - -DBUILD_WITH_QT6=ON
+      - -DBUILD_TESTING=OFF
+  kimageannotator:
+    after:
+      - kcolorpicker
+    plugin: cmake
+    source: https://github.com/ksnip/kImageAnnotator.git
+    source-tag: v0.7.1
+    build-snaps:
+      - kde-qt6-core24-sdk/latest/beta
+      - kf6-core24-sdk/latest/beta
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DQT_MAJOR_VERSION=6
+      - -DBUILD_WITH_QT6=ON
+      - -DBUILD_TESTING=OFF
+      - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
+      - "-DCMAKE_PREFIX_PATH=$CRAFT_STAGE\\:/snap/kde-qt6-core24-sdk/current\\:/snap/kf6-core24-sdk/current/usr"
+  libkdcraw:
+    plugin: cmake
+    source: https://invent.kde.org/graphics/libkdcraw.git
+    source-branch: release/26.04
+    build-snaps:
+      - kde-qt6-core24-sdk/latest/beta
+      - kf6-core24-sdk/latest/beta
+    build-packages:
+      - libraw-dev
+    stage-packages:
+      - libraw23t64
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DQT_MAJOR_VERSION=6
+      - -DBUILD_WITH_QT6=ON
+      - -DBUILD_TESTING=OFF
+  gwenview:
+    after:
+      - kimageannotator
+      - libkdcraw
+    parse-info:
+      - usr/share/metainfo/org.kde.gwenview.appdata.xml
+    plugin: cmake
+    source: .
+    source-type: local
+    build-snaps:
+      - kde-qt6-core24-sdk/latest/beta
+      - kf6-core24-sdk/latest/beta
+      - ffmpeg-2404-sdk
+    build-packages:
+      - libpulse0
+      - libtag1-dev
+      - libxml2-dev
+      - gettext
+      - doxygen
+      - graphviz
+      - libxml2-utils
+      - docbook-xml
+      - docbook-xsl
+      - libglx-dev
+      - libgl-dev
+      - libglvnd-dev
+      - libwayland-dev
+      - libxkbcommon-dev
+      - wayland-protocols
+      - libtiff-dev
+      - libpng-dev
+      - libexiv2-dev
+      - libcfitsio-dev
+      - libpulse0
+      - libfreetype-dev
+    stage-snaps:
+      - ffmpeg-2404
+    stage-packages:
+      - libasound2
+      - libasound2-plugins
+      - libasound2-data
+      - libwayland-client0
+      - libxkbcommon0
+      - wayland-protocols
+      - libtiff6
+      - libpng16-16
+      - libexiv2-27
+      - libcfitsio10t64
+      - libpulse0
+      - libfreetype6
+      - libopenh264-7
+      - cups-client
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DQT_MAJOR_VERSION=6
+      - -DBUILD_WITH_QT6=ON
+      - -DBUILD_TESTING=OFF
+      - "-DCMAKE_FIND_ROOT_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
+      - "-DCMAKE_PREFIX_PATH=$CRAFT_STAGE\\;/snap/kde-qt6-core24-sdk/current\\;/snap/kf6-core24-sdk/current/usr"
+    prime:
+      - -usr/lib/*/cmake/*
+      - -usr/include/*
+      - -usr/share/ECM/*
+      - -usr/share/man/*
+      - -usr/share/icons/breeze-dark*
+      - -usr/bin/X11
+      - -usr/lib/gcc/$CRAFT_ARCH_TRIPLET_BUILD_FOR/6.0.0
+      - -usr/lib/aspell/*
+      - -usr/share/lintian
+  gpu-2404:
+    after: [gwenview]
+    source: https://github.com/canonical/gpu-snap.git
+    plugin: dump
+    override-prime: |
+      craftctl default
+      ${CRAFT_PART_SRC}/bin/gpu-2404-cleanup mesa-2404
+    prime:
+      - bin/gpu-2404-wrapper
+  cleanup:
+    after:
+      - gwenview
+    plugin: nil
+    build-snaps:
+      - core24
+      - kf6-core24
+    override-prime: |
+      set -eux
+      for snap in "core24" "kf6-core24"; do
+        cd "/snap/$snap/current" && find . -type f,l -exec rm -rf "${CRAFT_PRIME}/{}" \;
+      done
