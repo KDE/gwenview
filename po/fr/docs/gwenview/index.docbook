@@ -693,7 +693,7 @@
 
 <screenshot>
   <screeninfo
->Copie d'écran de la fonction d'importation de &gwenview;</screeninfo>
+>Capture d'écran de la fonction d'importation de &gwenview;</screeninfo>
   <mediaobject>
     <imageobject>
       <imagedata fileref="importer.png" format="PNG"/>
