@@ -177,7 +177,7 @@ set_source_files_properties(${GV_JPEG_DIR}/transupp.c PROPERTIES SKIP_UNITY_BUIL
 
 
 ecm_qt_declare_logging_category(gwenviewlib_SRCS HEADER gwenview_lib_debug.h IDENTIFIER GWENVIEW_LIB_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.lib)
-ecm_qt_declare_logging_category(gwenviewlib_SRCS HEADER gwenview_exiv2_debug.h IDENTIFIER GWENVIEW_EXIV2_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.exiv2 DEFAULT_SEVERITY Critical DESCRIPTION "gwenview lib exiv2 (kdegraphics)" EXPORT GWENVIEW)
+ecm_qt_declare_logging_category(gwenviewlib_SRCS HEADER gwenview_exiv2_debug.h IDENTIFIER GWENVIEW_EXIV2_LOG CATEGORY_NAME org.kde.kdegraphics.gwenview.exiv2 DESCRIPTION "gwenview lib exiv2 (kdegraphics)" EXPORT GWENVIEW)
 
 if(HAVE_QTDBUS)
     set(gwenviewlib_SRCS
