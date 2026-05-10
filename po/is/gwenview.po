@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:42+0000\n"
+"POT-Creation-Date: 2026-05-10 00:41+0000\n"
 "PO-Revision-Date: 2025-12-02 13:23+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
@@ -141,8 +141,8 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Jöfnunarbil á hliðarstiku"
 
-#: app/browsemainpage.cpp:151 app/mainwindow.cpp:378 app/viewmainpage.cpp:410
-#: lib/documentview/documentviewcontroller.cpp:55
+#: app/browsemainpage.cpp:151 app/mainwindow.cpp:379 app/viewmainpage.cpp:410
+#: lib/documentview/documentviewcontroller.cpp:56
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
@@ -233,7 +233,7 @@ msgid "Show Hidden Files"
 msgstr "Sýna faldar skrár"
 
 #: app/browsemainpage.cpp:206 app/fileopscontextmanageritem.cpp:136
-#: app/mainwindow.cpp:377
+#: app/mainwindow.cpp:378
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -1152,144 +1152,144 @@ msgstr "Byrja í lágmarkssniði"
 msgid "A starting file or folders"
 msgstr "Upphafsskjal eða -möppur"
 
-#: app/mainwindow.cpp:387
+#: app/mainwindow.cpp:388
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "Hreinsa lista"
 
-#: app/mainwindow.cpp:395
+#: app/mainwindow.cpp:396
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "Endurhlaða"
 
-#: app/mainwindow.cpp:400
+#: app/mainwindow.cpp:401
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "Skipta út staðsetningu"
 
-#: app/mainwindow.cpp:405
+#: app/mainwindow.cpp:406
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "Velja"
 
-#: app/mainwindow.cpp:406
+#: app/mainwindow.cpp:407
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "Fletta í möppum eftir myndum"
 
-#: app/mainwindow.cpp:413
+#: app/mainwindow.cpp:414
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "Skoða"
 
-#: app/mainwindow.cpp:414
+#: app/mainwindow.cpp:415
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "Skoða valdar myndir"
 
-#: app/mainwindow.cpp:433
+#: app/mainwindow.cpp:434
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "Hætta að fylla skjá"
 
-#: app/mainwindow.cpp:437
+#: app/mainwindow.cpp:438
 #, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr "Lágmarkssnið"
 
-#: app/mainwindow.cpp:443
+#: app/mainwindow.cpp:444
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "Fyrri"
 
-#: app/mainwindow.cpp:444
+#: app/mainwindow.cpp:445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "Fara á fyrri mynd"
 
-#: app/mainwindow.cpp:450
+#: app/mainwindow.cpp:451
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "Næsta"
 
-#: app/mainwindow.cpp:451
+#: app/mainwindow.cpp:452
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "Fara á næstu mynd"
 
-#: app/mainwindow.cpp:457
+#: app/mainwindow.cpp:458
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "Fyrsta"
 
-#: app/mainwindow.cpp:458
+#: app/mainwindow.cpp:459
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "Fara á fyrstu mynd"
 
-#: app/mainwindow.cpp:464
+#: app/mainwindow.cpp:465
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "Síðasta"
 
-#: app/mainwindow.cpp:465
+#: app/mainwindow.cpp:466
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "Fara á síðustu mynd"
 
-#: app/mainwindow.cpp:475
+#: app/mainwindow.cpp:476
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "Upphafssíða"
 
-#: app/mainwindow.cpp:476
+#: app/mainwindow.cpp:477
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "Opna upphafssíðu"
 
-#: app/mainwindow.cpp:483
+#: app/mainwindow.cpp:484
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "Hliðarstika"
 
-#: app/mainwindow.cpp:488
+#: app/mainwindow.cpp:489
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "Sýna myndvinnsluverkfæri"
 
-#: app/mainwindow.cpp:523
+#: app/mainwindow.cpp:524
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "Deila"
 
-#: app/mainwindow.cpp:532
+#: app/mainwindow.cpp:533
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "Villa við deilingu: %1"
 
-#: app/mainwindow.cpp:539
+#: app/mainwindow.cpp:540
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1298,104 +1298,104 @@ msgstr ""
 "Slóð deildrar myndar (<a href=\"%1\">%1</a>) hefur verið afrituð á "
 "klippispjald."
 
-#: app/mainwindow.cpp:589
+#: app/mainwindow.cpp:590
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "Grunnstilla"
 
-#: app/mainwindow.cpp:604
+#: app/mainwindow.cpp:605
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Breyta"
 
-#: app/mainwindow.cpp:609
+#: app/mainwindow.cpp:610
 #, kde-format
 msgid "Redo"
 msgstr "Endurtaka"
 
-#: app/mainwindow.cpp:617
+#: app/mainwindow.cpp:618
 #, kde-format
 msgid "Undo"
 msgstr "Afturkalla"
 
-#: app/mainwindow.cpp:644
+#: app/mainwindow.cpp:645
 #, kde-format
 msgid "Folders"
 msgstr "Möppur"
 
-#: app/mainwindow.cpp:650
+#: app/mainwindow.cpp:651
 #, kde-format
 msgid "Information"
 msgstr "Upplýsingar"
 
-#: app/mainwindow.cpp:689
+#: app/mainwindow.cpp:690
 #, kde-format
 msgid "Operations"
 msgstr "Aðgerðir"
 
-#: app/mainwindow.cpp:958
+#: app/mainwindow.cpp:959
 #, kde-format
 msgid "Viewing media"
 msgstr "Skoðun myndefnis"
 
-#: app/mainwindow.cpp:1440
+#: app/mainwindow.cpp:1441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Fela hliðarstiku"
 
-#: app/mainwindow.cpp:1440
+#: app/mainwindow.cpp:1441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Sýna hliðarstiku"
 
-#: app/mainwindow.cpp:1790
+#: app/mainwindow.cpp:1791
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Opna mynd"
 
-#: app/mainwindow.cpp:1851
+#: app/mainwindow.cpp:1852
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Gera hlé á skyggnusýningu"
 
-#: app/mainwindow.cpp:1854
+#: app/mainwindow.cpp:1855
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Halda áfram skyggnusýningu"
 
-#: app/mainwindow.cpp:1854
+#: app/mainwindow.cpp:1855
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Hefja skyggnusýningu"
 
-#: app/mainwindow.cpp:1867
+#: app/mainwindow.cpp:1868
 #, kde-format
 msgid "Save All Changes"
 msgstr "Vista allar breytingar"
 
-#: app/mainwindow.cpp:1868
+#: app/mainwindow.cpp:1869
 #, kde-format
 msgid "Discard Changes"
 msgstr "Henda breytingum"
 
-#: app/mainwindow.cpp:1870
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Einni mynd hefur verið breytt."
 msgstr[1] "%1 myndum hefur verið breytt."
 
-#: app/mainwindow.cpp:1870
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Ef þú hættir núna tapast allt sem þú hefur breytt."
 
-#: app/mainwindow.cpp:1913
+#: app/mainwindow.cpp:1914
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1403,37 +1403,37 @@ msgstr ""
 "Þetta felur valmyndastikuna alveg. Þú getur kallað hana aftur fram með því "
 "að slá inn %1."
 
-#: app/mainwindow.cpp:1916
+#: app/mainwindow.cpp:1917
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Fela valmyndastiku"
 
-#: app/mainwindow.cpp:2137
+#: app/mainwindow.cpp:2138
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Þú ert nú á fyrsta skjalinu. Hvað viltu gera?"
 
-#: app/mainwindow.cpp:2138 app/mainwindow.cpp:2152
+#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
 #, kde-format
 msgid "Stay There"
 msgstr "Vera hér"
 
-#: app/mainwindow.cpp:2139
+#: app/mainwindow.cpp:2140
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Fara á síðasta skjalið"
 
-#: app/mainwindow.cpp:2140 app/mainwindow.cpp:2154
+#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Fara til baka í skjalalistann"
 
-#: app/mainwindow.cpp:2151
+#: app/mainwindow.cpp:2152
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Þú ert nú á síðasta skjalinu. Hvað viltu gera?"
 
-#: app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2154
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Fara á fyrsta skjalið"
@@ -2328,18 +2328,18 @@ msgstr "Gwenview getur ekki birt skjal af þessari gerð"
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Hleðsla <filename>%1</filename> mistókst"
 
-#: lib/documentview/documentviewcontroller.cpp:61
+#: lib/documentview/documentviewcontroller.cpp:62
 #, kde-format
 msgid "Zoom to Fit"
 msgstr "Aðdráttur svo passi"
 
-#: lib/documentview/documentviewcontroller.cpp:63
+#: lib/documentview/documentviewcontroller.cpp:64
 #, kde-format
 msgctxt "@action:button Zoom to fit, shown in status bar, keep it short please"
 msgid "Fit"
 msgstr "Passa á síðu"
 
-#: lib/documentview/documentviewcontroller.cpp:64
+#: lib/documentview/documentviewcontroller.cpp:65
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fit image into the viewing area"
@@ -2349,7 +2349,7 @@ msgstr "Laga mynd að skoðunarglugga"
 #. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
-#: lib/documentview/documentviewcontroller.cpp:70
+#: lib/documentview/documentviewcontroller.cpp:71
 #, kde-kuit-format
 msgctxt "@info:whatsthis %1 is the action's text"
 msgid ""
@@ -2377,12 +2377,12 @@ msgstr ""
 "aðdráttarstig og var notað í myndinni á undan <link url='%2'>í stillingunum</"
 "link>.</para>"
 
-#: lib/documentview/documentviewcontroller.cpp:83
+#: lib/documentview/documentviewcontroller.cpp:84
 #, kde-format
 msgid "Zoom to fill window by fitting to width or height"
 msgstr "Auka aðdrátt til að fylla glugga svo breidd eða hæð passi"
 
-#: lib/documentview/documentviewcontroller.cpp:85
+#: lib/documentview/documentviewcontroller.cpp:86
 #, kde-format
 msgctxt ""
 "@action:button Zoom to fill (fit width or height), shown in status bar, keep "
@@ -2390,36 +2390,36 @@ msgctxt ""
 msgid "Fill"
 msgstr "Fylla"
 
-#: lib/documentview/documentviewcontroller.cpp:90
+#: lib/documentview/documentviewcontroller.cpp:91
 #, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
 msgstr "100%"
 
-#: lib/documentview/documentviewcontroller.cpp:98
+#: lib/documentview/documentviewcontroller.cpp:99
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
 msgstr "Birta yfirlitsmynd þegar aðdráttur er aukinn"
 
-#: lib/documentview/documentviewcontroller.cpp:105
+#: lib/documentview/documentviewcontroller.cpp:106
 #, kde-format
 msgctxt "@action"
 msgid "Follow color scheme"
 msgstr "Fylgja litastefi"
 
-#: lib/documentview/documentviewcontroller.cpp:111
+#: lib/documentview/documentviewcontroller.cpp:112
 #, kde-format
 msgctxt "@action"
 msgid "Light Mode"
 msgstr "Ljóst snið"
 
-#: lib/documentview/documentviewcontroller.cpp:117
+#: lib/documentview/documentviewcontroller.cpp:118
 #, kde-format
 msgctxt "@action"
 msgid "Neutral Mode"
 msgstr "Hlutlaust snið"
 
-#: lib/documentview/documentviewcontroller.cpp:123
+#: lib/documentview/documentviewcontroller.cpp:124
 #, kde-format
 msgctxt "@action"
 msgid "Dark Mode"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:42+0000\n"
+"POT-Creation-Date: 2026-05-10 00:41+0000\n"
 "PO-Revision-Date: 2025-12-13 13:23+0000\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: \n"
@@ -130,8 +130,8 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Spațiator de aliniere în bara laterală"
 
-#: app/browsemainpage.cpp:151 app/mainwindow.cpp:378 app/viewmainpage.cpp:410
-#: lib/documentview/documentviewcontroller.cpp:55
+#: app/browsemainpage.cpp:151 app/mainwindow.cpp:379 app/viewmainpage.cpp:410
+#: lib/documentview/documentviewcontroller.cpp:56
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
@@ -222,7 +222,7 @@ msgid "Show Hidden Files"
 msgstr "Arată fișierele ascunse"
 
 #: app/browsemainpage.cpp:206 app/fileopscontextmanageritem.cpp:136
-#: app/mainwindow.cpp:377
+#: app/mainwindow.cpp:378
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -1152,144 +1152,144 @@ msgstr "Pornește în regim de reflector"
 msgid "A starting file or folders"
 msgstr "Un fișier sau dosare inițiale"
 
-#: app/mainwindow.cpp:387
+#: app/mainwindow.cpp:388
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "Curăță lista"
 
-#: app/mainwindow.cpp:395
+#: app/mainwindow.cpp:396
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "Reîncarcă"
 
-#: app/mainwindow.cpp:400
+#: app/mainwindow.cpp:401
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "Înlocuiește amplasarea"
 
-#: app/mainwindow.cpp:405
+#: app/mainwindow.cpp:406
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "Răsfoiește"
 
-#: app/mainwindow.cpp:406
+#: app/mainwindow.cpp:407
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "Răsfoiește dosarele pentru imagini"
 
-#: app/mainwindow.cpp:413
+#: app/mainwindow.cpp:414
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "Vezi"
 
-#: app/mainwindow.cpp:414
+#: app/mainwindow.cpp:415
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "Vezi imaginile alese"
 
-#: app/mainwindow.cpp:433
+#: app/mainwindow.cpp:434
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "Ieși din ecranul complet"
 
-#: app/mainwindow.cpp:437
+#: app/mainwindow.cpp:438
 #, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr "Regim de reflector"
 
-#: app/mainwindow.cpp:443
+#: app/mainwindow.cpp:444
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "Precedentă"
 
-#: app/mainwindow.cpp:444
+#: app/mainwindow.cpp:445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "Mergi la imaginea precedentă"
 
-#: app/mainwindow.cpp:450
+#: app/mainwindow.cpp:451
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "Următoare"
 
-#: app/mainwindow.cpp:451
+#: app/mainwindow.cpp:452
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "Mergi la imaginea următoare"
 
-#: app/mainwindow.cpp:457
+#: app/mainwindow.cpp:458
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "Prima"
 
-#: app/mainwindow.cpp:458
+#: app/mainwindow.cpp:459
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "Mergi la prima imagine"
 
-#: app/mainwindow.cpp:464
+#: app/mainwindow.cpp:465
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "Ultima"
 
-#: app/mainwindow.cpp:465
+#: app/mainwindow.cpp:466
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "Mergi la ultima imagine"
 
-#: app/mainwindow.cpp:475
+#: app/mainwindow.cpp:476
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "Pagina de pornire"
 
-#: app/mainwindow.cpp:476
+#: app/mainwindow.cpp:477
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "Deschide pagina de pornire"
 
-#: app/mainwindow.cpp:483
+#: app/mainwindow.cpp:484
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "Bara laterală"
 
-#: app/mainwindow.cpp:488
+#: app/mainwindow.cpp:489
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "Arată unelte de redactare"
 
-#: app/mainwindow.cpp:523
+#: app/mainwindow.cpp:524
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "Partajează"
 
-#: app/mainwindow.cpp:532
+#: app/mainwindow.cpp:533
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "Eroare la partajare: %1"
 
-#: app/mainwindow.cpp:539
+#: app/mainwindow.cpp:540
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1298,92 +1298,92 @@ msgstr ""
 "Legătura spre imaginea partajată (<a href=\"%1\">%1</a>) a fost copiată în "
 "clipboard."
 
-#: app/mainwindow.cpp:589
+#: app/mainwindow.cpp:590
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "Configurează"
 
-#: app/mainwindow.cpp:604
+#: app/mainwindow.cpp:605
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Editare"
 
-#: app/mainwindow.cpp:609
+#: app/mainwindow.cpp:610
 #, kde-format
 msgid "Redo"
 msgstr "Refă"
 
-#: app/mainwindow.cpp:617
+#: app/mainwindow.cpp:618
 #, kde-format
 msgid "Undo"
 msgstr "Desfă"
 
-#: app/mainwindow.cpp:644
+#: app/mainwindow.cpp:645
 #, kde-format
 msgid "Folders"
 msgstr "Dosare"
 
-#: app/mainwindow.cpp:650
+#: app/mainwindow.cpp:651
 #, kde-format
 msgid "Information"
 msgstr "Informații"
 
-#: app/mainwindow.cpp:689
+#: app/mainwindow.cpp:690
 #, kde-format
 msgid "Operations"
 msgstr "Operații"
 
-#: app/mainwindow.cpp:958
+#: app/mainwindow.cpp:959
 #, kde-format
 msgid "Viewing media"
 msgstr "Vizualizare suport"
 
-#: app/mainwindow.cpp:1440
+#: app/mainwindow.cpp:1441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Ascunde bara laterală"
 
-#: app/mainwindow.cpp:1440
+#: app/mainwindow.cpp:1441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Arată bara laterală"
 
-#: app/mainwindow.cpp:1790
+#: app/mainwindow.cpp:1791
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Deschide imagine"
 
-#: app/mainwindow.cpp:1851
+#: app/mainwindow.cpp:1852
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Întrerupe diaporama"
 
-#: app/mainwindow.cpp:1854
+#: app/mainwindow.cpp:1855
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Reia diaporama"
 
-#: app/mainwindow.cpp:1854
+#: app/mainwindow.cpp:1855
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Pornește diaporama"
 
-#: app/mainwindow.cpp:1867
+#: app/mainwindow.cpp:1868
 #, kde-format
 msgid "Save All Changes"
 msgstr "Salvează toate modificările"
 
-#: app/mainwindow.cpp:1868
+#: app/mainwindow.cpp:1869
 #, kde-format
 msgid "Discard Changes"
 msgstr "Aruncă modificările"
 
-#: app/mainwindow.cpp:1870
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1391,49 +1391,49 @@ msgstr[0] "O imagine a fost modificată."
 msgstr[1] "%1 imagini au fost modificate."
 msgstr[2] "%1 de imagini au fost modificate."
 
-#: app/mainwindow.cpp:1870
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Dacă ieșiți acum din program, modificările voastre vor fi pierdute."
 
-#: app/mainwindow.cpp:1913
+#: app/mainwindow.cpp:1914
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 "Aceasta va ascunde complet bara meniului. O puteți arăta din nou tastând %1."
 
-#: app/mainwindow.cpp:1916
+#: app/mainwindow.cpp:1917
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Ascunde bara meniului"
 
-#: app/mainwindow.cpp:2137
+#: app/mainwindow.cpp:2138
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Ați atins primul document. Ce doriți să faceți?"
 
-#: app/mainwindow.cpp:2138 app/mainwindow.cpp:2152
+#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
 #, kde-format
 msgid "Stay There"
 msgstr "Rămâi aici"
 
-#: app/mainwindow.cpp:2139
+#: app/mainwindow.cpp:2140
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Mergi la ultimul document"
 
-#: app/mainwindow.cpp:2140 app/mainwindow.cpp:2154
+#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Mergi înapoi la lista documentelor"
 
-#: app/mainwindow.cpp:2151
+#: app/mainwindow.cpp:2152
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Ați atins ultimul document. Ce doriți să faceți?"
 
-#: app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2154
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Mergi la primul document"
@@ -2345,18 +2345,18 @@ msgstr "Gwenview  nu știe cum să afișeze acest tip de document."
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Încărcare <filename>%1</filename> eșuată"
 
-#: lib/documentview/documentviewcontroller.cpp:61
+#: lib/documentview/documentviewcontroller.cpp:62
 #, kde-format
 msgid "Zoom to Fit"
 msgstr "Apropie pentru încadrare"
 
-#: lib/documentview/documentviewcontroller.cpp:63
+#: lib/documentview/documentviewcontroller.cpp:64
 #, kde-format
 msgctxt "@action:button Zoom to fit, shown in status bar, keep it short please"
 msgid "Fit"
 msgstr "Încadrează"
 
-#: lib/documentview/documentviewcontroller.cpp:64
+#: lib/documentview/documentviewcontroller.cpp:65
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fit image into the viewing area"
@@ -2366,7 +2366,7 @@ msgstr "Încadrează imaginea în zona vizualizării"
 #. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
-#: lib/documentview/documentviewcontroller.cpp:70
+#: lib/documentview/documentviewcontroller.cpp:71
 #, kde-kuit-format
 msgctxt "@info:whatsthis %1 is the action's text"
 msgid ""
@@ -2395,13 +2395,13 @@ msgstr ""
 "imaginile să fie afișate la un nivel de apropiere anterior <link url='%2'>în "
 "configurări</link>.</para>"
 
-#: lib/documentview/documentviewcontroller.cpp:83
+#: lib/documentview/documentviewcontroller.cpp:84
 #, kde-format
 msgid "Zoom to fill window by fitting to width or height"
 msgstr ""
 "Apropie pentru a umple fereastra prin potrivirea la lățime sau înălțime"
 
-#: lib/documentview/documentviewcontroller.cpp:85
+#: lib/documentview/documentviewcontroller.cpp:86
 #, kde-format
 msgctxt ""
 "@action:button Zoom to fill (fit width or height), shown in status bar, keep "
@@ -2409,36 +2409,36 @@ msgctxt ""
 msgid "Fill"
 msgstr "Umple"
 
-#: lib/documentview/documentviewcontroller.cpp:90
+#: lib/documentview/documentviewcontroller.cpp:91
 #, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
 msgstr "100%"
 
-#: lib/documentview/documentviewcontroller.cpp:98
+#: lib/documentview/documentviewcontroller.cpp:99
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
 msgstr "Arată o privire de ansamblu la apropiere"
 
-#: lib/documentview/documentviewcontroller.cpp:105
+#: lib/documentview/documentviewcontroller.cpp:106
 #, kde-format
 msgctxt "@action"
 msgid "Follow color scheme"
 msgstr "Urmează schema de culori"
 
-#: lib/documentview/documentviewcontroller.cpp:111
+#: lib/documentview/documentviewcontroller.cpp:112
 #, kde-format
 msgctxt "@action"
 msgid "Light Mode"
 msgstr "Regim luminos"
 
-#: lib/documentview/documentviewcontroller.cpp:117
+#: lib/documentview/documentviewcontroller.cpp:118
 #, kde-format
 msgctxt "@action"
 msgid "Neutral Mode"
 msgstr "Regim neutru"
 
-#: lib/documentview/documentviewcontroller.cpp:123
+#: lib/documentview/documentviewcontroller.cpp:124
 #, kde-format
 msgctxt "@action"
 msgid "Dark Mode"

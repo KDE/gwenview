@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:42+0000\n"
+"POT-Creation-Date: 2026-05-10 00:41+0000\n"
 "PO-Revision-Date: 2013-06-28 02:40+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -138,8 +138,8 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr ""
 
-#: app/browsemainpage.cpp:151 app/mainwindow.cpp:378 app/viewmainpage.cpp:410
-#: lib/documentview/documentviewcontroller.cpp:55
+#: app/browsemainpage.cpp:151 app/mainwindow.cpp:379 app/viewmainpage.cpp:410
+#: lib/documentview/documentviewcontroller.cpp:56
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
@@ -233,7 +233,7 @@ msgid "Show Hidden Files"
 msgstr "Видееолар көрсететілсін"
 
 #: app/browsemainpage.cpp:206 app/fileopscontextmanageritem.cpp:136
-#: app/mainwindow.cpp:377
+#: app/mainwindow.cpp:378
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -1180,19 +1180,19 @@ msgstr "Слайд-шоу күйінде бастау"
 msgid "A starting file or folders"
 msgstr "Бастапқы файл әлде қапшық"
 
-#: app/mainwindow.cpp:387
+#: app/mainwindow.cpp:388
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr ""
 
-#: app/mainwindow.cpp:395
+#: app/mainwindow.cpp:396
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "Қайта жүктеу"
 
-#: app/mainwindow.cpp:400
+#: app/mainwindow.cpp:401
 #, fuzzy, kde-format
 #| msgctxt "@action:inmenu Navigation Bar"
 #| msgid "Edit Location"
@@ -1200,115 +1200,115 @@ msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "Орналасуын өзгерту"
 
-#: app/mainwindow.cpp:405
+#: app/mainwindow.cpp:406
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "Ақтару"
 
-#: app/mainwindow.cpp:406
+#: app/mainwindow.cpp:407
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "Қапшықтардағы кескіндерді ақтару"
 
-#: app/mainwindow.cpp:413
+#: app/mainwindow.cpp:414
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "Көру"
 
-#: app/mainwindow.cpp:414
+#: app/mainwindow.cpp:415
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "Таңдалған кескіндерді қарау"
 
-#: app/mainwindow.cpp:433
+#: app/mainwindow.cpp:434
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr ""
 
-#: app/mainwindow.cpp:437
+#: app/mainwindow.cpp:438
 #, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr ""
 
-#: app/mainwindow.cpp:443
+#: app/mainwindow.cpp:444
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "Алдыңғы"
 
-#: app/mainwindow.cpp:444
+#: app/mainwindow.cpp:445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "Алдындағы кескінге өту"
 
-#: app/mainwindow.cpp:450
+#: app/mainwindow.cpp:451
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "Келесі"
 
-#: app/mainwindow.cpp:451
+#: app/mainwindow.cpp:452
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "Келесі кескінге өту"
 
-#: app/mainwindow.cpp:457
+#: app/mainwindow.cpp:458
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "Бірінші"
 
-#: app/mainwindow.cpp:458
+#: app/mainwindow.cpp:459
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "Бірінші кескінге өту"
 
-#: app/mainwindow.cpp:464
+#: app/mainwindow.cpp:465
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "Соңғы"
 
-#: app/mainwindow.cpp:465
+#: app/mainwindow.cpp:466
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "Соңғы кескінге өту"
 
-#: app/mainwindow.cpp:475
+#: app/mainwindow.cpp:476
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "Бастапқы бет"
 
-#: app/mainwindow.cpp:476
+#: app/mainwindow.cpp:477
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "Бастапқы бетті ашу"
 
-#: app/mainwindow.cpp:483
+#: app/mainwindow.cpp:484
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "Бүйір панелі"
 
-#: app/mainwindow.cpp:488
+#: app/mainwindow.cpp:489
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr ""
 
-#: app/mainwindow.cpp:523
+#: app/mainwindow.cpp:524
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Share"
@@ -1316,158 +1316,158 @@ msgctxt "@action Share images"
 msgid "Share"
 msgstr "Ортақтастыру"
 
-#: app/mainwindow.cpp:532
+#: app/mainwindow.cpp:533
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr ""
 
-#: app/mainwindow.cpp:539
+#: app/mainwindow.cpp:540
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr ""
 
-#: app/mainwindow.cpp:589
+#: app/mainwindow.cpp:590
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr ""
 
-#: app/mainwindow.cpp:604
+#: app/mainwindow.cpp:605
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Өңдеу"
 
-#: app/mainwindow.cpp:609
+#: app/mainwindow.cpp:610
 #, kde-format
 msgid "Redo"
 msgstr "Қайтудан айну"
 
-#: app/mainwindow.cpp:617
+#: app/mainwindow.cpp:618
 #, kde-format
 msgid "Undo"
 msgstr "Амалдан қайту"
 
-#: app/mainwindow.cpp:644
+#: app/mainwindow.cpp:645
 #, kde-format
 msgid "Folders"
 msgstr "Қапшықтары"
 
-#: app/mainwindow.cpp:650
+#: app/mainwindow.cpp:651
 #, kde-format
 msgid "Information"
 msgstr "Мәліметі"
 
-#: app/mainwindow.cpp:689
+#: app/mainwindow.cpp:690
 #, kde-format
 msgid "Operations"
 msgstr "Амалдары"
 
-#: app/mainwindow.cpp:958
+#: app/mainwindow.cpp:959
 #, kde-format
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1440
+#: app/mainwindow.cpp:1441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Бүйір панелін жасыру"
 
-#: app/mainwindow.cpp:1440
+#: app/mainwindow.cpp:1441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Бүйір панелін көрсету"
 
-#: app/mainwindow.cpp:1790
+#: app/mainwindow.cpp:1791
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Кескінді ашу"
 
-#: app/mainwindow.cpp:1851
+#: app/mainwindow.cpp:1852
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "Слайд-шоуды тоқтату"
 
-#: app/mainwindow.cpp:1854
+#: app/mainwindow.cpp:1855
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "Слайд-шоуды тоқтату"
 
-#: app/mainwindow.cpp:1854
+#: app/mainwindow.cpp:1855
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Слайд-шоуды бастау"
 
-#: app/mainwindow.cpp:1867
+#: app/mainwindow.cpp:1868
 #, kde-format
 msgid "Save All Changes"
 msgstr "Барлық өзгерістерді сақтау"
 
-#: app/mainwindow.cpp:1868
+#: app/mainwindow.cpp:1869
 #, kde-format
 msgid "Discard Changes"
 msgstr "Өзгерістерді ысырып тастау"
 
-#: app/mainwindow.cpp:1870
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "%1 кескін өзгертілген"
 
-#: app/mainwindow.cpp:1870
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Қазір шықсаңыз барлық өзгерістеріңіз жоғалады."
 
-#: app/mainwindow.cpp:1913
+#: app/mainwindow.cpp:1914
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1916
+#: app/mainwindow.cpp:1917
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Hide sidebar"
 msgid "Hide menu bar"
 msgstr "Бүйір панелін жасыру"
 
-#: app/mainwindow.cpp:2137
+#: app/mainwindow.cpp:2138
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2138 app/mainwindow.cpp:2152
+#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
 #, kde-format
 msgid "Stay There"
 msgstr ""
 
-#: app/mainwindow.cpp:2139
+#: app/mainwindow.cpp:2140
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Go to last image"
 msgid "Go to the Last Document"
 msgstr "Соңғы кескінге өту"
 
-#: app/mainwindow.cpp:2140 app/mainwindow.cpp:2154
+#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
 #, fuzzy, kde-format
 #| msgid "Go back to the original"
 msgid "Go Back to the Document List"
 msgstr "Түпнұсқасына қайта өту"
 
-#: app/mainwindow.cpp:2151
+#: app/mainwindow.cpp:2152
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2154
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Go to first image"
@@ -2377,19 +2377,19 @@ msgstr "Gwenview бұндай құжатты қалай көрсетуді бі�
 msgid "Loading <filename>%1</filename> failed"
 msgstr "<filename>%1</filename> жүктеу жаңылысы"
 
-#: lib/documentview/documentviewcontroller.cpp:61
+#: lib/documentview/documentviewcontroller.cpp:62
 #, fuzzy, kde-format
 #| msgid "Zoom to Fit"
 msgid "Zoom to Fit"
 msgstr "Шақтап масштабтау"
 
-#: lib/documentview/documentviewcontroller.cpp:63
+#: lib/documentview/documentviewcontroller.cpp:64
 #, kde-format
 msgctxt "@action:button Zoom to fit, shown in status bar, keep it short please"
 msgid "Fit"
 msgstr "Шақтау"
 
-#: lib/documentview/documentviewcontroller.cpp:64
+#: lib/documentview/documentviewcontroller.cpp:65
 #, fuzzy, kde-format
 #| msgid "&Fit image to page"
 msgctxt "@info:tooltip"
@@ -2400,7 +2400,7 @@ msgstr "Бетке &шақтау"
 #. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
-#: lib/documentview/documentviewcontroller.cpp:70
+#: lib/documentview/documentviewcontroller.cpp:71
 #, kde-kuit-format
 msgctxt "@info:whatsthis %1 is the action's text"
 msgid ""
@@ -2417,12 +2417,12 @@ msgid ""
 "settings</link>.</para>"
 msgstr ""
 
-#: lib/documentview/documentviewcontroller.cpp:83
+#: lib/documentview/documentviewcontroller.cpp:84
 #, kde-format
 msgid "Zoom to fill window by fitting to width or height"
 msgstr ""
 
-#: lib/documentview/documentviewcontroller.cpp:85
+#: lib/documentview/documentviewcontroller.cpp:86
 #, kde-format
 msgctxt ""
 "@action:button Zoom to fill (fit width or height), shown in status bar, keep "
@@ -2430,7 +2430,7 @@ msgctxt ""
 msgid "Fill"
 msgstr ""
 
-#: lib/documentview/documentviewcontroller.cpp:90
+#: lib/documentview/documentviewcontroller.cpp:91
 #, fuzzy, kde-format
 #| msgctxt ""
 #| "@action:button Zoom to original size, shown in status bar, keep it short "
@@ -2440,30 +2440,30 @@ msgctxt "Original image size percent value"
 msgid "100%"
 msgstr "100%"
 
-#: lib/documentview/documentviewcontroller.cpp:98
+#: lib/documentview/documentviewcontroller.cpp:99
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
 msgstr ""
 
-#: lib/documentview/documentviewcontroller.cpp:105
+#: lib/documentview/documentviewcontroller.cpp:106
 #, kde-format
 msgctxt "@action"
 msgid "Follow color scheme"
 msgstr ""
 
-#: lib/documentview/documentviewcontroller.cpp:111
+#: lib/documentview/documentviewcontroller.cpp:112
 #, kde-format
 msgctxt "@action"
 msgid "Light Mode"
 msgstr ""
 
-#: lib/documentview/documentviewcontroller.cpp:117
+#: lib/documentview/documentviewcontroller.cpp:118
 #, kde-format
 msgctxt "@action"
 msgid "Neutral Mode"
 msgstr ""
 
-#: lib/documentview/documentviewcontroller.cpp:123
+#: lib/documentview/documentviewcontroller.cpp:124
 #, kde-format
 msgctxt "@action"
 msgid "Dark Mode"

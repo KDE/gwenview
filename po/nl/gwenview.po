@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-03-19 00:42+0000\n"
+"POT-Creation-Date: 2026-05-10 00:41+0000\n"
 "PO-Revision-Date: 2025-10-08 12:05+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -143,8 +143,8 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Zijbalk uitlijnafstandshouder"
 
-#: app/browsemainpage.cpp:151 app/mainwindow.cpp:378 app/viewmainpage.cpp:410
-#: lib/documentview/documentviewcontroller.cpp:55
+#: app/browsemainpage.cpp:151 app/mainwindow.cpp:379 app/viewmainpage.cpp:410
+#: lib/documentview/documentviewcontroller.cpp:56
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "View"
@@ -235,7 +235,7 @@ msgid "Show Hidden Files"
 msgstr "Verborgen bestanden tonen"
 
 #: app/browsemainpage.cpp:206 app/fileopscontextmanageritem.cpp:136
-#: app/mainwindow.cpp:377
+#: app/mainwindow.cpp:378
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -1155,144 +1155,144 @@ msgstr "In modus schijnwerper starten"
 msgid "A starting file or folders"
 msgstr "Een beginbestand of -mappen"
 
-#: app/mainwindow.cpp:387
+#: app/mainwindow.cpp:388
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "Lijst wissen"
 
-#: app/mainwindow.cpp:395
+#: app/mainwindow.cpp:396
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "Herladen"
 
-#: app/mainwindow.cpp:400
+#: app/mainwindow.cpp:401
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "Locatie vervangen"
 
-#: app/mainwindow.cpp:405
+#: app/mainwindow.cpp:406
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "Bladeren"
 
-#: app/mainwindow.cpp:406
+#: app/mainwindow.cpp:407
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "Mappen doorbladeren naar afbeeldingen"
 
-#: app/mainwindow.cpp:413
+#: app/mainwindow.cpp:414
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "Weergeven"
 
-#: app/mainwindow.cpp:414
+#: app/mainwindow.cpp:415
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "Geselecteerde afbeeldingen bekijken"
 
-#: app/mainwindow.cpp:433
+#: app/mainwindow.cpp:434
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "Volledig scherm verlaten"
 
-#: app/mainwindow.cpp:437
+#: app/mainwindow.cpp:438
 #, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr "Modus schijnwerper"
 
-#: app/mainwindow.cpp:443
+#: app/mainwindow.cpp:444
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "Vorige"
 
-#: app/mainwindow.cpp:444
+#: app/mainwindow.cpp:445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "Ga naar vorige afbeelding"
 
-#: app/mainwindow.cpp:450
+#: app/mainwindow.cpp:451
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "Volgende"
 
-#: app/mainwindow.cpp:451
+#: app/mainwindow.cpp:452
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "Ga naar volgende afbeelding"
 
-#: app/mainwindow.cpp:457
+#: app/mainwindow.cpp:458
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "Eerste"
 
-#: app/mainwindow.cpp:458
+#: app/mainwindow.cpp:459
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "Ga naar de eerste afbeelding"
 
-#: app/mainwindow.cpp:464
+#: app/mainwindow.cpp:465
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "Laatste"
 
-#: app/mainwindow.cpp:465
+#: app/mainwindow.cpp:466
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "Ga naar de laatste afbeelding"
 
-#: app/mainwindow.cpp:475
+#: app/mainwindow.cpp:476
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "Startpagina"
 
-#: app/mainwindow.cpp:476
+#: app/mainwindow.cpp:477
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "Open de startpagina"
 
-#: app/mainwindow.cpp:483
+#: app/mainwindow.cpp:484
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "Zijbalk"
 
-#: app/mainwindow.cpp:488
+#: app/mainwindow.cpp:489
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "Hulpmiddelen voor bewerking tonen"
 
-#: app/mainwindow.cpp:523
+#: app/mainwindow.cpp:524
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "Delen"
 
-#: app/mainwindow.cpp:532
+#: app/mainwindow.cpp:533
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "Fout bij delen: %1"
 
-#: app/mainwindow.cpp:539
+#: app/mainwindow.cpp:540
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1301,104 +1301,104 @@ msgstr ""
 "De gedeelde koppeling naar afbeelding (<a href=\"%1\">%1</a>) is naar het "
 "klembord gekopieerd."
 
-#: app/mainwindow.cpp:589
+#: app/mainwindow.cpp:590
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "Configureren"
 
-#: app/mainwindow.cpp:604
+#: app/mainwindow.cpp:605
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Bewerken"
 
-#: app/mainwindow.cpp:609
+#: app/mainwindow.cpp:610
 #, kde-format
 msgid "Redo"
 msgstr "Opnieuw"
 
-#: app/mainwindow.cpp:617
+#: app/mainwindow.cpp:618
 #, kde-format
 msgid "Undo"
 msgstr "Ongedaan maken"
 
-#: app/mainwindow.cpp:644
+#: app/mainwindow.cpp:645
 #, kde-format
 msgid "Folders"
 msgstr "Mappen"
 
-#: app/mainwindow.cpp:650
+#: app/mainwindow.cpp:651
 #, kde-format
 msgid "Information"
 msgstr "Informatie"
 
-#: app/mainwindow.cpp:689
+#: app/mainwindow.cpp:690
 #, kde-format
 msgid "Operations"
 msgstr "Bewerkingen"
 
-#: app/mainwindow.cpp:958
+#: app/mainwindow.cpp:959
 #, kde-format
 msgid "Viewing media"
 msgstr "Media bekijken"
 
-#: app/mainwindow.cpp:1440
+#: app/mainwindow.cpp:1441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Zijbalk verbergen"
 
-#: app/mainwindow.cpp:1440
+#: app/mainwindow.cpp:1441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Zijbalk tonen"
 
-#: app/mainwindow.cpp:1790
+#: app/mainwindow.cpp:1791
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Afbeelding openen"
 
-#: app/mainwindow.cpp:1851
+#: app/mainwindow.cpp:1852
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Diashow pauzeren"
 
-#: app/mainwindow.cpp:1854
+#: app/mainwindow.cpp:1855
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Diashow hervatten"
 
-#: app/mainwindow.cpp:1854
+#: app/mainwindow.cpp:1855
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Diavoorstelling starten"
 
-#: app/mainwindow.cpp:1867
+#: app/mainwindow.cpp:1868
 #, kde-format
 msgid "Save All Changes"
 msgstr "Alle wijzigingen opslaan"
 
-#: app/mainwindow.cpp:1868
+#: app/mainwindow.cpp:1869
 #, kde-format
 msgid "Discard Changes"
 msgstr "Wijzigingen negeren"
 
-#: app/mainwindow.cpp:1870
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Eén afbeelding is gewijzigd."
 msgstr[1] "%1 afbeeldingen zijn gewijzigd."
 
-#: app/mainwindow.cpp:1870
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Als u nu afsluit zullen al uw wijzigingen verloren gaan."
 
-#: app/mainwindow.cpp:1913
+#: app/mainwindow.cpp:1914
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1406,37 +1406,37 @@ msgstr ""
 "Hierdoor wordt de menubalk geheel verborgen. U kunt die weer zichtbaar maken "
 "door %1 te typen."
 
-#: app/mainwindow.cpp:1916
+#: app/mainwindow.cpp:1917
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Menubalk verbergen"
 
-#: app/mainwindow.cpp:2137
+#: app/mainwindow.cpp:2138
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "U hebt het eerste document bereikt, wat wilt u gaan doen?"
 
-#: app/mainwindow.cpp:2138 app/mainwindow.cpp:2152
+#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
 #, kde-format
 msgid "Stay There"
 msgstr "Daar blijven"
 
-#: app/mainwindow.cpp:2139
+#: app/mainwindow.cpp:2140
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Ga naar het laatste document"
 
-#: app/mainwindow.cpp:2140 app/mainwindow.cpp:2154
+#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Ga terug naar de lijst met documenten"
 
-#: app/mainwindow.cpp:2151
+#: app/mainwindow.cpp:2152
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "U hebt het laatste document bereikt, wat wilt u gaan doen?"
 
-#: app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2154
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Ga naar het eerste document"
@@ -2347,18 +2347,18 @@ msgstr "Gwenview weet niet hoe dit soort document weer te geven"
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Laden van <filename>%1</filename> is mislukt"
 
-#: lib/documentview/documentviewcontroller.cpp:61
+#: lib/documentview/documentviewcontroller.cpp:62
 #, kde-format
 msgid "Zoom to Fit"
 msgstr "Zoomen naar passend"
 
-#: lib/documentview/documentviewcontroller.cpp:63
+#: lib/documentview/documentviewcontroller.cpp:64
 #, kde-format
 msgctxt "@action:button Zoom to fit, shown in status bar, keep it short please"
 msgid "Fit"
 msgstr "Passend"
 
-#: lib/documentview/documentviewcontroller.cpp:64
+#: lib/documentview/documentviewcontroller.cpp:65
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fit image into the viewing area"
@@ -2368,7 +2368,7 @@ msgstr "Laat de afbeelding passen in het beeldgebied"
 #. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
 #. but a more elaborate translation would also be fine.
 #. The text "in the settings" is supposed to sound like clicking it opens the settings.
-#: lib/documentview/documentviewcontroller.cpp:70
+#: lib/documentview/documentviewcontroller.cpp:71
 #, kde-kuit-format
 msgctxt "@info:whatsthis %1 is the action's text"
 msgid ""
@@ -2397,12 +2397,12 @@ msgstr ""
 "gewijzigd worden zodat afbeeldingen getoond worden op een vorige zoomwaarde "
 "in plaats van <link url='%2'>in de instellingen</link>.</para>"
 
-#: lib/documentview/documentviewcontroller.cpp:83
+#: lib/documentview/documentviewcontroller.cpp:84
 #, kde-format
 msgid "Zoom to fill window by fitting to width or height"
 msgstr "Zoomen om venster te vullen door breedte of hoogte passend te maken"
 
-#: lib/documentview/documentviewcontroller.cpp:85
+#: lib/documentview/documentviewcontroller.cpp:86
 #, kde-format
 msgctxt ""
 "@action:button Zoom to fill (fit width or height), shown in status bar, keep "
@@ -2410,36 +2410,36 @@ msgctxt ""
 msgid "Fill"
 msgstr "Vullen"
 
-#: lib/documentview/documentviewcontroller.cpp:90
+#: lib/documentview/documentviewcontroller.cpp:91
 #, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
 msgstr "100%"
 
-#: lib/documentview/documentviewcontroller.cpp:98
+#: lib/documentview/documentviewcontroller.cpp:99
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
 msgstr "Overzicht tonen bij inzoomen"
 
-#: lib/documentview/documentviewcontroller.cpp:105
+#: lib/documentview/documentviewcontroller.cpp:106
 #, kde-format
 msgctxt "@action"
 msgid "Follow color scheme"
 msgstr "Kleurenschema volgen"
 
-#: lib/documentview/documentviewcontroller.cpp:111
+#: lib/documentview/documentviewcontroller.cpp:112
 #, kde-format
 msgctxt "@action"
 msgid "Light Mode"
 msgstr "Lichte modus"
 
-#: lib/documentview/documentviewcontroller.cpp:117
+#: lib/documentview/documentviewcontroller.cpp:118
 #, kde-format
 msgctxt "@action"
 msgid "Neutral Mode"
 msgstr "Neutrale modus"
 
-#: lib/documentview/documentviewcontroller.cpp:123
+#: lib/documentview/documentviewcontroller.cpp:124
 #, kde-format
 msgctxt "@action"
 msgid "Dark Mode"
