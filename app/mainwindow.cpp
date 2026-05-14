@@ -1410,6 +1410,10 @@ void MainWindow::syncSortOrder(const QUrl &url)
                 column = KDirModel::Size;
                 sortRole = Qt::DisplayRole;
                 qCDebug(GWENVIEW_APP_LOG) << "Sorting according to file manager: size";
+            } else if (columnName == "type") {
+                column = KDirModel::Type;
+                sortRole = Qt::DisplayRole;
+                qCDebug(GWENVIEW_APP_LOG) << "Sorting according to file manager: type";
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
             } else if (columnName == "rating") {
                 column = KDirModel::Name;

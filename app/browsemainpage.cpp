@@ -168,6 +168,9 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
         action = new QAction(i18nc("@addAction:inmenu", "Size"), mSortAction);
         action->setCheckable(true);
         action->setData(QVariant(Sorting::Size));
+        action = new QAction(i18nc("@addAction:inmenu", "Type"), mSortAction);
+        action->setCheckable(true);
+        action->setData(QVariant(Sorting::Type));
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
         action = new QAction(i18nc("@addAction:inmenu", "Rating"), mSortAction);
         action->setCheckable(true);
@@ -517,6 +520,9 @@ void BrowseMainPage::updateSortOrder()
         break;
     case Sorting::Date:
         column = KDirModel::ModifiedTime;
+        break;
+    case Sorting::Type:
+        column = KDirModel::Type;
         break;
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
     case Sorting::Rating:

@@ -41,6 +41,7 @@ enum Enum {
     Name,
     Size,
     Date,
+    Type,
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
     Rating,
 #endif
