@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-10 00:41+0000\n"
+"POT-Creation-Date: 2026-05-15 00:42+0000\n"
 "PO-Revision-Date: 2013-06-28 02:40+0600\n"
 "Last-Translator: Sairan Kikkarin <sairan@computer.org>\n"
 "Language-Team: Kazakh <kde-i18n-doc@kde.org>\n"
@@ -175,7 +175,15 @@ msgctxt "@addAction:inmenu"
 msgid "Size"
 msgstr "Өлшемі бойынша"
 
-#: app/browsemainpage.cpp:172
+#: app/browsemainpage.cpp:171
+#, fuzzy, kde-format
+#| msgctxt "@item:intable"
+#| msgid "File Time"
+msgctxt "@addAction:inmenu"
+msgid "Type"
+msgstr "Файл құрылған уақыты"
+
+#: app/browsemainpage.cpp:175
 #, fuzzy, kde-format
 #| msgctxt "@action:inmenu"
 #| msgid "Rating"
@@ -183,69 +191,69 @@ msgctxt "@addAction:inmenu"
 msgid "Rating"
 msgstr "Ұпайлары"
 
-#: app/browsemainpage.cpp:179
+#: app/browsemainpage.cpp:182
 #, kde-format
 msgctxt "@action:inmenu Sort"
 msgid "Descending"
 msgstr ""
 
-#: app/browsemainpage.cpp:191
+#: app/browsemainpage.cpp:194
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Thumbnail Details"
 msgstr "Нобай мәліметі"
 
-#: app/browsemainpage.cpp:192
+#: app/browsemainpage.cpp:195
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filename"
 msgstr "Файлының атауы"
 
-#: app/browsemainpage.cpp:193
+#: app/browsemainpage.cpp:196
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Date"
 msgstr "Құрылған кезі"
 
-#: app/browsemainpage.cpp:194
+#: app/browsemainpage.cpp:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Image Size"
 msgstr "Кескіннің өлшемі"
 
-#: app/browsemainpage.cpp:195
+#: app/browsemainpage.cpp:198
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "File Size"
 msgstr "Толық өлшемі"
 
-#: app/browsemainpage.cpp:197
+#: app/browsemainpage.cpp:200
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "Ұпайлары"
 
-#: app/browsemainpage.cpp:200
+#: app/browsemainpage.cpp:203
 #, fuzzy, kde-format
 #| msgid "Show videos"
 msgctxt "@action:inmenu View"
 msgid "Show Hidden Files"
 msgstr "Видееолар көрсететілсін"
 
-#: app/browsemainpage.cpp:206 app/fileopscontextmanageritem.cpp:136
+#: app/browsemainpage.cpp:209 app/fileopscontextmanageritem.cpp:136
 #: app/mainwindow.cpp:378
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
 msgstr "Файл"
 
-#: app/browsemainpage.cpp:208
+#: app/browsemainpage.cpp:211
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Folder to Places"
 msgstr "Орындарға қапшықты қосу"
 
-#: app/browsemainpage.cpp:257
+#: app/browsemainpage.cpp:260
 #, kde-format
 msgctxt ""
 "@info:status %1 number of selected documents, %2 total number of documents, "
@@ -253,7 +261,7 @@ msgctxt ""
 msgid "Selected %1 of %2 (%3)"
 msgstr ""
 
-#: app/browsemainpage.cpp:263
+#: app/browsemainpage.cpp:266
 #, fuzzy, kde-format
 #| msgid "Loop on images"
 msgctxt "@info:status Image files"
@@ -261,7 +269,7 @@ msgid "%1 image"
 msgid_plural "%1 images"
 msgstr[0] "Кескін кезегі тұйық"
 
-#: app/browsemainpage.cpp:264
+#: app/browsemainpage.cpp:267
 #, fuzzy, kde-format
 #| msgid "Show videos"
 msgctxt "@info:status Video files"
@@ -269,7 +277,7 @@ msgid "%1 video"
 msgid_plural "%1 videos"
 msgstr[0] "Видееолар көрсететілсін"
 
-#: app/browsemainpage.cpp:271
+#: app/browsemainpage.cpp:274
 #, kde-format
 msgctxt "@info:status images, videos"
 msgid "%1, %2"
@@ -1370,104 +1378,104 @@ msgstr "Амалдары"
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Бүйір панелін жасыру"
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Бүйір панелін көрсету"
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1795
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Кескінді ашу"
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1856
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "Слайд-шоуды тоқтату"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1859
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "Слайд-шоуды тоқтату"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1859
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Слайд-шоуды бастау"
 
-#: app/mainwindow.cpp:1868
+#: app/mainwindow.cpp:1872
 #, kde-format
 msgid "Save All Changes"
 msgstr "Барлық өзгерістерді сақтау"
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1873
 #, kde-format
 msgid "Discard Changes"
 msgstr "Өзгерістерді ысырып тастау"
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1875
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "%1 кескін өзгертілген"
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1875
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Қазір шықсаңыз барлық өзгерістеріңіз жоғалады."
 
-#: app/mainwindow.cpp:1914
+#: app/mainwindow.cpp:1918
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1917
+#: app/mainwindow.cpp:1921
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Hide sidebar"
 msgid "Hide menu bar"
 msgstr "Бүйір панелін жасыру"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2142
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2143 app/mainwindow.cpp:2157
 #, kde-format
 msgid "Stay There"
 msgstr ""
 
-#: app/mainwindow.cpp:2140
+#: app/mainwindow.cpp:2144
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Go to last image"
 msgid "Go to the Last Document"
 msgstr "Соңғы кескінге өту"
 
-#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
+#: app/mainwindow.cpp:2145 app/mainwindow.cpp:2159
 #, fuzzy, kde-format
 #| msgid "Go back to the original"
 msgid "Go Back to the Document List"
 msgstr "Түпнұсқасына қайта өту"
 
-#: app/mainwindow.cpp:2152
+#: app/mainwindow.cpp:2156
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2154
+#: app/mainwindow.cpp:2158
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip"
 #| msgid "Go to first image"
@@ -2542,55 +2550,55 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (random), group (slide show)
-#: lib/gwenviewconfig.kcfg:339
+#: lib/gwenviewconfig.kcfg:340
 #, kde-format
 msgid "Display slide show images in random order"
 msgstr "Кездейсоқ ретімен слайд-шоуды көрсету"
 
 #. i18n: ectx: label, entry (fullscreen), group (slide show)
-#: lib/gwenviewconfig.kcfg:343
+#: lib/gwenviewconfig.kcfg:344
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
 msgstr "Толық экранды слайд-шоуды көрсету"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
-#: lib/gwenviewconfig.kcfg:347
+#: lib/gwenviewconfig.kcfg:348
 #, kde-format
 msgid "Loop on images"
 msgstr "Кескін кезегі тұйық"
 
 #. i18n: ectx: label, entry (stopAtEnd), group (slide show)
-#: lib/gwenviewconfig.kcfg:351
+#: lib/gwenviewconfig.kcfg:352
 #, kde-format
 msgid "Stop at last image of folder"
 msgstr "Қапшықтағы соңғы кескінінде тоқтау"
 
 #. i18n: ectx: label, entry (interval), group (slide show)
-#: lib/gwenviewconfig.kcfg:355
+#: lib/gwenviewconfig.kcfg:356
 #, kde-format
 msgid "Interval between images (in seconds)"
 msgstr "Кескіндер аралығы (секунд)"
 
 #. i18n: ectx: label, entry (CropPreserveAspectRatio), group (Crop)
-#: lib/gwenviewconfig.kcfg:371
+#: lib/gwenviewconfig.kcfg:372
 #, kde-format
 msgid "Restrict crop to image ratio when Advanced Settings disabled"
 msgstr ""
 
 #. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
-#: lib/gwenviewconfig.kcfg:375
+#: lib/gwenviewconfig.kcfg:376
 #, kde-format
 msgid "Index representing selected ratio in the Advanced settings combobox"
 msgstr ""
 
 #. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
-#: lib/gwenviewconfig.kcfg:379
+#: lib/gwenviewconfig.kcfg:380
 #, kde-format
 msgid "Last used crop ratio width when Advanced Settings enabled"
 msgstr ""
 
 #. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
-#: lib/gwenviewconfig.kcfg:383
+#: lib/gwenviewconfig.kcfg:384
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr ""

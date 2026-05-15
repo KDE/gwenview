@@ -15,7 +15,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-10 00:41+0000\n"
+"POT-Creation-Date: 2026-05-15 00:42+0000\n"
 "PO-Revision-Date: 2025-11-08 21:10-0300\n"
 "Last-Translator: Guilherme Marçal Silva <guimarcalsilva@gmail.com>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -186,74 +186,82 @@ msgctxt "@addAction:inmenu"
 msgid "Size"
 msgstr "Tamanho"
 
-#: app/browsemainpage.cpp:172
+#: app/browsemainpage.cpp:171
+#, fuzzy, kde-format
+#| msgctxt "@item:intable"
+#| msgid "File Type"
+msgctxt "@addAction:inmenu"
+msgid "Type"
+msgstr "Tipo de arquivo"
+
+#: app/browsemainpage.cpp:175
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Rating"
 msgstr "Avaliação"
 
-#: app/browsemainpage.cpp:179
+#: app/browsemainpage.cpp:182
 #, kde-format
 msgctxt "@action:inmenu Sort"
 msgid "Descending"
 msgstr "Decrescente"
 
-#: app/browsemainpage.cpp:191
+#: app/browsemainpage.cpp:194
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Thumbnail Details"
 msgstr "Detalhes das miniaturas"
 
-#: app/browsemainpage.cpp:192
+#: app/browsemainpage.cpp:195
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filename"
 msgstr "Nome do arquivo"
 
-#: app/browsemainpage.cpp:193
+#: app/browsemainpage.cpp:196
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Date"
 msgstr "Data"
 
-#: app/browsemainpage.cpp:194
+#: app/browsemainpage.cpp:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Image Size"
 msgstr "Tamanho da imagem"
 
-#: app/browsemainpage.cpp:195
+#: app/browsemainpage.cpp:198
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "File Size"
 msgstr "Tamanho do arquivo"
 
-#: app/browsemainpage.cpp:197
+#: app/browsemainpage.cpp:200
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "Avaliação"
 
-#: app/browsemainpage.cpp:200
+#: app/browsemainpage.cpp:203
 #, kde-format
 msgctxt "@action:inmenu View"
 msgid "Show Hidden Files"
 msgstr "Mostrar os arquivos ocultos"
 
-#: app/browsemainpage.cpp:206 app/fileopscontextmanageritem.cpp:136
+#: app/browsemainpage.cpp:209 app/fileopscontextmanageritem.cpp:136
 #: app/mainwindow.cpp:378
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
 msgstr "Arquivo"
 
-#: app/browsemainpage.cpp:208
+#: app/browsemainpage.cpp:211
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Folder to Places"
 msgstr "Adicionar a pasta aos Locais"
 
-#: app/browsemainpage.cpp:257
+#: app/browsemainpage.cpp:260
 #, kde-format
 msgctxt ""
 "@info:status %1 number of selected documents, %2 total number of documents, "
@@ -261,7 +269,7 @@ msgctxt ""
 msgid "Selected %1 of %2 (%3)"
 msgstr "Selecionados %1 de %2 (%3)"
 
-#: app/browsemainpage.cpp:263
+#: app/browsemainpage.cpp:266
 #, kde-format
 msgctxt "@info:status Image files"
 msgid "%1 image"
@@ -269,7 +277,7 @@ msgid_plural "%1 images"
 msgstr[0] "%1 imagem"
 msgstr[1] "%1 imagens"
 
-#: app/browsemainpage.cpp:264
+#: app/browsemainpage.cpp:267
 #, kde-format
 msgctxt "@info:status Video files"
 msgid "%1 video"
@@ -277,7 +285,7 @@ msgid_plural "%1 videos"
 msgstr[0] "%1 vídeo"
 msgstr[1] "%1 vídeos"
 
-#: app/browsemainpage.cpp:271
+#: app/browsemainpage.cpp:274
 #, kde-format
 msgctxt "@info:status images, videos"
 msgid "%1, %2"
@@ -1350,62 +1358,62 @@ msgstr "Operações"
 msgid "Viewing media"
 msgstr "Visualização de mídia"
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Oculta a barra lateral"
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Exibe a barra lateral"
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1795
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Abrir imagem"
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1856
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Pausar a apresentação de slides"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1859
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Continuar a apresentação de slides"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1859
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Iniciar a apresentação de slides"
 
-#: app/mainwindow.cpp:1868
+#: app/mainwindow.cpp:1872
 #, kde-format
 msgid "Save All Changes"
 msgstr "Salvar todas as alterações"
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1873
 #, kde-format
 msgid "Discard Changes"
 msgstr "Descartar as alterações"
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1875
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Uma imagem foi modificada."
 msgstr[1] "Foram modificadas %1 imagens."
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1875
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Se você sair agora, suas alterações serão perdidas."
 
-#: app/mainwindow.cpp:1914
+#: app/mainwindow.cpp:1918
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1413,37 +1421,37 @@ msgstr ""
 "Isto irá ocultar a barra de menus completamente. Você pode exibi-la "
 "novamente digitando %1."
 
-#: app/mainwindow.cpp:1917
+#: app/mainwindow.cpp:1921
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Ocultar a barra de menus"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2142
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Você chegou ao primeiro documento, o que deseja fazer?"
 
-#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2143 app/mainwindow.cpp:2157
 #, kde-format
 msgid "Stay There"
 msgstr "Permanecer aqui"
 
-#: app/mainwindow.cpp:2140
+#: app/mainwindow.cpp:2144
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Ir para o último documento"
 
-#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
+#: app/mainwindow.cpp:2145 app/mainwindow.cpp:2159
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Voltar à lista de documentos"
 
-#: app/mainwindow.cpp:2152
+#: app/mainwindow.cpp:2156
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Você chegou ao último documento, o que deseja fazer?"
 
-#: app/mainwindow.cpp:2154
+#: app/mainwindow.cpp:2158
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Ir para o primeiro documento"
@@ -2530,37 +2538,37 @@ msgstr ""
 "            apresentadas, deixando as outras cores intocadas."
 
 #. i18n: ectx: label, entry (random), group (slide show)
-#: lib/gwenviewconfig.kcfg:339
+#: lib/gwenviewconfig.kcfg:340
 #, kde-format
 msgid "Display slide show images in random order"
 msgstr "Exibir as imagens na apresentação de slides de forma aleatória"
 
 #. i18n: ectx: label, entry (fullscreen), group (slide show)
-#: lib/gwenviewconfig.kcfg:343
+#: lib/gwenviewconfig.kcfg:344
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
 msgstr "Mostrar apresentação de slides no modo de tela cheia"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
-#: lib/gwenviewconfig.kcfg:347
+#: lib/gwenviewconfig.kcfg:348
 #, kde-format
 msgid "Loop on images"
 msgstr "Repetir as imagens"
 
 #. i18n: ectx: label, entry (stopAtEnd), group (slide show)
-#: lib/gwenviewconfig.kcfg:351
+#: lib/gwenviewconfig.kcfg:352
 #, kde-format
 msgid "Stop at last image of folder"
 msgstr "Parar na última imagem da pasta"
 
 #. i18n: ectx: label, entry (interval), group (slide show)
-#: lib/gwenviewconfig.kcfg:355
+#: lib/gwenviewconfig.kcfg:356
 #, kde-format
 msgid "Interval between images (in seconds)"
 msgstr "Intervalo entre imagens (em segundos)"
 
 #. i18n: ectx: label, entry (CropPreserveAspectRatio), group (Crop)
-#: lib/gwenviewconfig.kcfg:371
+#: lib/gwenviewconfig.kcfg:372
 #, kde-format
 msgid "Restrict crop to image ratio when Advanced Settings disabled"
 msgstr ""
@@ -2568,7 +2576,7 @@ msgstr ""
 "avançadas estiverem desativadas"
 
 #. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
-#: lib/gwenviewconfig.kcfg:375
+#: lib/gwenviewconfig.kcfg:376
 #, kde-format
 msgid "Index representing selected ratio in the Advanced settings combobox"
 msgstr ""
@@ -2576,7 +2584,7 @@ msgstr ""
 "avançadas"
 
 #. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
-#: lib/gwenviewconfig.kcfg:379
+#: lib/gwenviewconfig.kcfg:380
 #, kde-format
 msgid "Last used crop ratio width when Advanced Settings enabled"
 msgstr ""
@@ -2584,7 +2592,7 @@ msgstr ""
 "avançadas estiverem ativadas"
 
 #. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
-#: lib/gwenviewconfig.kcfg:383
+#: lib/gwenviewconfig.kcfg:384
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr ""

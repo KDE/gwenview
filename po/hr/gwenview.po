@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-10 00:41+0000\n"
+"POT-Creation-Date: 2026-05-15 00:42+0000\n"
 "PO-Revision-Date: 2011-07-22 16:56+0200\n"
 "Last-Translator: Marko Dimjašević <marko@dimjasevic.net>\n"
 "Language-Team: Croatian <kde-croatia-list@lists.sourceforge.net>\n"
@@ -178,7 +178,15 @@ msgctxt "@addAction:inmenu"
 msgid "Size"
 msgstr "veličini"
 
-#: app/browsemainpage.cpp:172
+#: app/browsemainpage.cpp:171
+#, fuzzy, kde-format
+#| msgctxt "@item:intable"
+#| msgid "File Time"
+msgctxt "@addAction:inmenu"
+msgid "Type"
+msgstr "Vrijeme datoteke"
+
+#: app/browsemainpage.cpp:175
 #, fuzzy, kde-format
 #| msgctxt "@action:inmenu"
 #| msgid "Rating"
@@ -186,69 +194,69 @@ msgctxt "@addAction:inmenu"
 msgid "Rating"
 msgstr "Ocjena"
 
-#: app/browsemainpage.cpp:179
+#: app/browsemainpage.cpp:182
 #, kde-format
 msgctxt "@action:inmenu Sort"
 msgid "Descending"
 msgstr ""
 
-#: app/browsemainpage.cpp:191
+#: app/browsemainpage.cpp:194
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Thumbnail Details"
 msgstr "Detalji sličice"
 
-#: app/browsemainpage.cpp:192
+#: app/browsemainpage.cpp:195
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filename"
 msgstr "Naziv datoteke"
 
-#: app/browsemainpage.cpp:193
+#: app/browsemainpage.cpp:196
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Date"
 msgstr "Datum"
 
-#: app/browsemainpage.cpp:194
+#: app/browsemainpage.cpp:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Image Size"
 msgstr "Veličina slike"
 
-#: app/browsemainpage.cpp:195
+#: app/browsemainpage.cpp:198
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "File Size"
 msgstr "Veličina datoteke"
 
-#: app/browsemainpage.cpp:197
+#: app/browsemainpage.cpp:200
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "Ocjena"
 
-#: app/browsemainpage.cpp:200
+#: app/browsemainpage.cpp:203
 #, fuzzy, kde-format
 #| msgid "Show videos"
 msgctxt "@action:inmenu View"
 msgid "Show Hidden Files"
 msgstr "Prikaži video datoteke"
 
-#: app/browsemainpage.cpp:206 app/fileopscontextmanageritem.cpp:136
+#: app/browsemainpage.cpp:209 app/fileopscontextmanageritem.cpp:136
 #: app/mainwindow.cpp:378
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
 msgstr "Datoteka"
 
-#: app/browsemainpage.cpp:208
+#: app/browsemainpage.cpp:211
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Folder to Places"
 msgstr "Dodaj mapu u Mjesta"
 
-#: app/browsemainpage.cpp:257
+#: app/browsemainpage.cpp:260
 #, kde-format
 msgctxt ""
 "@info:status %1 number of selected documents, %2 total number of documents, "
@@ -256,7 +264,7 @@ msgctxt ""
 msgid "Selected %1 of %2 (%3)"
 msgstr ""
 
-#: app/browsemainpage.cpp:263
+#: app/browsemainpage.cpp:266
 #, fuzzy, kde-format
 #| msgid "Loop on images"
 msgctxt "@info:status Image files"
@@ -266,7 +274,7 @@ msgstr[0] "Vrti petlju sa slikama"
 msgstr[1] "Vrti petlju sa slikama"
 msgstr[2] "Vrti petlju sa slikama"
 
-#: app/browsemainpage.cpp:264
+#: app/browsemainpage.cpp:267
 #, fuzzy, kde-format
 #| msgid "Show videos"
 msgctxt "@info:status Video files"
@@ -276,7 +284,7 @@ msgstr[0] "Prikaži video datoteke"
 msgstr[1] "Prikaži video datoteke"
 msgstr[2] "Prikaži video datoteke"
 
-#: app/browsemainpage.cpp:271
+#: app/browsemainpage.cpp:274
 #, kde-format
 msgctxt "@info:status images, videos"
 msgid "%1, %2"
@@ -1410,7 +1418,7 @@ msgstr "Postupci"
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1445
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Sidebar"
@@ -1418,7 +1426,7 @@ msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Bočna traka"
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1445
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Sidebar"
@@ -1426,40 +1434,40 @@ msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Bočna traka"
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1795
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Otvori sliku"
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1856
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Pause Slideshow"
 msgstr "Prezentacija"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1859
 #, fuzzy, kde-format
 #| msgid "Slideshow"
 msgid "Resume Slideshow"
 msgstr "Prezentacija"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1859
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Pokreni prezentaciju"
 
-#: app/mainwindow.cpp:1868
+#: app/mainwindow.cpp:1872
 #, kde-format
 msgid "Save All Changes"
 msgstr "Spremi sve promjene"
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1873
 #, kde-format
 msgid "Discard Changes"
 msgstr "Odbaci promjene"
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1875
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1467,52 +1475,52 @@ msgstr[0] "Izmijenjena je %1 slika."
 msgstr[1] "Izmijenjene su %1 slike."
 msgstr[2] "Izmijenjeno je %1 slika."
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1875
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Ako sada izađete, vaše promjene će biti izgubljene."
 
-#: app/mainwindow.cpp:1914
+#: app/mainwindow.cpp:1918
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1917
+#: app/mainwindow.cpp:1921
 #, fuzzy, kde-format
 #| msgctxt "@action"
 #| msgid "Sidebar"
 msgid "Hide menu bar"
 msgstr "Bočna traka"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2142
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2143 app/mainwindow.cpp:2157
 #, kde-format
 msgid "Stay There"
 msgstr ""
 
-#: app/mainwindow.cpp:2140
+#: app/mainwindow.cpp:2144
 #, fuzzy, kde-format
 #| msgid "Go to Last Image"
 msgid "Go to the Last Document"
 msgstr "Pomakni se na posljednju sliku"
 
-#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
+#: app/mainwindow.cpp:2145 app/mainwindow.cpp:2159
 #, fuzzy, kde-format
 #| msgid "Go back to the original"
 msgid "Go Back to the Document List"
 msgstr "Vrati se na izvorno"
 
-#: app/mainwindow.cpp:2152
+#: app/mainwindow.cpp:2156
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2154
+#: app/mainwindow.cpp:2158
 #, fuzzy, kde-format
 #| msgid "Go to First Image"
 msgid "Go to the First Document"
@@ -2622,55 +2630,55 @@ msgid ""
 msgstr ""
 
 #. i18n: ectx: label, entry (random), group (slide show)
-#: lib/gwenviewconfig.kcfg:339
+#: lib/gwenviewconfig.kcfg:340
 #, kde-format
 msgid "Display slide show images in random order"
 msgstr "Prikaži slike u prezentaciji nasumičnim redoslijedom"
 
 #. i18n: ectx: label, entry (fullscreen), group (slide show)
-#: lib/gwenviewconfig.kcfg:343
+#: lib/gwenviewconfig.kcfg:344
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
 msgstr "Prikaži prezentaciju u načinu preko cijelog zaslona"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
-#: lib/gwenviewconfig.kcfg:347
+#: lib/gwenviewconfig.kcfg:348
 #, kde-format
 msgid "Loop on images"
 msgstr "Vrti petlju sa slikama"
 
 #. i18n: ectx: label, entry (stopAtEnd), group (slide show)
-#: lib/gwenviewconfig.kcfg:351
+#: lib/gwenviewconfig.kcfg:352
 #, kde-format
 msgid "Stop at last image of folder"
 msgstr "Zaustavi se na zadnjoj slici u mapi"
 
 #. i18n: ectx: label, entry (interval), group (slide show)
-#: lib/gwenviewconfig.kcfg:355
+#: lib/gwenviewconfig.kcfg:356
 #, kde-format
 msgid "Interval between images (in seconds)"
 msgstr "Interval između slika (u sekundama)"
 
 #. i18n: ectx: label, entry (CropPreserveAspectRatio), group (Crop)
-#: lib/gwenviewconfig.kcfg:371
+#: lib/gwenviewconfig.kcfg:372
 #, kde-format
 msgid "Restrict crop to image ratio when Advanced Settings disabled"
 msgstr ""
 
 #. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
-#: lib/gwenviewconfig.kcfg:375
+#: lib/gwenviewconfig.kcfg:376
 #, kde-format
 msgid "Index representing selected ratio in the Advanced settings combobox"
 msgstr ""
 
 #. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
-#: lib/gwenviewconfig.kcfg:379
+#: lib/gwenviewconfig.kcfg:380
 #, kde-format
 msgid "Last used crop ratio width when Advanced Settings enabled"
 msgstr ""
 
 #. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
-#: lib/gwenviewconfig.kcfg:383
+#: lib/gwenviewconfig.kcfg:384
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr ""

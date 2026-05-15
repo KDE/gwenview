@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-10 00:41+0000\n"
+"POT-Creation-Date: 2026-05-15 00:42+0000\n"
 "PO-Revision-Date: 2024-12-25 19:45+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -170,75 +170,83 @@ msgctxt "@addAction:inmenu"
 msgid "Size"
 msgstr "आकृति"
 
-#: app/browsemainpage.cpp:172
+#: app/browsemainpage.cpp:171
+#, fuzzy, kde-format
+#| msgctxt "@item:intable"
+#| msgid "File Type"
+msgctxt "@addAction:inmenu"
+msgid "Type"
+msgstr "सञ्चिकाप्रकारः"
+
+#: app/browsemainpage.cpp:175
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Rating"
 msgstr "रेटिंग्"
 
-#: app/browsemainpage.cpp:179
+#: app/browsemainpage.cpp:182
 #, kde-format
 msgctxt "@action:inmenu Sort"
 msgid "Descending"
 msgstr "अवतरन्"
 
-#: app/browsemainpage.cpp:191
+#: app/browsemainpage.cpp:194
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Thumbnail Details"
 msgstr "लघुचित्र विवरण"
 
-#: app/browsemainpage.cpp:192
+#: app/browsemainpage.cpp:195
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filename"
 msgstr "सञ्चिकानाम"
 
-#: app/browsemainpage.cpp:193
+#: app/browsemainpage.cpp:196
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Date"
 msgstr "दिनाङ्कः"
 
-#: app/browsemainpage.cpp:194
+#: app/browsemainpage.cpp:197
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Image Size"
 msgstr "चित्रस्य आकारः"
 
-#: app/browsemainpage.cpp:195
+#: app/browsemainpage.cpp:198
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "File Size"
 msgstr "सञ्चिकायाः आकारः"
 
-#: app/browsemainpage.cpp:197
+#: app/browsemainpage.cpp:200
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Rating"
 msgstr "रेटिंग्"
 
-#: app/browsemainpage.cpp:200
+#: app/browsemainpage.cpp:203
 #, fuzzy, kde-format
 #| msgid "Show failed files..."
 msgctxt "@action:inmenu View"
 msgid "Show Hidden Files"
 msgstr "असफलसञ्चिकाः दर्शयतु..."
 
-#: app/browsemainpage.cpp:206 app/fileopscontextmanageritem.cpp:136
+#: app/browsemainpage.cpp:209 app/fileopscontextmanageritem.cpp:136
 #: app/mainwindow.cpp:378
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
 msgstr "सञ्चिका"
 
-#: app/browsemainpage.cpp:208
+#: app/browsemainpage.cpp:211
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Folder to Places"
 msgstr "Places इत्यत्र Folder योजयन्तु"
 
-#: app/browsemainpage.cpp:257
+#: app/browsemainpage.cpp:260
 #, kde-format
 msgctxt ""
 "@info:status %1 number of selected documents, %2 total number of documents, "
@@ -246,7 +254,7 @@ msgctxt ""
 msgid "Selected %1 of %2 (%3)"
 msgstr "%2 (%3) तः %1 चयनितम् ।"
 
-#: app/browsemainpage.cpp:263
+#: app/browsemainpage.cpp:266
 #, kde-format
 msgctxt "@info:status Image files"
 msgid "%1 image"
@@ -254,7 +262,7 @@ msgid_plural "%1 images"
 msgstr[0] "%1 चित्रम्"
 msgstr[1] "%1 चित्राणि"
 
-#: app/browsemainpage.cpp:264
+#: app/browsemainpage.cpp:267
 #, kde-format
 msgctxt "@info:status Video files"
 msgid "%1 video"
@@ -262,7 +270,7 @@ msgid_plural "%1 videos"
 msgstr[0] "%1 विडियो"
 msgstr[1] "%1 विडियो"
 
-#: app/browsemainpage.cpp:271
+#: app/browsemainpage.cpp:274
 #, kde-format
 msgctxt "@info:status images, videos"
 msgid "%1, %2"
@@ -1336,99 +1344,99 @@ msgstr "संचालनम्"
 msgid "Viewing media"
 msgstr "माध्यमं दृष्ट्वा"
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "पार्श्वपट्टिका गोपयन्तु"
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1445
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "पार्श्वपट्टिकां दर्शयतु"
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1795
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "चित्रं उद्घाटयतु"
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1856
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "स्लाइड शो विरामयतु"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1859
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "स्लाइड शो पुनः आरभत"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1859
 #, kde-format
 msgid "Start Slideshow"
 msgstr "स्लाइड शो आरभत"
 
-#: app/mainwindow.cpp:1868
+#: app/mainwindow.cpp:1872
 #, kde-format
 msgid "Save All Changes"
 msgstr "सर्वाणि परिवर्तनानि रक्षन्तु"
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1873
 #, kde-format
 msgid "Discard Changes"
 msgstr "परिवर्तनं परित्यजन्तु"
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1875
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "एकं चित्रं परिवर्तितम् अस्ति।"
 msgstr[1] "%1 चित्राणि परिवर्तितानि सन्ति ।"
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1875
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "यदि भवान् इदानीं त्यक्तवान् तर्हि भवतः परिवर्तनं नष्टं भविष्यति।"
 
-#: app/mainwindow.cpp:1914
+#: app/mainwindow.cpp:1918
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 "एतेन मेनू-पट्टिका पूर्णतया गोपिता भविष्यति । %1 इति टङ्कयित्वा पुनः दर्शयितुं शक्नुवन्ति ।"
 
-#: app/mainwindow.cpp:1917
+#: app/mainwindow.cpp:1921
 #, kde-format
 msgid "Hide menu bar"
 msgstr "मेनू-पट्टिकां गोपयन्तु"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2142
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "भवन्तः प्रथमं दस्तावेजं प्राप्तवन्तः, किं कर्तुम् इच्छन्ति?"
 
-#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2143 app/mainwindow.cpp:2157
 #, kde-format
 msgid "Stay There"
 msgstr "तत्र तिष्ठतु"
 
-#: app/mainwindow.cpp:2140
+#: app/mainwindow.cpp:2144
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "अन्तिमदस्तावेजं प्रति गच्छन्तु"
 
-#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
+#: app/mainwindow.cpp:2145 app/mainwindow.cpp:2159
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "दस्तावेजसूचौ पुनः गच्छन्तु"
 
-#: app/mainwindow.cpp:2152
+#: app/mainwindow.cpp:2156
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "भवन्तः अन्तिमदस्तावेजं प्राप्तवन्तः, किं कर्तुम् इच्छन्ति?"
 
-#: app/mainwindow.cpp:2154
+#: app/mainwindow.cpp:2158
 #, kde-format
 msgid "Go to the First Document"
 msgstr "प्रथमं दस्तावेजं गच्छन्तु"
@@ -2492,55 +2500,55 @@ msgstr ""
 "            तत् प्रदर्शयितुं न शक्यते, अन्यवर्णान् च त्यक्त्वा।"
 
 #. i18n: ectx: label, entry (random), group (slide show)
-#: lib/gwenviewconfig.kcfg:339
+#: lib/gwenviewconfig.kcfg:340
 #, kde-format
 msgid "Display slide show images in random order"
 msgstr "स्लाइड् शो चित्राणि यादृच्छिकक्रमेण प्रदर्शयन्तु"
 
 #. i18n: ectx: label, entry (fullscreen), group (slide show)
-#: lib/gwenviewconfig.kcfg:343
+#: lib/gwenviewconfig.kcfg:344
 #, kde-format
 msgid "Show slideshow in fullscreen mode"
 msgstr "स्लाइड् शो पूर्णपर्दे मोड् मध्ये दर्शयतु"
 
 #. i18n: ectx: label, entry (loop), group (slide show)
-#: lib/gwenviewconfig.kcfg:347
+#: lib/gwenviewconfig.kcfg:348
 #, kde-format
 msgid "Loop on images"
 msgstr "चित्रेषु लूप् कुर्वन्तु"
 
 #. i18n: ectx: label, entry (stopAtEnd), group (slide show)
-#: lib/gwenviewconfig.kcfg:351
+#: lib/gwenviewconfig.kcfg:352
 #, kde-format
 msgid "Stop at last image of folder"
 msgstr "फोल्डरस्य अन्तिमे चित्रे स्थगयन्तु"
 
 #. i18n: ectx: label, entry (interval), group (slide show)
-#: lib/gwenviewconfig.kcfg:355
+#: lib/gwenviewconfig.kcfg:356
 #, kde-format
 msgid "Interval between images (in seconds)"
 msgstr "बिम्बानां मध्ये अन्तरालः (सेकेण्ड्-मात्रेषु)"
 
 #. i18n: ectx: label, entry (CropPreserveAspectRatio), group (Crop)
-#: lib/gwenviewconfig.kcfg:371
+#: lib/gwenviewconfig.kcfg:372
 #, kde-format
 msgid "Restrict crop to image ratio when Advanced Settings disabled"
 msgstr "उन्नतसेटिंग्स् अक्षमीकरणे सस्यं प्रतिबिम्बानुपातं प्रतिबन्धयन्तु"
 
 #. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
-#: lib/gwenviewconfig.kcfg:375
+#: lib/gwenviewconfig.kcfg:376
 #, kde-format
 msgid "Index representing selected ratio in the Advanced settings combobox"
 msgstr "Advanced settings combobox मध्ये चयनितं अनुपातं प्रतिनिधियति अनुक्रमणिका"
 
 #. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
-#: lib/gwenviewconfig.kcfg:379
+#: lib/gwenviewconfig.kcfg:380
 #, kde-format
 msgid "Last used crop ratio width when Advanced Settings enabled"
 msgstr "अन्तिमप्रयुक्तं सस्यानुपातविस्तारः यदा उन्नतसेटिंग्स् सक्षमः अभवत्"
 
 #. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
-#: lib/gwenviewconfig.kcfg:383
+#: lib/gwenviewconfig.kcfg:384
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr "अन्तिमप्रयुक्तं सस्यानुपातस्य ऊर्ध्वता यदा उन्नतसेटिंग्स् सक्षमम् अभवत्"
