@@ -171,12 +171,10 @@ msgid "Size"
 msgstr "大小"
 
 #: app/browsemainpage.cpp:171
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Type"
+#, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Type"
-msgstr "文件类型"
+msgstr ""
 
 #: app/browsemainpage.cpp:175
 #, kde-format

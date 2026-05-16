@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-15 00:42+0000\n"
-"PO-Revision-Date: 2026-02-26 18:54+0100\n"
+"PO-Revision-Date: 2026-05-15 22:52+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
 "Language: nn\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 26.03.70\n"
+"X-Generator: Lokalize 26.04.1\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -177,12 +177,10 @@ msgid "Size"
 msgstr "Storleik"
 
 #: app/browsemainpage.cpp:171
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Type"
+#, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Type"
-msgstr "Filtype"
+msgstr "Type"
 
 #: app/browsemainpage.cpp:175
 #, kde-format
