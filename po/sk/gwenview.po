@@ -179,12 +179,10 @@ msgid "Size"
 msgstr "Veľkosť"
 
 #: app/browsemainpage.cpp:171
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Type"
+#, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Type"
-msgstr "Typ súboru"
+msgstr "Typ"
 
 #: app/browsemainpage.cpp:175
 #, kde-format
