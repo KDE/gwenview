@@ -1076,7 +1076,7 @@
             <listitem>
                 <para
 ><link linkend="configview"
->Afbeeldingweergave</link
+>Afbeeldingsweergave</link
 ></para>
             </listitem>
             <listitem>
@@ -1207,7 +1207,7 @@
     </sect1>
         <sect1 id="configview">
         <title
->Afbeeldingweergave</title>
+>Afbeeldingsweergave</title>
         <variablelist>
             <varlistentry>
                 <term
