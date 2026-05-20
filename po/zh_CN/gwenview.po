@@ -156,7 +156,7 @@ msgstr "排序方式"
 #, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Name"
-msgstr "名称"
+msgstr "文件名"
 
 #: app/browsemainpage.cpp:165
 #, kde-format

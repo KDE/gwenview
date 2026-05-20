@@ -4,7 +4,7 @@
 # Tom Albers <tomalbers@kde.nl>, 2005.
 # Rinse de Vries <RinseDeVries@home.nl>, 2005.
 # Bram Schoenmakers <bramschoenmakers@kde.nl>, 2006.
-# SPDX-FileCopyrightText: 2008, 2009, 2023, 2024, 2025 Freek de Kruijf <f.de.kruijf@hetnet.nl>
+# SPDX-FileCopyrightText: 2008-2009, 2023-2026 Freek de Kruijf <f.de.kruijf@hetnet.nl>
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2009, 2010, 2011, 2012.
 # Freek de Kruijf <freekdekruijf@kde.nl>, 2011, 2013, 2014, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023.
 msgid ""
@@ -12,14 +12,14 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2025-10-08 12:05+0200\n"
+"PO-Revision-Date: 2026-05-19 11:41+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Lokalize 26.04.1\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #, kde-format
@@ -291,7 +291,7 @@ msgstr "Algemeen"
 #: app/configdialog.cpp:122
 #, kde-format
 msgid "Image View"
-msgstr "Afbeeldingweergave"
+msgstr "Afbeeldingsweergave"
 
 #: app/configdialog.cpp:133
 #, kde-format
