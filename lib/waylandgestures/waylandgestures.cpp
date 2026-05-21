@@ -77,12 +77,21 @@ private:
 
 WaylandGestures::WaylandGestures(QObject *parent)
     : QObject(parent)
+    , m_pinchGesture(nullptr)
 {
     m_startZoom = 1.0;
     m_zoomModifier = 1.0;
     m_pointerGestures = new PointerGestures();
     connect(m_pointerGestures, &PointerGestures::activeChanged, this, [this]() {
-        init();
+        if (m_pointerGestures->isActive()) {
+            init();
+        } else {
+            if (m_pinchGesture) {
+                m_pinchGesture->destroy();
+                delete m_pinchGesture;
+                m_pinchGesture = nullptr;
+            }
+        }
     });
 }
 
@@ -111,6 +120,11 @@ void WaylandGestures::init()
     const auto pointer = reinterpret_cast<wl_pointer *>(native->nativeResourceForIntegration(QByteArrayLiteral("wl_pointer")));
     if (!pointer) {
         return;
+    }
+
+    if (m_pinchGesture) {
+        m_pinchGesture->destroy();
+        delete m_pinchGesture;
     }
 
     m_pinchGesture = new PinchGesture(m_pointerGestures->get_pinch_gesture(pointer), this);
