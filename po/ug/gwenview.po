@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-15 00:42+0000\n"
-"PO-Revision-Date: 2026-04-15 13:30-0400\n"
+"PO-Revision-Date: 2026-05-30 16:31-0400\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
 "Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
 "Language: ug\n"
@@ -175,12 +175,10 @@ msgid "Size"
 msgstr "چوڭلۇقى"
 
 #: app/browsemainpage.cpp:171
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Type"
+#, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Type"
-msgstr "ھۆججەت تۈرى"
+msgstr "تۈرى"
 
 #: app/browsemainpage.cpp:175
 #, kde-format
@@ -2282,7 +2280,7 @@ msgstr "ئەخلەتخانا"
 #, kde-format
 msgctxt "@action:button"
 msgid "Deselect"
-msgstr "ئەكسىچە تاللا"
+msgstr "تاللىما"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:416
@@ -2751,7 +2749,7 @@ msgstr "چوڭلۇقىنى ئۆزگەرت"
 #: lib/resize/resizeimagewidget.ui:14
 #, kde-format
 msgid "Resize Image"
-msgstr "سۈرەت چوڭلۇقىنى ئۆزگەرتىش"
+msgstr "سۈرەت چوڭلۇقىنى ئۆزگەرت"
 
 #. i18n: ectx: property (text), widget (QLabel, mEstimatedSizeLabel)
 #: lib/resize/resizeimagewidget.ui:20
