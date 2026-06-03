@@ -59,6 +59,7 @@
   <name xml:lang="sv">Gwenview</name>
   <name xml:lang="ta">குவென்வியூ</name>
   <name xml:lang="tr">Gwenview</name>
+  <name xml:lang="ug">Gwenview سۈرەت كۆرگۈچ</name>
   <name xml:lang="uk">Gwenview</name>
   <name xml:lang="zh-CN">Gwenview 图像查看器</name>
   <name xml:lang="zh-TW">Gwenview</name>
@@ -111,6 +112,7 @@
   <summary xml:lang="sv">Bildvisare</summary>
   <summary xml:lang="ta">படக் காட்டி</summary>
   <summary xml:lang="tr">Görsel görüntüleyicisi</summary>
+  <summary xml:lang="ug">سۈرەت كۆرگۈچ</summary>
   <summary xml:lang="uk">Програма для перегляду зображень</summary>
   <summary xml:lang="zh-CN">图像查看器</summary>
   <summary xml:lang="zh-TW">影像檢視器</summary>
@@ -221,6 +223,7 @@
     <p xml:lang="sv">Funktioner:</p>
     <p xml:lang="ta">அம்சங்கள்:</p>
     <p xml:lang="tr">Özellikler:</p>
+    <p xml:lang="ug">ئىقتىدار:</p>
     <p xml:lang="uk">Можливості:</p>
     <p xml:lang="zh-CN">程序功能：</p>
     <p xml:lang="zh-TW">功能：</p>
