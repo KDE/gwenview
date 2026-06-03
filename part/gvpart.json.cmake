@@ -46,6 +46,7 @@
         "Name[sv]": "Gwenview bildvisare",
         "Name[ta]": "குவென்வியூ படக் காட்டி",
         "Name[tr]": "Gwenview Görsel Görüntüleyicisi",
+        "Name[ug]": "Gwenview سۈرەت كۆرگۈچ",
         "Name[uk]": "Переглядач зображень Gwenview",
         "Name[zh_CN]": "Gwenview 图像查看器",
         "Name[zh_TW]": "Gwenview 影像檢視程式",
