@@ -413,7 +413,7 @@
 ><guimenu
 >Einstellungen</guimenu
 ><guimenuitem
->&gwenview; einrichten ...</guimenuitem
+>&gwenview; einrichten …</guimenuitem
 ></menuchoice
 > öffnen.</para>
 
@@ -443,7 +443,7 @@
 <tip
 ><para
 >Sie können direkt im Ansichtsmodus beginnen, wenn Sie &gwenview; aus dem Kontextmenü eines anderen Programms durch <guimenuitem
->Öffnen mit ...</guimenuitem
+>Öffnen mit …</guimenuitem
 > oder auf der Befehlszeile mit dem Namen eines Bild als Argument starten.</para
 > </tip>
 
@@ -652,7 +652,7 @@
 >Zeigt <guilabel
 >Metainformation</guilabel
 > wie Dateiname und -größe an. Klicken Sie auf <guilabel
->Mehr ...</guilabel
+>Mehr …</guilabel
 >, dann werden alle verfügbaren Metadaten in einem Dialog angezeigt und Sie können auswählen, welche Daten in der Seitenleiste angezeigt werden sollen.</para
 ></listitem>
 </varlistentry>
@@ -810,7 +810,7 @@
 ><guimenu
 >Einstellungen</guimenu
 ><guimenuitem
->&gwenview; einrichten ...</guimenuitem
+>&gwenview; einrichten …</guimenuitem
 ></menuchoice
 > ausgewählt, können Sie im Ansichtsmodus mit dem Mausrad durch die Bilder im Vorschaubereich blättern. </para
 ></listitem>
@@ -827,7 +827,7 @@
 ><guimenu
 >Einstellungen</guimenu
 ><guimenuitem
->Kurzbefehle festlegen ...</guimenuitem
+>Kurzbefehle festlegen …</guimenuitem
 ></menuchoice
 > ansehen und bearbeiten. Beachten Sie, dass in den Datei- und Ordneransichten alle üblichen &plasma;-Kurzbefehle funktionieren, solange sie nicht anderweitig zugeordnet wurden.</para>
 
@@ -1079,7 +1079,7 @@
 ><guimenu
 >Einstellungen</guimenu
 ><guimenuitem
->&gwenview; einrichten ...</guimenuitem
+>&gwenview; einrichten …</guimenuitem
 > </menuchoice
 > öffnen Sie einen Dialog mit drei Abschnitten. Dieses Kapitel beschreibt ausführlich alle vorhandenen Optionen. </para>
         <itemizedlist>
@@ -1241,7 +1241,7 @@
                         <listitem>
                             <para
 ><guilabel
->Umgebungs-Hintergrund</guilabel
+>Umgebender Hintergrund</guilabel
 > &mdash; Verwendet die Hintergrundfarbe, die auf der Seite <link linkend="configgeneral"
 >Allgemein</link
 > ausgewählt ist.</para>
