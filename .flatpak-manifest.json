@@ -89,8 +89,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.7.tar.gz",
-                    "sha256": "5e292b02614dbc0cee40fe1116db2f42f63ef6b2ba430c77b614e17b8d61a638",
+                    "url": "https://github.com/Exiv2/exiv2/archive/refs/tags/v0.28.8.tar.gz",
+                    "sha256": "ea51b0609f58a9afa063b60daa1539948b62247721e154f4fff0ad3aec9f9756",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 769,
@@ -110,8 +110,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.6.2.tar.gz",
-                    "sha256": "66fd078cc0bea896b0d44b120d46d6805421a5361d3a5ad84d9f397b1b5de2cb",
+                    "url": "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-4.6.4.tar.gz",
+                    "sha256": "227b637b91c9820ea96f39a65eb087f053de567d82f4338e2884f123f8183c55",
                     "disable-http-decompression": true,
                     "x-checker-data": {
                         "type": "anitya",
@@ -138,8 +138,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://github.com/jasper-software/jasper/archive/version-4.2.8.tar.gz",
-                    "sha256": "987e8c8b4afcff87553833b6f0fa255b5556a0ecc617b45ee1882e10c1b5ec14",
+                    "url": "https://github.com/jasper-software/jasper/archive/version-4.2.9.tar.gz",
+                    "sha256": "b0e5af6b54c274b9670c7e32ddbf6c802d88c896062d760267695dd0aa7014ff",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 1421,
@@ -159,8 +159,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://www.libraw.org/data/LibRaw-0.21.4.tar.gz",
-                    "sha256": "6be43f19397e43214ff56aab056bf3ff4925ca14012ce5a1538a172406a09e63",
+                    "url": "https://www.libraw.org/data/LibRaw-0.22.1.tar.gz",
+                    "sha256": "a789dc4e2409e2901d93793a4e0b80c7b49d0d97cf6ad71c850eb7616acfd786",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 1709,
@@ -196,8 +196,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://git.openldap.org/openldap/openldap/-/archive/LMDB_0.9.33/openldap-LMDB_0.9.33.tar.bz2",
-                    "sha256": "d19d52725800177b89d235161c0af8ae8b2932207e3c9eb87e95b61f1925206d",
+                    "url": "https://git.openldap.org/openldap/openldap/-/archive/LMDB_0.9.35/openldap-LMDB_0.9.35.tar.bz2",
+                    "sha256": "98e28ab0a5c23fb2eb8ad12c12d7ad5fc5e4c3563f41d0b91e9420a075974d6f",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 6974,
@@ -217,8 +217,8 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://download.kde.org/stable/frameworks/6.20/baloo-6.20.0.tar.xz",
-                    "sha256": "06a0dc24b9cae08c7228aebc3215185042b58c4fc58ef86c8863e577493d1314",
+                    "url": "https://download.kde.org/stable/frameworks/6.27/baloo-6.27.0.tar.xz",
+                    "sha256": "6b226118bde28e81217f8cd6129f6e24c5d422bd7a322fe682e592b028b72db7",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 8762,
