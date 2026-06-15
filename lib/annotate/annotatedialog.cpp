@@ -34,6 +34,7 @@ AnnotateDialog::AnnotateDialog(QWidget *parent)
     , mAnnotator(new kImageAnnotator::KImageAnnotator())
 {
     mAnnotator->setParent(this);
+    mAnnotator->setSaveToolSelection(true);
     auto layout = new QVBoxLayout;
     layout->addWidget(mAnnotator);
     auto buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
