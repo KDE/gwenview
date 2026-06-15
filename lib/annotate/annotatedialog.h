@@ -43,6 +43,9 @@ public:
     QImage getImage() const;
 
 private:
+    void restoreWindowSize();
+    void saveWindowSize();
+
     kImageAnnotator::KImageAnnotator *mAnnotator;
 };
 
