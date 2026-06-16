@@ -2,23 +2,23 @@
 # Copyright (C) 2008 This_file_is_part_of_KDE
 # This file is distributed under the same license as the gwenview package.
 # Laurenţiu Buzdugan <lbuz@rolix.org>, 2008".
-# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2020, 2021, 2022, 2025 Sergiu Bivol <sergiu@cip.md>
+# SPDX-FileCopyrightText: 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2020, 2021, 2022, 2025, 2026 Sergiu Bivol <sergiu@cip.md>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2025-11-17 11:50+0000\n"
-"PO-Revision-Date: 2025-12-13 13:23+0000\n"
+"PO-Revision-Date: 2026-06-15 15:06+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
-"Language-Team: \n"
+"Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Lokalize 25.08.1\n"
+"X-Generator: Lokalize 25.12.3\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2265,6 +2265,9 @@ msgid ""
 "Gwenview cannot display documents of type %1. Install the kimageformats "
 "package to gain support for a wider range of media types."
 msgstr ""
+"Gwenview nu poate afișa documente de tipul %1. Instalați pachetul "
+"kimageformats pentru a obține susținerea unei game mai mari de tipuri de "
+"fișier."
 
 #: lib/document/loadingdocumentimpl.cpp:403
 #, kde-format
@@ -2494,6 +2497,24 @@ msgid ""
 "            own zoom and position (if these are changed, image A will NOT\n"
 "            be displayed with the updated zoom and position)."
 msgstr ""
+"Definește ce se întâmplă când mergeți la imaginea B după ce\n"
+"            ați apropiat o zonă a imaginii A.  Dacă e ales Autofit,\n"
+"            imaginea B e îndepărtată pentru a se încadra în ecran.  Dacă e "
+"ales\n"
+"            KeepSame, toate imaginile au aceeași apropiere și poziție: "
+"imaginea B\n"
+"            e adusă la aceeași parametri de apropiere ca imaginea A (și "
+"dacă\n"
+"            aceștia se schimbă, imaginea A va fi afișată cu apropierea și\n"
+"            poziția nouă).  Dacă e stabilit la Individual, toate imaginile "
+"își \n"
+"            memorizează propria apropiere și poziție: imaginea B e adusă "
+"inițial\n"
+"            la aceeași parametri de apropiere ca imaginea A, dar ulterior "
+"își va\n"
+"            memoriza propria apropiere și poziție (dacă acestea se schimbă,\n"
+"            imaginea A NU va fi afișată cu apropierea și poziția "
+"actualizate)."
 
 #. i18n: ectx: whatsthis, entry (RenderingIntent), group (ImageView)
 #: lib/gwenviewconfig.kcfg:228
