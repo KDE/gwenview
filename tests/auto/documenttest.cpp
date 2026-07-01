@@ -26,7 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KF
 #include <KIO/StatJob>
 #include <KJobUiDelegate>
-#include <kio_version.h>
 
 // KDCraw
 #include <KDCRAW/KDcraw>

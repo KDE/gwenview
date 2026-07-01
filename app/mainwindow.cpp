@@ -69,15 +69,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KUrlComboBox>
 #include <KUrlNavigator>
 #include <KXMLGUIFactory>
-#include <kwidgetsaddons_version.h>
-#include <kxmlgui_version.h>
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
 #include "lib/semanticinfo/semanticinfodirmodel.h"
 #endif
 #if HAVE_PURPOSE
 #include <Purpose/AlternativesModel>
 #include <Purpose/Menu>
-#include <purpose_version.h>
 #endif
 
 // Local
