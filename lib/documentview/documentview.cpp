@@ -634,15 +634,14 @@ void DocumentView::slotCompleted()
         }
     }
 
-    bool available = false;
+    bool motionPhotoAvailable = false;
     if (d->mAdapter->kind() == MimeTypeUtils::KIND_RASTER_IMAGE && d->mDocument) {
         const QString path = d->mDocument->url().toLocalFile();
-        available = !path.isEmpty() && (path.endsWith(QLatin1String(".jpg"), Qt::CaseInsensitive) || path.endsWith(QLatin1String(".jpeg"), Qt::CaseInsensitive))
-            && MotionPhotoUtil::isMotionPhoto(path);
+        motionPhotoAvailable = !path.isEmpty() && MotionPhotoUtil::isMotionPhoto(path);
     }
-    if (available != d->mMotionPhotoAvailable) {
-        d->mMotionPhotoAvailable = available;
-        Q_EMIT motionPhotoAvailableChanged(available);
+    if (motionPhotoAvailable != d->mMotionPhotoAvailable) {
+        d->mMotionPhotoAvailable = motionPhotoAvailable;
+        Q_EMIT motionPhotoAvailableChanged(motionPhotoAvailable);
     }
 
     Q_EMIT completed();
@@ -708,7 +707,7 @@ void DocumentView::slotStopMotionPhoto()
     d->mPlayingMotionPhoto = false;
     Q_EMIT motionPhotoPlayingChanged(false);
 
-    createAdapterForDocument(); // Destroys VideoViewAdapter, creates RasterImageViewAdapter
+    createAdapterForDocument();
     d->mMotionPhotoBuffer.reset();
     d->mAdapter->setDocument(d->mDocument);
 }

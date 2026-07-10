@@ -275,9 +275,7 @@ void VideoViewAdapter::setDocument(const Document::Ptr &doc)
 {
     d->mHud->show();
     d->mLoopAction->setChecked(false);
-    if (d->mMuteButton) {
-        d->mMuteButton->show();
-    }
+    d->mMuteButton->show();
     d->mVolumeSlider->show();
     d->mDocument = doc;
     d->mMediaPlayer->setSource(d->mDocument->url());
@@ -301,9 +299,7 @@ void VideoViewAdapter::setSourceDevice(QIODevice *device, const QUrl &url)
     d->mHud->show();
     d->mWidget->setAcceptHoverEvents(true);
     d->mLoopAction->setChecked(true);
-    if (d->mMuteButton) {
-        d->mMuteButton->hide();
-    }
+    d->mMuteButton->hide();
     d->mVolumeSlider->hide();
     d->mMotionPhotoDevice = device;
     d->mMotionPhotoUrl = url;

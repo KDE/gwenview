@@ -302,16 +302,13 @@ struct ViewMainPagePrivate {
 
         QObject::connect(view, &DocumentView::videoFinished, mSlideShow, &SlideShow::resumeAndGoToNextUrl);
 
-        QObject::connect(view, &DocumentView::motionPhotoAvailableChanged, q, [this, view](bool available) {
+        auto updateIfCurrent = [this, view]() {
             if (view == currentView()) {
-                updateMotionPhotoButton(available, view->isPlayingMotionPhoto());
+                updateMotionPhotoButton(view);
             }
-        });
-        QObject::connect(view, &DocumentView::motionPhotoPlayingChanged, q, [this, view](bool playing) {
-            if (view == currentView()) {
-                updateMotionPhotoButton(view->isMotionPhotoAvailable(), playing);
-            }
-        });
+        };
+        QObject::connect(view, &DocumentView::motionPhotoAvailableChanged, q, updateIfCurrent);
+        QObject::connect(view, &DocumentView::motionPhotoPlayingChanged, q, updateIfCurrent);
 
         mDocumentViews << view;
 
@@ -355,13 +352,13 @@ struct ViewMainPagePrivate {
         return mDocumentViewController->view();
     }
 
-    void updateMotionPhotoButton(bool available, bool playing)
+    void updateMotionPhotoButton(DocumentView *view)
     {
-        if (playing) {
+        if (view->isPlayingMotionPhoto()) {
             mMotionPhotoButton->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-stop")));
             mMotionPhotoButton->setText(i18nc("@action:button", "Back to Image"));
             mMotionPhotoButton->show();
-        } else if (available) {
+        } else if (view->isMotionPhotoAvailable()) {
             mMotionPhotoButton->setIcon(QIcon::fromTheme(QStringLiteral("media-playback-start")));
             mMotionPhotoButton->setText(i18nc("@action:button", "Play Motion Photo"));
             mMotionPhotoButton->show();
@@ -382,7 +379,7 @@ struct ViewMainPagePrivate {
         view->setCurrent(true);
         mDocumentViewController->setView(view);
         mSynchronizer->setCurrentView(view);
-        updateMotionPhotoButton(view->isMotionPhotoAvailable(), view->isPlayingMotionPhoto());
+        updateMotionPhotoButton(view);
 
         QModelIndex index = indexForView(view);
         if (index.isValid()) {
