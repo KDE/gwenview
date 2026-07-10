@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-15 00:42+0000\n"
+"POT-Creation-Date: 2026-07-10 00:41+0000\n"
 "PO-Revision-Date: 2020-08-10 14:45+0200\n"
 "Last-Translator: Dan Åsen Hansen <post@danhansen.net>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@nuug.no>\n"
@@ -137,7 +137,7 @@ msgid "Sidebar Alignment Spacer"
 msgstr ""
 
 # unreviewed-context
-#: app/browsemainpage.cpp:151 app/mainwindow.cpp:379 app/viewmainpage.cpp:410
+#: app/browsemainpage.cpp:151 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
 #: lib/documentview/documentviewcontroller.cpp:56
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -235,7 +235,7 @@ msgid "Show Hidden Files"
 msgstr "Vis filer med importfeil …"
 
 #: app/browsemainpage.cpp:209 app/fileopscontextmanageritem.cpp:136
-#: app/mainwindow.cpp:378
+#: app/mainwindow.cpp:375
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -298,13 +298,13 @@ msgstr "Bildevisning"
 msgid "Advanced"
 msgstr "Avansert"
 
-#: app/fileoperations.cpp:65
+#: app/fileoperations.cpp:64
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "Kopier %1"
 
-#: app/fileoperations.cpp:67
+#: app/fileoperations.cpp:66
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
@@ -312,19 +312,19 @@ msgid_plural "Copy %1 images"
 msgstr[0] "Kopier %1 bilde"
 msgstr[1] "Kopier %1 bilder"
 
-#: app/fileoperations.cpp:69
+#: app/fileoperations.cpp:68
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Kopier"
 
-#: app/fileoperations.cpp:73
+#: app/fileoperations.cpp:72
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "Flytt %1"
 
-#: app/fileoperations.cpp:75
+#: app/fileoperations.cpp:74
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
@@ -332,19 +332,19 @@ msgid_plural "Move %1 images"
 msgstr[0] "Flytt %1 bilde"
 msgstr[1] "Flytt %1 bilder"
 
-#: app/fileoperations.cpp:77
+#: app/fileoperations.cpp:76
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "Flytt"
 
-#: app/fileoperations.cpp:81
+#: app/fileoperations.cpp:80
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "Lenke til %1"
 
-#: app/fileoperations.cpp:83
+#: app/fileoperations.cpp:82
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
@@ -352,28 +352,28 @@ msgid_plural "Link %1 images"
 msgstr[0] "Lenke til %1 bilde"
 msgstr[1] "Lenke til %1 bilder"
 
-#: app/fileoperations.cpp:85
+#: app/fileoperations.cpp:84
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "Lenke"
 
-#: app/fileoperations.cpp:196
+#: app/fileoperations.cpp:195
 #, kde-format
 msgid "Move Here"
 msgstr "Flytt hit"
 
-#: app/fileoperations.cpp:197
+#: app/fileoperations.cpp:196
 #, kde-format
 msgid "Copy Here"
 msgstr "Kopier hit"
 
-#: app/fileoperations.cpp:198
+#: app/fileoperations.cpp:197
 #, kde-format
 msgid "Link Here"
 msgstr "Lag lenke hit"
 
-#: app/fileoperations.cpp:200
+#: app/fileoperations.cpp:199
 #, kde-format
 msgid "Cancel"
 msgstr "Avbryt"
@@ -1158,285 +1158,285 @@ msgstr "Start i bildeframvisningsmodus"
 msgid "A starting file or folders"
 msgstr "En startfil eller mappe"
 
-#: app/mainwindow.cpp:388
+#: app/mainwindow.cpp:385
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr ""
 
-#: app/mainwindow.cpp:396
+#: app/mainwindow.cpp:393
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "Last på nytt"
 
-#: app/mainwindow.cpp:401
+#: app/mainwindow.cpp:398
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "Erstatt adresse"
 
-#: app/mainwindow.cpp:406
+#: app/mainwindow.cpp:403
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "Bla"
 
-#: app/mainwindow.cpp:407
+#: app/mainwindow.cpp:404
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "Bla i mapper etter bilder"
 
-#: app/mainwindow.cpp:414
+#: app/mainwindow.cpp:411
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "Vis"
 
-#: app/mainwindow.cpp:415
+#: app/mainwindow.cpp:412
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "Vis valgte bilder"
 
-#: app/mainwindow.cpp:434
+#: app/mainwindow.cpp:431
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "Gå ut av fullskjermmodus"
 
-#: app/mainwindow.cpp:438
+#: app/mainwindow.cpp:435
 #, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr ""
 
-#: app/mainwindow.cpp:444
+#: app/mainwindow.cpp:441
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "Forrige"
 
-#: app/mainwindow.cpp:445
+#: app/mainwindow.cpp:442
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "Gå til forrige bilde"
 
-#: app/mainwindow.cpp:451
+#: app/mainwindow.cpp:448
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "Neste"
 
-#: app/mainwindow.cpp:452
+#: app/mainwindow.cpp:449
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "Gå til neste bilde"
 
-#: app/mainwindow.cpp:458
+#: app/mainwindow.cpp:455
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "Først"
 
-#: app/mainwindow.cpp:459
+#: app/mainwindow.cpp:456
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "Gå til første bilde"
 
-#: app/mainwindow.cpp:465
+#: app/mainwindow.cpp:462
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "Siste"
 
-#: app/mainwindow.cpp:466
+#: app/mainwindow.cpp:463
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "Gå til siste bilde"
 
-#: app/mainwindow.cpp:476
+#: app/mainwindow.cpp:473
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "Startside"
 
-#: app/mainwindow.cpp:477
+#: app/mainwindow.cpp:474
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "Åpne startsiden"
 
-#: app/mainwindow.cpp:484
+#: app/mainwindow.cpp:481
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "Sidestolpe"
 
-#: app/mainwindow.cpp:489
+#: app/mainwindow.cpp:486
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr ""
 
-#: app/mainwindow.cpp:524
+#: app/mainwindow.cpp:521
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "Del"
 
-#: app/mainwindow.cpp:533
+#: app/mainwindow.cpp:530
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr ""
 
-#: app/mainwindow.cpp:540
+#: app/mainwindow.cpp:537
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr ""
 
-#: app/mainwindow.cpp:590
+#: app/mainwindow.cpp:587
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr ""
 
 # unreviewed-context
-#: app/mainwindow.cpp:605
+#: app/mainwindow.cpp:602
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Rediger"
 
-#: app/mainwindow.cpp:610
+#: app/mainwindow.cpp:607
 #, kde-format
 msgid "Redo"
 msgstr "Gjør om igjen"
 
-#: app/mainwindow.cpp:618
+#: app/mainwindow.cpp:615
 #, kde-format
 msgid "Undo"
 msgstr "Angre"
 
-#: app/mainwindow.cpp:645
+#: app/mainwindow.cpp:642
 #, kde-format
 msgid "Folders"
 msgstr "Mapper"
 
-#: app/mainwindow.cpp:651
+#: app/mainwindow.cpp:648
 #, kde-format
 msgid "Information"
 msgstr "Informasjon"
 
-#: app/mainwindow.cpp:690
+#: app/mainwindow.cpp:687
 #, kde-format
 msgid "Operations"
 msgstr "Handlinger"
 
-#: app/mainwindow.cpp:959
+#: app/mainwindow.cpp:956
 #, kde-format
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1445
+#: app/mainwindow.cpp:1442
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Skjul sidestolpe"
 
-#: app/mainwindow.cpp:1445
+#: app/mainwindow.cpp:1442
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Vis sidestolpe"
 
-#: app/mainwindow.cpp:1795
+#: app/mainwindow.cpp:1792
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Åpne bildet"
 
-#: app/mainwindow.cpp:1856
+#: app/mainwindow.cpp:1853
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Pause i lysbildeframvisning"
 
-#: app/mainwindow.cpp:1859
+#: app/mainwindow.cpp:1856
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Fortsett lysbildevisning"
 
-#: app/mainwindow.cpp:1859
+#: app/mainwindow.cpp:1856
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Start bildeframvisning"
 
-#: app/mainwindow.cpp:1872
+#: app/mainwindow.cpp:1869
 #, kde-format
 msgid "Save All Changes"
 msgstr "Lagre alle endringer"
 
-#: app/mainwindow.cpp:1873
+#: app/mainwindow.cpp:1870
 #, kde-format
 msgid "Discard Changes"
 msgstr "Forkast endringer"
 
-#: app/mainwindow.cpp:1875
+#: app/mainwindow.cpp:1872
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Ett bilde er endret."
 msgstr[1] "%1 bilder er endret."
 
-#: app/mainwindow.cpp:1875
+#: app/mainwindow.cpp:1872
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Hvis du avslutter nå blir endringene borte."
 
-#: app/mainwindow.cpp:1918
+#: app/mainwindow.cpp:1915
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "Dette skjuler menylinja helt. Du kan vise den igjen ved å trykke %1."
 
-#: app/mainwindow.cpp:1921
+#: app/mainwindow.cpp:1918
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Skjul menylinje"
 
-#: app/mainwindow.cpp:2142
+#: app/mainwindow.cpp:2139
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "Du nådde det første dokumentet, hva vil du gjøre?"
 
-#: app/mainwindow.cpp:2143 app/mainwindow.cpp:2157
+#: app/mainwindow.cpp:2140 app/mainwindow.cpp:2154
 #, kde-format
 msgid "Stay There"
 msgstr "Bli der"
 
-#: app/mainwindow.cpp:2144
+#: app/mainwindow.cpp:2141
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Gå til det siste dokumentet"
 
-#: app/mainwindow.cpp:2145 app/mainwindow.cpp:2159
+#: app/mainwindow.cpp:2142 app/mainwindow.cpp:2156
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Gå tilbake til dokumentliste"
 
-#: app/mainwindow.cpp:2156
+#: app/mainwindow.cpp:2153
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "Du nådde det siste dokumentet, hva vil du gjøre?"
 
-#: app/mainwindow.cpp:2158
+#: app/mainwindow.cpp:2155
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Gå til det første dokumentet"
@@ -1786,14 +1786,14 @@ msgstr "Opprinnelig filnavn"
 msgid "Original filename, in lower case"
 msgstr "Opprinnelig filnavn, med små bokstaver"
 
-#: importer/importdialog.cpp:94
+#: importer/importdialog.cpp:93
 #, kde-format
 msgid "One document has been imported."
 msgid_plural "%1 documents have been imported."
 msgstr[0] "Ett dokument er importert."
 msgstr[1] "%1 dokumenter er importert."
 
-#: importer/importdialog.cpp:96
+#: importer/importdialog.cpp:95
 #, kde-format
 msgid "One document has been skipped because it had already been imported."
 msgid_plural ""
@@ -1801,7 +1801,7 @@ msgid_plural ""
 msgstr[0] "Ett dokument er utelatt fordi det allerede var importert."
 msgstr[1] "%1 dokumenter er utelatt fordi de allerede var importert."
 
-#: importer/importdialog.cpp:104
+#: importer/importdialog.cpp:103
 #, kde-format
 msgid ""
 "One of them has been renamed because another document with the same name had "
@@ -1816,21 +1816,21 @@ msgstr[1] ""
 "%1 av dem har fått nye navn fordi andre dokumenter med samme navn var "
 "importert fra før."
 
-#: importer/importdialog.cpp:112
+#: importer/importdialog.cpp:111
 #, kde-format
 msgid "Delete the imported document from the device?"
 msgid_plural "Delete the %1 imported documents from the device?"
 msgstr[0] "Skal det importerte dokumentet slettes fra enheten?"
 msgstr[1] "Skal de %1 importerte dokumentene slettes fra enheten?"
 
-#: importer/importdialog.cpp:114
+#: importer/importdialog.cpp:113
 #, kde-format
 msgid "Delete the skipped document from the device?"
 msgid_plural "Delete the %1 skipped documents from the device?"
 msgstr[0] "Skal det utelatte dokumentet slettes fra enheten?"
 msgstr[1] "Skal de %1 utelatte dokumentene slettes fra enheten?"
 
-#: importer/importdialog.cpp:117
+#: importer/importdialog.cpp:116
 #, kde-format
 msgctxt "Singular sentence is actually never used."
 msgid "Delete the imported or skipped document from the device?"
@@ -1838,18 +1838,18 @@ msgid_plural "Delete the %1 imported and skipped documents from the device?"
 msgstr[0] "Skal det importerte eller utelatte dokumentet slettes fra enheten?"
 msgstr[1] "Skal de %1 importerte og utelatte dokumentene slettes fra enheten?"
 
-#: importer/importdialog.cpp:124
+#: importer/importdialog.cpp:123
 #, kde-format
 msgctxt "@title:window"
 msgid "Import Finished"
 msgstr "Import fullført"
 
-#: importer/importdialog.cpp:125
+#: importer/importdialog.cpp:124
 #, kde-format
 msgid "Keep"
 msgstr "Behold"
 
-#: importer/importdialog.cpp:139
+#: importer/importdialog.cpp:138
 #, kde-format
 msgid ""
 "Failed to delete the document:\n"
@@ -1864,32 +1864,32 @@ msgstr[1] ""
 "Klarte ikke å slette dokumenter:\n"
 "%2"
 
-#: importer/importdialog.cpp:141
+#: importer/importdialog.cpp:140
 #, kde-format
 msgid "Retry"
 msgstr "Prøv igjen"
 
-#: importer/importdialog.cpp:142
+#: importer/importdialog.cpp:141
 #, kde-format
 msgid "Ignore"
 msgstr "Ignorer"
 
-#: importer/importdialog.cpp:166
+#: importer/importdialog.cpp:165
 #, kde-format
 msgid "What do you want to do now?"
 msgstr "Hva vil du gjøre nå?"
 
-#: importer/importdialog.cpp:168
+#: importer/importdialog.cpp:167
 #, kde-format
 msgid "View Imported Documents with Gwenview"
 msgstr "Vis importerte dokumenter med Gwenview"
 
-#: importer/importdialog.cpp:169
+#: importer/importdialog.cpp:168
 #, kde-format
 msgid "Import more Documents"
 msgstr "Importer flere dokumenter"
 
-#: importer/importdialog.cpp:170
+#: importer/importdialog.cpp:169
 #, kde-format
 msgid "Quit"
 msgstr "Avslutt"
