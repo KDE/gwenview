@@ -4,31 +4,33 @@
 # SPDX-FileCopyrightText: 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2023, 2024, 2025 Vít Pelčák <vit@pelcak.org>
 # Tomáš Chvátal <tomas.chvatal@gmail.com>, 2012, 2013.
 # SPDX-FileCopyrightText: 2021, 2022, 2023, 2024 Vit Pelcak <vit@pelcak.org>
+# SPDX-FileCopyrightText: 2026 Libor Filípek <libor.filipek@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-07-10 00:41+0000\n"
-"PO-Revision-Date: 2025-12-02 11:34+0100\n"
-"Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
+"PO-Revision-Date: 2026-07-10 11:19+0200\n"
+"Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Lokalize 25.08.3\n"
+"X-Generator: Poedit 3.9\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
 msgid "Your names"
-msgstr "Lukáš Tinkl, Vít Pelčák, Pavel Fric"
+msgstr "Lukáš Tinkl,Vít Pelčák,Pavel Fric,Libor Filípek"
 
 #, kde-format
 msgctxt "EMAIL OF TRANSLATORS"
 msgid "Your emails"
-msgstr "lukas@kde.org,vit@pelcak.org,pavelfric@seznam.cz"
+msgstr ""
+"lukas@kde.org,vit@pelcak.org,pavelfric@seznam.cz,libor.filipek@gmail.com"
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_LowResourceUsageMode)
 #: app/advancedconfigpage.ui:28
@@ -44,6 +46,9 @@ msgid ""
 "storing thumbnails on disk and will prefer embedded thumbnails of lower "
 "quality that are faster to load, if available."
 msgstr ""
+"Tuto možnost zapněte, pokud nemáte k dispozici dostatek místa na disku. Tím "
+"se zabrání ukládání miniatur na disk a budou se upřednostňovat vložené "
+"miniatury nižší kvality, které se načítají rychleji, jsou-li k dispozici."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/advancedconfigpage.ui:82
@@ -58,6 +63,8 @@ msgid ""
 "Squash colors that don't fit within the active color profile's color gamut, "
 "leaving other colors untouched"
 msgstr ""
+"Barvy, které nespadají do barevného prostoru aktuálního barevného profilu, "
+"se zploští, zatímco ostatní barvy zůstanou beze změny"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/advancedconfigpage.ui:102
@@ -86,6 +93,8 @@ msgid ""
 "Scale all colors equally to fit them within the active color profile's color "
 "gamut"
 msgstr ""
+"Všechny barvy rovnoměrně přizpůsobit tak, aby se vešly do barevného prostoru "
+"aktivního barevného profilu"
 
 #. i18n: ectx: property (text), widget (QLabel, colorRenderingLabel)
 #: app/advancedconfigpage.ui:182
@@ -114,6 +123,10 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
+"Je-li správa barev vypnutá, program Gwenview převede obrázky do barevného "
+"prostoru sRGB, nikoli do barevného prostoru, který detekuje u daného "
+"displeje. To je vhodné pouze u displejů, které jsou kalibrovány na barevný "
+"prostor sRGB nebo u nichž je známo, že poskytují nesprávný barevný profil."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
@@ -165,12 +178,10 @@ msgid "Size"
 msgstr "Velikost"
 
 #: app/browsemainpage.cpp:171
-#, fuzzy, kde-format
-#| msgctxt "@item:intable"
-#| msgid "File Type"
+#, kde-format
 msgctxt "@addAction:inmenu"
 msgid "Type"
-msgstr "Typ souboru"
+msgstr "Typ"
 
 #: app/browsemainpage.cpp:175
 #, kde-format
@@ -237,7 +248,7 @@ msgstr "Soubor"
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Add Folder to Places"
-msgstr "Přidat složku do Umístění"
+msgstr "Přidat složku do Míst"
 
 #: app/browsemainpage.cpp:260
 #, kde-format
@@ -1149,7 +1160,7 @@ msgstr "Spustit v režimu promítání"
 #: app/main.cpp:225
 #, kde-format
 msgid "Start in spotlight mode"
-msgstr ""
+msgstr "Spustit v režimu Spotlight"
 
 #: app/main.cpp:226
 #, kde-format
@@ -1208,7 +1219,7 @@ msgstr "Ukončit celoobrazovkový režim"
 #, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
-msgstr ""
+msgstr "Režim Spotlight"
 
 #: app/mainwindow.cpp:441
 #, kde-format
@@ -1609,7 +1620,7 @@ msgstr "Spustit promítání s vybranými obrázky"
 #, kde-format
 msgctxt "@action Recent Folders view"
 msgid "Add Folder to Places"
-msgstr "Přidat složku do Umístění"
+msgstr "Přidat složku do Míst"
 
 #: app/startmainpage.cpp:292
 #, kde-format
@@ -1627,7 +1638,7 @@ msgstr "Zapomenout všechny složky"
 #, kde-format
 msgctxt "@action Recent Files view"
 msgid "Add Containing Folder to Places"
-msgstr ""
+msgstr "Přidat nadřazenou složku do Míst"
 
 #: app/startmainpage.cpp:296
 #, kde-format
@@ -1703,6 +1714,12 @@ msgid ""
 "and contain multiple rows of images; <link url='%1'>configure these options "
 "in the settings</link>.</para>"
 msgstr ""
+"<para>Tímto přepínačem se zobrazí malý panel se všemi ostatními obrázky v "
+"aktuální složce. Výběrem některého z nich se změní právě zobrazený obrázek.</"
+"para><para>Vyberte více obrázků najednou, abyste si je mohli prohlížet vedle "
+"sebe.</para><para>Panel lze volitelně přesunout na pravou stranu obrazovky a "
+"může obsahovat více řádků obrázků; <link url='%1'>tyto možnosti "
+"nakonfigurujte v nastavení</link>.</para>"
 
 #: app/viewmainpage.cpp:571
 #, kde-format
@@ -1983,7 +2000,7 @@ msgstr "Chybí potřebný argument složky zdroje."
 #: importer/main.cpp:63
 #, kde-format
 msgid "Too many arguments."
-msgstr "Příliš mnoho argumentů"
+msgstr "Příliš mnoho argumentů."
 
 #: importer/main.cpp:69
 #, kde-format
@@ -2020,18 +2037,21 @@ msgctxt "@info:usagetip above install button"
 msgid ""
 "After finishing the installation process, restart this Importer to continue."
 msgstr ""
+"Po dokončení instalace restartujte tento importér, abyste mohli pokračovat."
 
 #: importer/thumbnailpage.cpp:254
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
 msgstr ""
+"Spusťte aplikaci Discover a nainstalujte knihovnu podpory protokolu pro "
+"\"%1\""
 
 #: importer/thumbnailpage.cpp:256
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
-msgstr "Instalovat podporu pro tento fotoaparát..."
+msgstr "Instalovat podporu pro tento fotoaparát…"
 
 #: importer/thumbnailpage.cpp:257
 #, kde-format
@@ -2041,6 +2061,9 @@ msgid ""
 "to launch Discover to install Kamera to enable protocol support for "
 "\"camera:/\" on your system."
 msgstr ""
+"Abyste mohli číst data z kamery, musíte mít v systému nainstalovanou "
+"aplikaci Kamera. Kliknutím sem spusťte Discover a nainstalujte aplikaci "
+"Kamera, čímž ve svém systému povolíte podporu protokolu \"camera:/\"."
 
 #: importer/thumbnailpage.cpp:260
 #, kde-format
@@ -2055,12 +2078,15 @@ msgid ""
 "Click here to launch Discover to install the missing protocol support "
 "library to enable the protocol support for \"%1:/\" on your system."
 msgstr ""
+"Klikněte sem a spusťte nástroj Discover, abyste nainstalovali chybějící "
+"knihovnu podpory protokolu a ve svém systému tak povolili podporu protokolu "
+"\"%1:/\"."
 
 #: importer/thumbnailpage.cpp:265
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
-msgstr ""
+msgstr "Vyhledat na webu, jak nainstalovat podporu protokolu pro \"%1\"…"
 
 #: importer/thumbnailpage.cpp:281
 #, kde-format
@@ -2068,7 +2094,7 @@ msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
 "protocol name"
 msgid "How to install protocol support for \"%1\" on Linux"
-msgstr ""
+msgstr "Jak nainstalovat podporu protokolu pro \"%1\" v systému Linux"
 
 #: importer/thumbnailpage.cpp:282
 #, kde-format
@@ -2095,6 +2121,9 @@ msgid ""
 "Opening Discover failed.<nl/>Please check if Discover is installed on your "
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
+"Spuštění aplikace Discover se nezdařilo.<nl/>Zkontrolujte, zda je ve vašem "
+"systému nainstalována aplikace Discover, nebo pomocí správce balíčků "
+"nainstalujte balíček \"Kamera\"."
 
 #: importer/thumbnailpage.cpp:492
 #, kde-kuit-format
@@ -2104,6 +2133,9 @@ msgid ""
 "system, or use your system's package manager to install the protocol support "
 "library for \"%1\"."
 msgstr ""
+"Spuštění aplikace Discover se nezdařilo.<nl/>Zkontrolujte, zda je ve vašem "
+"systému nainstalována aplikace Discover, nebo pomocí správce balíčků vašeho "
+"systému nainstalujte knihovnu podpory protokolu \"%1\"."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: importer/thumbnailpage.ui:173
@@ -2242,6 +2274,8 @@ msgid ""
 "Gwenview cannot display documents of type %1. Install the kimageformats "
 "package to gain support for a wider range of media types."
 msgstr ""
+"Gwenview nedokáže zobrazit dokumenty typu %1. Nainstalujte balíček "
+"kimageformats, abyste získali podporu pro širší škálu typů médií."
 
 #: lib/document/loadingdocumentimpl.cpp:403
 #, kde-format
@@ -2359,11 +2393,22 @@ msgid ""
 "are displayed at a previous zoom value instead <link url='%2'>in the "
 "settings</link>.</para>"
 msgstr ""
+"<para>Tím se obrázek přizpůsobí dostupné zobrazovací ploše:"
+"<list><item>Obrázky, které jsou větší než zobrazovací plocha, se zobrazí v "
+"menším rozměru, aby se tam vešly.</item><item>Obrázky, které jsou menší než "
+"zobrazovací oblast, se zobrazují v normální velikosti. Pokud chcete, aby "
+"menší obrázky místo toho vyplňovaly celou dostupnou zobrazovací oblast, "
+"zapněte <emphasis>Zvětšit menší obrázky</emphasis> <link url='%2'>v "
+"nastavení</link>.</item></list></para><para>Pokud je \"%1\" již zapnuto, "
+"dalším stisknutím se funkce vypne a obrázek se místo toho zobrazí v normální "
+"velikosti.</para><para>\"%1\" je výchozí režim přiblížení obrázků. Tuto "
+"hodnotu lze změnit tak, aby se obrázky zobrazovaly s předchozí hodnotou "
+"přiblížení <link url='%2'>v nastavení</link>.</para>"
 
 #: lib/documentview/documentviewcontroller.cpp:84
 #, kde-format
 msgid "Zoom to fill window by fitting to width or height"
-msgstr ""
+msgstr "Zvětšit tak, aby obsah vyplnil okno přizpůsobením se šířce nebo výšce"
 
 #: lib/documentview/documentviewcontroller.cpp:86
 #, kde-format
@@ -2382,7 +2427,7 @@ msgstr "100%"
 #: lib/documentview/documentviewcontroller.cpp:99
 #, kde-format
 msgid "Show Bird's Eye View When Zoomed In"
-msgstr ""
+msgstr "Zobrazit pohled z ptačí perspektivy při přiblížení"
 
 #: lib/documentview/documentviewcontroller.cpp:106
 #, kde-format
@@ -2457,6 +2502,24 @@ msgid ""
 "            own zoom and position (if these are changed, image A will NOT\n"
 "            be displayed with the updated zoom and position)."
 msgstr ""
+"Určuje, co se stane při přechodu na obrázek B poté, co\n"
+"            došlo k přiblížení určité oblasti obrázku A.  Je-li nastaveno na "
+"\"Automaticky přizpůsobit\",\n"
+"            obrázek B se oddálí tak, aby se vešel na obrazovku.  Je-li "
+"nastaveno na \"Ponechat stejné\",\n"
+"            všechny obrázky sdílejí stejné přiblížení a polohu: obrázek B se "
+"nastaví\n"
+"            na stejné parametry přiblížení jako obrázek A (a pokud se tyto\n"
+"            změní, obrázek A se poté zobrazí s aktualizovaným zvětšením\n"
+"            a polohou).  Je-li nastaveno na \"Individuální\", všechny "
+"obrázky si zapamatují\n"
+"            své vlastní zvětšení a polohu: obrázek B je zpočátku nastaven "
+"na\n"
+"            stejné parametry zvětšení jako obrázek A, ale poté si zapamatuje "
+"své\n"
+"            vlastní zvětšení a polohu (jsou-li tyto parametry změněny, "
+"obrázek A se\n"
+"            NEBUDE zobrazovat s aktualizovaným zvětšením a polohou)."
 
 #. i18n: ectx: whatsthis, entry (RenderingIntent), group (ImageView)
 #: lib/gwenviewconfig.kcfg:228
@@ -2470,6 +2533,13 @@ msgid ""
 "colors\n"
 "            that cannot be displayed, and leave the other colors alone."
 msgstr ""
+"Určuje, jak se barvy vykreslují, pokud váš displej\n"
+"            používá barevný profil ICC a obrázek obsahuje barvy, které se\n"
+"            nevejdou do barevného rozsahu profilu. Volba \"Perceptuální\" "
+"upraví\n"
+"            barvy celého obrázku tak, aby se všechny vešly do\n"
+"            možností displeje. Volba \"Relativní\" omezí pouze ty barvy,\n"
+"            které nelze zobrazit, a ostatní barvy ponechá beze změny."
 
 #. i18n: ectx: label, entry (random), group (slide show)
 #: lib/gwenviewconfig.kcfg:340
@@ -2506,12 +2576,15 @@ msgstr "Interval mezi obrázky (v sekundách)"
 #, kde-format
 msgid "Restrict crop to image ratio when Advanced Settings disabled"
 msgstr ""
+"Omezit poměr výšky a šířky obrázku, pokud jsou pokročilá nastavení "
+"deaktivována"
 
 #. i18n: ectx: label, entry (CropRatioIndex), group (Crop)
 #: lib/gwenviewconfig.kcfg:376
 #, kde-format
 msgid "Index representing selected ratio in the Advanced settings combobox"
 msgstr ""
+"Index představující vybraný poměr v rozevíracím seznamu pokročilých nastavení"
 
 #. i18n: ectx: label, entry (CropRatioWidth), group (Crop)
 #: lib/gwenviewconfig.kcfg:380
@@ -2710,6 +2783,8 @@ msgstr "Velikost:"
 msgid ""
 "Click on a red eye and choose a size, or double-click to correct instantly."
 msgstr ""
+"Klikněte na červené oko a vyberte velikost, nebo dvakrát klikněte a opravte "
+"ho okamžitě."
 
 #: lib/resize/resizeimagedialog.cpp:76
 #, kde-format
@@ -2718,6 +2793,9 @@ msgid ""
 "Assuming that the image format won't be changed and\n"
 "for lossy images using the value set in 'Lossy image save quality'."
 msgstr ""
+"Za předpokladu, že formát obrázku se nezmění, a\n"
+"u obrázků se ztrátou kvality se použije hodnota nastavená v položce "
+"'Ztrátová kvalita uloženého obrázku'."
 
 #: lib/resize/resizeimagedialog.cpp:219
 #, kde-format
