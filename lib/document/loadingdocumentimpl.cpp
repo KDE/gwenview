@@ -36,9 +36,10 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QFutureWatcher>
 #include <QImage>
 #include <QImageReader>
+#include <QMimeDatabase>
 #include <QPointer>
 #include <QUrl>
-#include <QtConcurrent>
+#include <QtConcurrentRun>
 
 // KF
 #include <KIO/TransferJob>
