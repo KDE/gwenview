@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-10 00:41+0000\n"
+"POT-Creation-Date: 2026-07-21 00:41+0000\n"
 "PO-Revision-Date: 2026-05-15 09:24+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -2257,7 +2257,7 @@ msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
 msgstr "El Gwenview no pot desar aquesta classe de documents."
 
-#: lib/document/loadingdocumentimpl.cpp:138
+#: lib/document/loadingdocumentimpl.cpp:139
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2268,19 +2268,19 @@ msgstr ""
 "«kimageformats» per a aconseguir suport per a un ventall més ampli de tipus "
 "d'elements multimèdia."
 
-#: lib/document/loadingdocumentimpl.cpp:403
+#: lib/document/loadingdocumentimpl.cpp:404
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "No s'ha pogut obrir el fitxer %1"
 
-#: lib/document/loadingdocumentimpl.cpp:494
+#: lib/document/loadingdocumentimpl.cpp:495
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "Ha fallat en carregar la meta-informació."
 
-#: lib/document/loadingdocumentimpl.cpp:520
+#: lib/document/loadingdocumentimpl.cpp:521
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."

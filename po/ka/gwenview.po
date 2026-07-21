@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-10 00:41+0000\n"
+"POT-Creation-Date: 2026-07-21 00:41+0000\n"
 "PO-Revision-Date: 2026-05-15 04:11+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -2239,7 +2239,7 @@ msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
 msgstr "Gwenview -ს ამ ტიპის გამოსახულების ჩაწერა არ შეუძლია."
 
-#: lib/document/loadingdocumentimpl.cpp:138
+#: lib/document/loadingdocumentimpl.cpp:139
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2249,19 +2249,19 @@ msgstr ""
 "Gwenview-ს %1 ტიპის მქონე დოკუმენტების ჩვენება არ შეუძლია. მედიის ტიპების "
 "ფართო დიაპაზონის მხარდაჭერისთვის დააყენეთ პაკეტი kimageformats."
 
-#: lib/document/loadingdocumentimpl.cpp:403
+#: lib/document/loadingdocumentimpl.cpp:404
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "ფაილის გახსნის შეცდომა: %1"
 
-#: lib/document/loadingdocumentimpl.cpp:494
+#: lib/document/loadingdocumentimpl.cpp:495
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "მეტამონაცემების ჩატვირთვის შეცდომა."
 
-#: lib/document/loadingdocumentimpl.cpp:520
+#: lib/document/loadingdocumentimpl.cpp:521
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."

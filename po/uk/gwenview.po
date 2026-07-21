@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-10 00:41+0000\n"
+"POT-Creation-Date: 2026-07-21 00:41+0000\n"
 "PO-Revision-Date: 2026-05-15 09:55+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
@@ -2301,7 +2301,7 @@ msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
 msgstr "Gwenview не може зберігати документи цього типу."
 
-#: lib/document/loadingdocumentimpl.cpp:138
+#: lib/document/loadingdocumentimpl.cpp:139
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2311,19 +2311,19 @@ msgstr ""
 "Gwenview не може показувати документи у форматі %1. Встановіть пакунок "
 "kimageformats, щоб розширити підтримку типів мультимедійних даних."
 
-#: lib/document/loadingdocumentimpl.cpp:403
+#: lib/document/loadingdocumentimpl.cpp:404
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "Не вдалося відкрити файл %1"
 
-#: lib/document/loadingdocumentimpl.cpp:494
+#: lib/document/loadingdocumentimpl.cpp:495
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "Спроба завантаження метаінформації завершилася невдало."
 
-#: lib/document/loadingdocumentimpl.cpp:520
+#: lib/document/loadingdocumentimpl.cpp:521
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."
