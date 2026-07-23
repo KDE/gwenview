@@ -125,7 +125,7 @@
             </choices>
             <default>ThumbnailActions::AllButtons</default>
         </entry>
-        <entry name="LastUsedVersion" type="int">
+        <entry name="LastUsedVersion" type="Int">
             <default>-1</default>
         </entry>
         <entry name="ShowHiddenFiles" type="Bool">
