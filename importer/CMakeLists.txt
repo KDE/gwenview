@@ -72,3 +72,4 @@ install(FILES gwenview_importer.desktop
     DESTINATION ${KDE_INSTALL_DATADIR}/solid/actions/)
 
 install(FILES org.kde.gwenview_importer.desktop DESTINATION ${KDE_INSTALL_APPDIR})
+install(FILES importerconfig.kcfg DESTINATION ${KDE_INSTALL_KCFGDIR} RENAME gwenview-importer.kcfg)
