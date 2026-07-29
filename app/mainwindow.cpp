@@ -1203,7 +1203,7 @@ void MainWindow::setActiveViewModeAction(QAction *action)
             // his image back.
             d->mViewMainPage->reset();
         }
-        setCaption(d->mUrlNavigator->locationUrl().adjusted(QUrl::RemoveScheme).toString());
+        setCaption(d->mUrlNavigator->locationUrl().toDisplayString(QUrl::PreferLocalFile));
     }
     d->autoAssignThumbnailProvider();
     toggleSideBar(d->sideBarVisibility());
