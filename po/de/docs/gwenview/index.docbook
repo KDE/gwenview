@@ -116,7 +116,7 @@
 >&gwenview; ist ein schneller und einfach zu verwendender Betrachter für Bilder und Videos. </para>
 
  <para
->&gwenview; hat zwei Hauptmodi: einen Übersichts- und einen Ansichtsmodus: Beide können im normalen Anwendungsfenster und im Vollbildmodus benutzt werden. Im Übersichtsmodus blättern Sie durch die Vorschau der Bilder in einem Ordner, der Ansichtsmodus zeigt die Bilder einzeln an und im Vollbildmodus können Sie die Bilder in einer Diaschau anzeigen. Außerdem gibt es die Startseite, die Karteikarten mit zuletzt geöffneten Ordnern und Adressen sowie Ihre Orte und Stichwörter anzeigt. </para>
+>&gwenview; hat zwei Hauptmodi: einen Übersichts- und einen Ansichtsmodus: Beide können im normalen Anwendungsfenster und im Vollbildmodus verwendet werden. Im Übersichtsmodus blättern Sie durch die Vorschau der Bilder in einem Ordner, der Ansichtsmodus zeigt die Bilder einzeln an und im Vollbildmodus können Sie die Bilder in einer Diaschau anzeigen. Außerdem gibt es die Startseite, die Karteikarten mit zuletzt geöffneten Ordnern und Adressen sowie Ihre Orte und Stichwörter anzeigt. </para>
 
 <para
 >Das Laden von Bildern wird von der Qt-Bibliothek übernommen, daher unterstützt &gwenview; alle Bildformate, die auch von Qt unterstützt werden. &gwenview; zeigt auch Bilder mit Alpha-Kanal (Transparenz) und Animationen korrekt an.</para>
@@ -531,7 +531,7 @@
   </mediaobject>
 </screenshot>
 <para
->Die Übersicht im Vollbildmodus können Sie zum Beispiel benutzen, um Bilder auf einem großen Fernsehbildschirm anzuzeigen. </para>
+>Die Übersicht im Vollbildmodus können Sie zum Beispiel verwenden, um Bilder auf einem großen Fernsehbildschirm anzuzeigen. </para>
 </sect2>
 
 <sect2 id="fullscreen">
@@ -638,7 +638,7 @@
 >Vorheriges</guibutton
 > und <guibutton
 >Nächstes</guibutton
-> oder Kurzbefehle benutzen. Klicken Sie auf einen Ordner, um zwischen Ansichts- und Übersichtsmodus zu wechseln.</para
+> oder Kurzbefehle verwenden. Klicken Sie auf einen Ordner, um zwischen Ansichts- und Übersichtsmodus zu wechseln.</para
 ></listitem>
 </varlistentry>
 
@@ -1312,13 +1312,13 @@
                             <para
 ><guilabel
 >Vergrößerung und Position beibehalten</guilabel
-> &mdash; Benutzt denselben Vergrößerungsfaktor für alle Bilder.</para>
+> &mdash; Verwendet denselben Vergrößerungsfaktor für alle Bilder.</para>
                         </listitem>
                         <listitem>
                             <para
 ><guilabel
 >Vergrößerung und Position je Bild</guilabel
-> &mdash; Benutzt unterschiedliche Vergrößerungsstufen für jedes Bild.</para>
+> &mdash; Verwendet unterschiedliche Vergrößerungsstufen für jedes Bild.</para>
                         </listitem>
                         <listitem>
                             <para
