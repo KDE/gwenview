@@ -2464,8 +2464,7 @@ msgid "Loading <filename>%1</filename> failed"
 msgstr "Neuspjelo učitavanje datoteke <filename>%1</filename>"
 
 #: lib/documentview/documentviewcontroller.cpp:62
-#, fuzzy, kde-format
-#| msgid "Zoom to Fit"
+#, kde-format
 msgid "Zoom to Fit"
 msgstr "Zumiraj na prigodno"
 
