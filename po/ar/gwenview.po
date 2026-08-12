@@ -121,7 +121,7 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
-"عند تعطيل إدارة الألوان، يحول جونفيو الصور إلى مساحة ألوان sRGB بدلاً من "
+"عند تعطيل إدارة الألوان، يحول جونفيو الصور إلى مساحة ألوان sRGB بدلًا من "
 "مساحة الألوان التي يكتشفها للشاشة. هذا مناسب فقط لشاشات العرض المعايرة "
 "لمساحة ألوان sRGB أو المعروف عنها أنها توفر ملف تعريف لون غير صحيح."
 
@@ -1848,7 +1848,7 @@ msgstr[0] "لم يستورد أي ملفات"
 msgstr[1] "استوردَ ملف واحد."
 msgstr[2] "استوردَ ملفين."
 msgstr[3] "استوردَ %1 ملفات"
-msgstr[4] "استوردَ %1 ملفاً"
+msgstr[4] "استوردَ %1 ملفًا"
 msgstr[5] "استوردَ %1 ملف"
 
 #: importer/importdialog.cpp:96
@@ -1973,7 +1973,7 @@ msgstr "اعرض المستندات المستوردة باستخدام جونف
 #: importer/importdialog.cpp:169
 #, kde-format
 msgid "Import more Documents"
-msgstr "استورد مزيداً من المستندات"
+msgstr "استورد مزيدًا من المستندات"
 
 #: importer/importdialog.cpp:170
 #, kde-format
@@ -2444,8 +2444,8 @@ msgstr ""
 "لتشغل كامل مساحة العرض، فشغّل <emphasis> تكبير الصور الأصغر  </emphasis> "
 "<link url = '%2'> في الإعدادات </link>. </item> </list> </para> <para> إذا "
 "مُكّن \"%1\" فعلًا، فسيؤدي الضغط عليه مرة أخرى إلى إيقاف تشغيله وستُعرض الصورة "
-"بحجمها الطبيعي بدلاً من ذلك. </para> <para> \"%1\" هو التكبير المبدئي للصور. "
-"يمكن تغيير هذا بحيث تُعرض الصور بقيمة تكبير سابقة بدلاً من ذلك <link url = "
+"بحجمها الطبيعي بدلًا من ذلك. </para> <para> \"%1\" هو التكبير المبدئي للصور. "
+"يمكن تغيير هذا بحيث تُعرض الصور بقيمة تكبير سابقة بدلًا من ذلك <link url = "
 "'%2'> في الإعدادات </link>. </para>"
 
 #: lib/documentview/documentviewcontroller.cpp:84
@@ -2526,7 +2526,7 @@ msgid ""
 "            used for temporary files by KSaveFile."
 msgstr ""
 "قائمة امتدادات الملفات التي يجب على جنيوفيو أن لا يحاول تحميلها.\n"
-"            نستثني أيضاً اللاحقة new لأن هذه هي اللاحقة\n"
+"            نستثني أيضًا اللاحقة new لأن هذه هي اللاحقة\n"
 "            التي يستخدمها KSaveFile للملفات المؤقتة."
 
 #. i18n: ectx: whatsthis, entry (ZoomMode), group (ImageView)
