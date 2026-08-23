@@ -613,18 +613,22 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView *view)
     d->mContextBar->hide();
 
     d->mToggleSelectionButton = new QToolButton;
+    d->mToggleSelectionButton->setToolTip(i18nc("@info:tooltip", "Toggle selection"));
     d->mToggleSelectionButton->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
     connect(d->mToggleSelectionButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotToggleSelectionClicked);
 
     d->mFullScreenButton = new QToolButton;
+    d->mFullScreenButton->setToolTip(i18nc("@info:tooltip", "Full screen"));
     d->mFullScreenButton->setIcon(QIcon::fromTheme(QStringLiteral("view-fullscreen")));
     connect(d->mFullScreenButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotFullScreenClicked);
 
     d->mRotateLeftButton = new QToolButton;
+    d->mRotateLeftButton->setToolTip(i18nc("@info:tooltip", "Rotate left"));
     d->mRotateLeftButton->setIcon(QIcon::fromTheme(QStringLiteral("object-rotate-left")));
     connect(d->mRotateLeftButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotRotateLeftClicked);
 
     d->mRotateRightButton = new QToolButton;
+    d->mRotateRightButton->setToolTip(i18nc("@info:tooltip", "Rotate right"));
     d->mRotateRightButton->setIcon(QIcon::fromTheme(QStringLiteral("object-rotate-right")));
     connect(d->mRotateRightButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotRotateRightClicked);
 
@@ -638,6 +642,7 @@ PreviewItemDelegate::PreviewItemDelegate(ThumbnailView *view)
 
     // Save button
     d->mSaveButton = new QToolButton(d->mView->viewport());
+    d->mSaveButton->setToolTip(i18nc("@info:tooltip", "Save"));
     d->mSaveButton->setIcon(QIcon::fromTheme(QStringLiteral("document-save")));
     d->mSaveButton->hide();
     connect(d->mSaveButton, &QToolButton::clicked, this, &PreviewItemDelegate::slotSaveClicked);
