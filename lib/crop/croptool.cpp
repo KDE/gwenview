@@ -276,6 +276,23 @@ void CropTool::paint(QPainter *painter)
 
     painter->drawRect(rect);
 
+    if (d->mCropWidget->advancedSettingsEnabled() && d->mCropWidget->showGridlinesEnabled()) {
+        const int width = int(rect.width() / 3.0f);
+        const int height = int(rect.height() / 3.0f);
+
+        const auto verticalLeft = QLine(QPoint(rect.x() + width, rect.y()), QPoint(rect.x() + width, rect.y() + rect.height()));
+        painter->drawLine(verticalLeft);
+
+        const auto verticalRight = QLine(QPoint(rect.x() + width * 2, rect.y()), QPoint(rect.x() + width * 2, rect.y() + rect.height()));
+        painter->drawLine(verticalRight);
+
+        const auto horizontalTop = QLine(QPoint(rect.x(), rect.y() + height), QPoint(rect.x() + rect.width(), rect.y() + height));
+        painter->drawLine(horizontalTop);
+
+        const auto horizontalBottom = QLine(QPoint(rect.x(), rect.y() + height * 2), QPoint(rect.x() + rect.width(), rect.y() + height * 2));
+        painter->drawLine(horizontalBottom);
+    }
+
     if (d->mMovingHandle == CH_None) {
         // Only draw handles when user is not resizing
         painter->setBrush(fillColor);
@@ -457,6 +474,7 @@ void CropTool::toolActivated()
         const QSizeF ratio = QSizeF(GwenviewConfig::cropRatioWidth(), GwenviewConfig::cropRatioHeight());
         d->mCropWidget->setCropRatio(ratio);
     }
+    d->mCropWidget->setShowGridlinesEnabled(GwenviewConfig::cropShowGridlinesEnabled());
 }
 
 void CropTool::toolDeactivated()
@@ -467,6 +485,7 @@ void CropTool::toolDeactivated()
     const QSizeF ratio = d->mCropWidget->cropRatio();
     GwenviewConfig::setCropRatioWidth(ratio.width());
     GwenviewConfig::setCropRatioHeight(ratio.height());
+    GwenviewConfig::setCropShowGridlinesEnabled(d->mCropWidget->showGridlinesEnabled());
 }
 
 void CropTool::slotCropRequested()

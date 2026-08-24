@@ -46,6 +46,8 @@ public:
 
     void setAdvancedSettingsEnabled(bool enable);
     bool advancedSettingsEnabled() const;
+    void setShowGridlinesEnabled(bool enable);
+    bool showGridlinesEnabled() const;
     void setPreserveAspectRatio(bool preserve);
     bool preserveAspectRatio() const;
     void setCropRatio(QSizeF size);

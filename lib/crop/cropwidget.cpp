@@ -72,6 +72,7 @@ struct CropWidgetPrivate : public QWidget {
     QSpinBox *topSpinBox = nullptr;
     QCheckBox *preserveAspectRatioCheckBox = nullptr;
     QDialogButtonBox *dialogButtonBox = nullptr;
+    QCheckBox *showGridlinesCheckBox = nullptr;
 
     Document::Ptr mDocument;
     CropTool *mCropTool = nullptr;
@@ -350,14 +351,23 @@ struct CropWidgetPrivate : public QWidget {
         flowLayout->addWidget(box);
         flowLayout->addSpacing(18);
 
-        // (5) Preserve ratio checkbox
+        // (5) Show Gridlines
+        box = boxWidget(cropWidget);
+        mAdvancedWidgets << box;
+        showGridlinesCheckBox = new QCheckBox(i18nc("@option:check", "Show Gridlines"), box);
+        showGridlinesCheckBox->setFocusPolicy(Qt::NoFocus);
+        box->layout()->addWidget(showGridlinesCheckBox);
+        flowLayout->addWidget(box);
+        flowLayout->addSpacing(18);
+
+        // (6) Preserve ratio checkbox
         mPreserveAspectRatioWidget = boxWidget(cropWidget);
         preserveAspectRatioCheckBox = new QCheckBox(i18nc("@option:check", "Preserve aspect ratio"), mPreserveAspectRatioWidget);
         mPreserveAspectRatioWidget->layout()->addWidget(preserveAspectRatioCheckBox);
         flowLayout->addWidget(mPreserveAspectRatioWidget);
         flowLayout->addSpacing(18);
 
-        // (6) Dialog buttons
+        // (7) Dialog buttons
         box = boxWidget(cropWidget);
         dialogButtonBox = new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Reset | QDialogButtonBox::Ok, box);
         box->layout()->addWidget(dialogButtonBox);
@@ -442,6 +452,16 @@ void CropWidget::setCropRatio(QSizeF size)
 QSizeF CropWidget::cropRatio() const
 {
     return d->chosenRatio();
+}
+
+void CropWidget::setShowGridlinesEnabled(bool enable)
+{
+    d->showGridlinesCheckBox->setChecked(enable);
+}
+
+bool CropWidget::showGridlinesEnabled() const
+{
+    return d->showGridlinesCheckBox->isChecked();
 }
 
 void CropWidget::reset()
