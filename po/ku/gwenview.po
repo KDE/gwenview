@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-21 00:41+0000\n"
+"POT-Creation-Date: 2026-08-24 00:42+0000\n"
 "PO-Revision-Date: 2009-01-22 22:46+0200\n"
 "Last-Translator: Omer Ensari <oensari@gmail.com>\n"
 "Language-Team: Kurdish <kde-i18n-doc@kde.org>\n"
@@ -2439,7 +2439,7 @@ msgstr "Jê Bibe"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:416
-#: lib/thumbnailview/previewitemdelegate.cpp:833
+#: lib/thumbnailview/previewitemdelegate.cpp:838
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
@@ -2963,6 +2963,41 @@ msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"
 msgstr "Lêrasthatî"
 
+#: lib/thumbnailview/previewitemdelegate.cpp:616
+#, fuzzy, kde-format
+#| msgid "Collections"
+msgctxt "@info:tooltip"
+msgid "Toggle selection"
+msgstr "Berhevok"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:621
+#, fuzzy, kde-format
+#| msgid "Start in fullscreen mode"
+msgctxt "@info:tooltip"
+msgid "Full screen"
+msgstr "Di moda dîmender tijî de bide destpêkirin"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:626
+#, fuzzy, kde-format
+#| msgid "Rotate Left"
+msgctxt "@info:tooltip"
+msgid "Rotate left"
+msgstr "Bizivirîne Çepê"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:631
+#, fuzzy, kde-format
+#| msgid "Rotate Right"
+msgctxt "@info:tooltip"
+msgid "Rotate right"
+msgstr "Bizivirîne Rastê"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:645
+#, fuzzy, kde-format
+#| msgid "Save All"
+msgctxt "@info:tooltip"
+msgid "Save"
+msgstr "Hemûyan Tomar Bike"
+
 #: lib/transformimageoperation.cpp:58
 #, fuzzy, kde-format
 #| msgid "Rotate Right"
@@ -3100,12 +3135,6 @@ msgstr "&Bibîne"
 #~ msgid "Batch Processing"
 #~ msgstr "Pêvajoyên Bitevayî"
 
-#, fuzzy
-#~| msgid "Collections"
-#~ msgctxt "@title:menu"
-#~ msgid "Collections"
-#~ msgstr "Berhevok"
-
 #~ msgid ""
 #~ "Images will be uploaded here:\n"
 #~ "%1"
@@ -3135,12 +3164,6 @@ msgstr "&Bibîne"
 #~ msgctxt "@action Open Recent menu"
 #~ msgid "Forget All Files && Folders"
 #~ msgstr "Peldank Biafirîne"
-
-#, fuzzy
-#~| msgid "Start in fullscreen mode"
-#~ msgctxt "@action"
-#~ msgid "Leave Fullscreen Mode"
-#~ msgstr "Di moda dîmender tijî de bide destpêkirin"
 
 #, fuzzy
 #~| msgid "Cancel"

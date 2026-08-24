@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-21 00:41+0000\n"
+"POT-Creation-Date: 2026-08-24 00:42+0000\n"
 "PO-Revision-Date: 2012-07-13 22:35+0530\n"
 "Last-Translator: Deepayan Sarkar <deepayan.sarkar@gmail.com>\n"
 "Language-Team: American English <kde-translation@bengalinux.org>\n"
@@ -2336,7 +2336,7 @@ msgstr "অ-নির্বাচন করো"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:416
-#: lib/thumbnailview/previewitemdelegate.cpp:833
+#: lib/thumbnailview/previewitemdelegate.cpp:838
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
@@ -2862,6 +2862,43 @@ msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"
 msgstr "এলোমেলোভাবে"
 
+#: lib/thumbnailview/previewitemdelegate.cpp:616
+#, fuzzy, kde-format
+#| msgctxt "@title:menu"
+#| msgid "Collections"
+msgctxt "@info:tooltip"
+msgid "Toggle selection"
+msgstr "সংগ্রহ"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:621
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Leave Fullscreen Mode"
+msgctxt "@info:tooltip"
+msgid "Full screen"
+msgstr "পর্দাজোড়া মোড থেকে বেরোও"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:626
+#, fuzzy, kde-format
+#| msgid "Rotate Left"
+msgctxt "@info:tooltip"
+msgid "Rotate left"
+msgstr "বাঁদিকে ঘোরাও"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:631
+#, fuzzy, kde-format
+#| msgid "Rotate Right"
+msgctxt "@info:tooltip"
+msgid "Rotate right"
+msgstr "ডানদিকে ঘোরাও"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:645
+#, fuzzy, kde-format
+#| msgid "Save All"
+msgctxt "@info:tooltip"
+msgid "Save"
+msgstr "সব সংরক্ষণ করো"
+
 #: lib/transformimageoperation.cpp:58
 #, kde-format
 msgctxt "(qtundo-format)"
@@ -2974,10 +3011,6 @@ msgstr "ভি&উ"
 #~ msgid "Export"
 #~ msgstr "রপ্তানি"
 
-#~ msgctxt "@title:menu"
-#~ msgid "Collections"
-#~ msgstr "সংগ্রহ"
-
 #~ msgid "Gwenview KPart"
 #~ msgstr "গোয়েন-ভিউ কে-পার্ট"
 
@@ -2988,10 +3021,6 @@ msgstr "ভি&উ"
 #~ msgctxt "@title:group"
 #~ msgid "Meta Information"
 #~ msgstr "মেটা তথ্য"
-
-#~ msgctxt "@action"
-#~ msgid "Leave Fullscreen Mode"
-#~ msgstr "পর্দাজোড়া মোড থেকে বেরোও"
 
 #~ msgid "Cache:"
 #~ msgstr "ক্যাশে (Cache):"

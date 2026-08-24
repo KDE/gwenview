@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-21 00:41+0000\n"
+"POT-Creation-Date: 2026-08-24 00:42+0000\n"
 "PO-Revision-Date: 2010-08-10 23:36+0200\n"
 "Last-Translator: Jean Cayron et Odile Lambert <jean.cayron@gmail.com>\n"
 "Language-Team: Walloon <linux@walon.org>\n"
@@ -2424,7 +2424,7 @@ msgstr "Disfacer"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:416
-#: lib/thumbnailview/previewitemdelegate.cpp:833
+#: lib/thumbnailview/previewitemdelegate.cpp:838
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
@@ -2956,6 +2956,41 @@ msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"
 msgstr "A l' astcheyance"
 
+#: lib/thumbnailview/previewitemdelegate.cpp:616
+#, fuzzy, kde-format
+#| msgid "Collections"
+msgctxt "@info:tooltip"
+msgid "Toggle selection"
+msgstr "Ramexhnêyes"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:621
+#, fuzzy, kde-format
+#| msgid "Start in fullscreen mode"
+msgctxt "@info:tooltip"
+msgid "Full screen"
+msgstr "Enonder e môde tote li waitroûle"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:626
+#, fuzzy, kde-format
+#| msgid "Rotate Left"
+msgctxt "@info:tooltip"
+msgid "Rotate left"
+msgstr "Fé tourner a hintche"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:631
+#, fuzzy, kde-format
+#| msgid "Rotate Right"
+msgctxt "@info:tooltip"
+msgid "Rotate right"
+msgstr "Fé tourné a droete"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:645
+#, fuzzy, kde-format
+#| msgid "Save All"
+msgctxt "@info:tooltip"
+msgid "Save"
+msgstr "Totafwait schaper"
+
 #: lib/transformimageoperation.cpp:58
 #, fuzzy, kde-format
 #| msgid "Rotate Right"
@@ -3093,12 +3128,6 @@ msgstr "&Vey"
 #~ msgid "Batch Processing"
 #~ msgstr "Ovraedje pa lots"
 
-#, fuzzy
-#~| msgid "Collections"
-#~ msgctxt "@title:menu"
-#~ msgid "Collections"
-#~ msgstr "Ramexhnêyes"
-
 #~ msgid ""
 #~ "Images will be uploaded here:\n"
 #~ "%1"
@@ -3128,12 +3157,6 @@ msgstr "&Vey"
 #~ msgctxt "@action Open Recent menu"
 #~ msgid "Forget All Files && Folders"
 #~ msgstr "Rovyî ç' ridant"
-
-#, fuzzy
-#~| msgid "Start in fullscreen mode"
-#~ msgctxt "@action"
-#~ msgid "Leave Fullscreen Mode"
-#~ msgstr "Enonder e môde tote li waitroûle"
 
 #~ msgid "Cache:"
 #~ msgstr "Muchete :"

@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-21 00:41+0000\n"
+"POT-Creation-Date: 2026-08-24 00:42+0000\n"
 "PO-Revision-Date: 2026-05-21 00:27+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -2258,7 +2258,7 @@ msgstr "取消選擇"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:416
-#: lib/thumbnailview/previewitemdelegate.cpp:833
+#: lib/thumbnailview/previewitemdelegate.cpp:838
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
@@ -2777,6 +2777,43 @@ msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"
 msgstr "隨機"
 
+#: lib/thumbnailview/previewitemdelegate.cpp:616
+#, fuzzy, kde-format
+#| msgctxt "@title:menu"
+#| msgid "Collections"
+msgctxt "@info:tooltip"
+msgid "Toggle selection"
+msgstr "收集"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:621
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Exit Full Screen"
+msgctxt "@info:tooltip"
+msgid "Full screen"
+msgstr "離開全螢幕"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:626
+#, fuzzy, kde-format
+#| msgid "Rotate Left"
+msgctxt "@info:tooltip"
+msgid "Rotate left"
+msgstr "向左旋轉"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:631
+#, fuzzy, kde-format
+#| msgid "Rotate Right"
+msgctxt "@info:tooltip"
+msgid "Rotate right"
+msgstr "向右旋轉"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:645
+#, fuzzy, kde-format
+#| msgid "Save All"
+msgctxt "@info:tooltip"
+msgid "Save"
+msgstr "全部儲存"
+
 #: lib/transformimageoperation.cpp:58
 #, kde-format
 msgctxt "(qtundo-format)"
@@ -2907,10 +2944,6 @@ msgstr "檢視(&V)"
 #~ msgctxt "@title:menu"
 #~ msgid "Batch Processing"
 #~ msgstr "批次處理"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Collections"
-#~ msgstr "收集"
 
 #~ msgid ""
 #~ "Images will be uploaded here:\n"

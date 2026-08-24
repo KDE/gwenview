@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-21 00:41+0000\n"
+"POT-Creation-Date: 2026-08-24 00:42+0000\n"
 "PO-Revision-Date: 2024-10-01 21:29-0500\n"
 "Last-Translator: A S Alam <aman@punlinux.org>\n"
 "Language-Team: pa\n"
@@ -2271,7 +2271,7 @@ msgstr "ਚੋਣ ਹਟਾਓ"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:416
-#: lib/thumbnailview/previewitemdelegate.cpp:833
+#: lib/thumbnailview/previewitemdelegate.cpp:838
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
@@ -2769,6 +2769,43 @@ msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"
 msgstr "ਰਲਵਾਂ"
 
+#: lib/thumbnailview/previewitemdelegate.cpp:616
+#, fuzzy, kde-format
+#| msgctxt "@title:menu"
+#| msgid "Collections"
+msgctxt "@info:tooltip"
+msgid "Toggle selection"
+msgstr "ਭੰਡਾਰ"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:621
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Exit Full Screen"
+msgctxt "@info:tooltip"
+msgid "Full screen"
+msgstr "ਪੂਰੀ ਸਕਰੀਨ ਤੋਂ ਬਾਹਰ ਜਾਓ"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:626
+#, fuzzy, kde-format
+#| msgid "Rotate Left"
+msgctxt "@info:tooltip"
+msgid "Rotate left"
+msgstr "ਖੱਬੇ ਘੁੰਮਾਓ"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:631
+#, fuzzy, kde-format
+#| msgid "Rotate Right"
+msgctxt "@info:tooltip"
+msgid "Rotate right"
+msgstr "ਸੱਜੇ ਘੁੰਮਾਓ"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:645
+#, fuzzy, kde-format
+#| msgid "Save All"
+msgctxt "@info:tooltip"
+msgid "Save"
+msgstr "ਸਭ ਸੰਭਾਲੋ"
+
 #: lib/transformimageoperation.cpp:58
 #, kde-format
 msgctxt "(qtundo-format)"
@@ -2886,10 +2923,6 @@ msgstr "ਵੇਖੋ(&V)"
 #~ msgctxt "@title:menu"
 #~ msgid "Batch Processing"
 #~ msgstr "ਬੈਚ ਕਾਰਵਾਈ ਜਾਰੀ"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Collections"
-#~ msgstr "ਭੰਡਾਰ"
 
 #~ msgid ""
 #~ "Images will be uploaded here:\n"

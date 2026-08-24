@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-21 00:41+0000\n"
+"POT-Creation-Date: 2026-08-24 00:42+0000\n"
 "PO-Revision-Date: 2024-09-19 15:04+0300\n"
 "Last-Translator: Antonis Geralis <capoiosct@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -2341,7 +2341,7 @@ msgstr "Αναίρεση επιλογής"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:416
-#: lib/thumbnailview/previewitemdelegate.cpp:833
+#: lib/thumbnailview/previewitemdelegate.cpp:838
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
@@ -2887,6 +2887,43 @@ msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"
 msgstr "Τυχαία"
 
+#: lib/thumbnailview/previewitemdelegate.cpp:616
+#, fuzzy, kde-format
+#| msgctxt "@title:menu"
+#| msgid "Collections"
+msgctxt "@info:tooltip"
+msgid "Toggle selection"
+msgstr "Συλλογές"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:621
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Exit Full Screen"
+msgctxt "@info:tooltip"
+msgid "Full screen"
+msgstr "Έξοδος από πλήρη οθόνη"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:626
+#, fuzzy, kde-format
+#| msgid "Rotate Left"
+msgctxt "@info:tooltip"
+msgid "Rotate left"
+msgstr "Περιστροφή αριστερά"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:631
+#, fuzzy, kde-format
+#| msgid "Rotate Right"
+msgctxt "@info:tooltip"
+msgid "Rotate right"
+msgstr "Περιστροφή δεξιά"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:645
+#, fuzzy, kde-format
+#| msgid "Save All"
+msgctxt "@info:tooltip"
+msgid "Save"
+msgstr "Αποθήκευση όλων"
+
 #: lib/transformimageoperation.cpp:58
 #, kde-format
 msgctxt "(qtundo-format)"
@@ -3011,10 +3048,6 @@ msgstr "Π&ροβολή"
 #~ msgctxt "@title:menu"
 #~ msgid "Batch Processing"
 #~ msgstr "Επεξεργασία δέσμης"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Collections"
-#~ msgstr "Συλλογές"
 
 #~ msgid ""
 #~ "Images will be uploaded here:\n"

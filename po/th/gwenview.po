@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-21 00:41+0000\n"
+"POT-Creation-Date: 2026-08-24 00:42+0000\n"
 "PO-Revision-Date: 2010-12-17 21:37+0700\n"
 "Last-Translator: Thanomsub Noppaburana <donga.nb@gmail.com>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
@@ -2378,7 +2378,7 @@ msgstr "ลบ"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:416
-#: lib/thumbnailview/previewitemdelegate.cpp:833
+#: lib/thumbnailview/previewitemdelegate.cpp:838
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
@@ -2912,6 +2912,42 @@ msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"
 msgstr "สุ่มรูปภาพ"
 
+#: lib/thumbnailview/previewitemdelegate.cpp:616
+#, fuzzy, kde-format
+#| msgctxt "@title:menu"
+#| msgid "Collections"
+msgctxt "@info:tooltip"
+msgid "Toggle selection"
+msgstr "คลังภาพ"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:621
+#, fuzzy, kde-format
+#| msgid "Start in fullscreen mode"
+msgctxt "@info:tooltip"
+msgid "Full screen"
+msgstr "เริ่มในโหมดเต็มจอภาพ"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:626
+#, fuzzy, kde-format
+#| msgid "Rotate Left"
+msgctxt "@info:tooltip"
+msgid "Rotate left"
+msgstr "หมุนทางซ้าย"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:631
+#, fuzzy, kde-format
+#| msgid "Rotate Right"
+msgctxt "@info:tooltip"
+msgid "Rotate right"
+msgstr "หมุนทางขวา"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:645
+#, fuzzy, kde-format
+#| msgid "Save"
+msgctxt "@info:tooltip"
+msgid "Save"
+msgstr "บันทึก"
+
 #: lib/transformimageoperation.cpp:58
 #, fuzzy, kde-format
 #| msgid "Rotate Right"
@@ -3037,10 +3073,6 @@ msgstr "&มุมมอง"
 #~ msgid "Batch Processing"
 #~ msgstr "ประมวลผลกลุ่มภาพ"
 
-#~ msgctxt "@title:menu"
-#~ msgid "Collections"
-#~ msgstr "คลังภาพ"
-
 #~ msgid ""
 #~ "Images will be uploaded here:\n"
 #~ "%1"
@@ -3070,12 +3102,6 @@ msgstr "&มุมมอง"
 #~ msgctxt "@action Open Recent menu"
 #~ msgid "Forget All Files && Folders"
 #~ msgstr "ลืมโฟลเดอร์นี้"
-
-#, fuzzy
-#~| msgid "Start in fullscreen mode"
-#~ msgctxt "@action"
-#~ msgid "Leave Fullscreen Mode"
-#~ msgstr "เริ่มในโหมดเต็มจอภาพ"
 
 #~ msgid "Cache:"
 #~ msgstr "แคช:"
@@ -3400,9 +3426,6 @@ msgstr "&มุมมอง"
 #~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
 #~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 #~ "weight:600;\">แสดงรูปภาพ</span></p></body></html>"
-
-#~ msgid "Save"
-#~ msgstr "บันทึก"
 
 #~ msgctxt "@action:inmenu Tools"
 #~ msgid "Show Filter Bar"

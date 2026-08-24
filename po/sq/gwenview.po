@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-21 00:41+0000\n"
+"POT-Creation-Date: 2026-08-24 00:42+0000\n"
 "PO-Revision-Date: 2009-08-30 02:35+0000\n"
 "Last-Translator: Vilson Gjeci <vilsongjeci@gmail.com>\n"
 "Language-Team: Albanian <sq@li.org>\n"
@@ -2350,7 +2350,7 @@ msgstr "Fshije"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:416
-#: lib/thumbnailview/previewitemdelegate.cpp:833
+#: lib/thumbnailview/previewitemdelegate.cpp:838
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
@@ -2866,6 +2866,39 @@ msgstr "Loop"
 msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"
 msgstr "Rastësore"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:616
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Toggle selection"
+msgstr ""
+
+#: lib/thumbnailview/previewitemdelegate.cpp:621
+#, kde-format
+msgctxt "@info:tooltip"
+msgid "Full screen"
+msgstr ""
+
+#: lib/thumbnailview/previewitemdelegate.cpp:626
+#, fuzzy, kde-format
+#| msgid "Rotate Left"
+msgctxt "@info:tooltip"
+msgid "Rotate left"
+msgstr "Rrotullo Majtas"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:631
+#, fuzzy, kde-format
+#| msgid "Rotate Right"
+msgctxt "@info:tooltip"
+msgid "Rotate right"
+msgstr "Rrotullo Djathtas"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:645
+#, fuzzy, kde-format
+#| msgid "Save All"
+msgctxt "@info:tooltip"
+msgid "Save"
+msgstr "Ruaji të Gjitha"
 
 #: lib/transformimageoperation.cpp:58
 #, fuzzy, kde-format

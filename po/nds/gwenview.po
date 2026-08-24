@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-21 00:41+0000\n"
+"POT-Creation-Date: 2026-08-24 00:42+0000\n"
 "PO-Revision-Date: 2014-08-11 13:36+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -2382,7 +2382,7 @@ msgstr "Ut Köör rutnehmen"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:416
-#: lib/thumbnailview/previewitemdelegate.cpp:833
+#: lib/thumbnailview/previewitemdelegate.cpp:838
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
@@ -2919,6 +2919,43 @@ msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"
 msgstr "Tofällig"
 
+#: lib/thumbnailview/previewitemdelegate.cpp:616
+#, fuzzy, kde-format
+#| msgctxt "@title:menu"
+#| msgid "Collections"
+msgctxt "@info:tooltip"
+msgid "Toggle selection"
+msgstr "Sammeln"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:621
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Leave Fullscreen Mode"
+msgctxt "@info:tooltip"
+msgid "Full screen"
+msgstr "Heelschirmbedrief utmaken"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:626
+#, fuzzy, kde-format
+#| msgid "Rotate Left"
+msgctxt "@info:tooltip"
+msgid "Rotate left"
+msgstr "Na links dreihen"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:631
+#, fuzzy, kde-format
+#| msgid "Rotate Right"
+msgctxt "@info:tooltip"
+msgid "Rotate right"
+msgstr "Na rechts dreihen"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:645
+#, fuzzy, kde-format
+#| msgid "Save"
+msgctxt "@info:tooltip"
+msgid "Save"
+msgstr "Sekern"
+
 #: lib/transformimageoperation.cpp:58
 #, kde-format
 msgctxt "(qtundo-format)"
@@ -3039,10 +3076,6 @@ msgstr "&Ansicht"
 #~ msgid "Batch Processing"
 #~ msgstr "Stapel-Verarbeiden"
 
-#~ msgctxt "@title:menu"
-#~ msgid "Collections"
-#~ msgstr "Sammeln"
-
 #~ msgid ""
 #~ "Images will be uploaded here:\n"
 #~ "%1"
@@ -3072,10 +3105,6 @@ msgstr "&Ansicht"
 #~ msgctxt "@action Open Recent menu"
 #~ msgid "Forget All Files && Folders"
 #~ msgstr "Dissen Orner vergeten"
-
-#~ msgctxt "@action"
-#~ msgid "Leave Fullscreen Mode"
-#~ msgstr "Heelschirmbedrief utmaken"
 
 #~ msgid "Cache:"
 #~ msgstr "Twischenspieker:"
@@ -3440,9 +3469,6 @@ msgstr "&Ansicht"
 #~ "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-"
 #~ "right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-"
 #~ "weight:600;\">Bildansicht</span></p></body></html>"
-
-#~ msgid "Save"
-#~ msgstr "Sekern"
 
 #, fuzzy
 #~| msgid "Show Sidebar"

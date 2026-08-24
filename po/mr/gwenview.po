@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-21 00:41+0000\n"
+"POT-Creation-Date: 2026-08-24 00:42+0000\n"
 "PO-Revision-Date: 2014-10-28 15:32+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -2374,7 +2374,7 @@ msgstr "निवड रद्द करा"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:416
-#: lib/thumbnailview/previewitemdelegate.cpp:833
+#: lib/thumbnailview/previewitemdelegate.cpp:838
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
@@ -2901,6 +2901,43 @@ msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"
 msgstr "विनाक्रम"
 
+#: lib/thumbnailview/previewitemdelegate.cpp:616
+#, fuzzy, kde-format
+#| msgctxt "@title:menu"
+#| msgid "Collections"
+msgctxt "@info:tooltip"
+msgid "Toggle selection"
+msgstr "संग्रह"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:621
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Leave Fullscreen Mode"
+msgctxt "@info:tooltip"
+msgid "Full screen"
+msgstr "पूर्ण स्क्रीन पद्धतीतून बाहेर पडा"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:626
+#, fuzzy, kde-format
+#| msgid "Rotate Left"
+msgctxt "@info:tooltip"
+msgid "Rotate left"
+msgstr "डाव्या बाजूला फिरवा"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:631
+#, fuzzy, kde-format
+#| msgid "Rotate Right"
+msgctxt "@info:tooltip"
+msgid "Rotate right"
+msgstr "उजव्या बाजूला फिरवा"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:645
+#, fuzzy, kde-format
+#| msgid "Save All"
+msgctxt "@info:tooltip"
+msgid "Save"
+msgstr "सर्व साठवा"
+
 #: lib/transformimageoperation.cpp:58
 #, kde-format
 msgctxt "(qtundo-format)"
@@ -3021,10 +3058,6 @@ msgstr "दृश्य (&V)"
 #~ msgid "Batch Processing"
 #~ msgstr "समूह प्रक्रिया"
 
-#~ msgctxt "@title:menu"
-#~ msgid "Collections"
-#~ msgstr "संग्रह"
-
 #~ msgid ""
 #~ "Images will be uploaded here:\n"
 #~ "%1"
@@ -3054,10 +3087,6 @@ msgstr "दृश्य (&V)"
 #~ msgctxt "@action Open Recent menu"
 #~ msgid "Forget All Files && Folders"
 #~ msgstr "हि संचयीका विसरा"
-
-#~ msgctxt "@action"
-#~ msgid "Leave Fullscreen Mode"
-#~ msgstr "पूर्ण स्क्रीन पद्धतीतून बाहेर पडा"
 
 #~ msgid "Cache:"
 #~ msgstr "कॅशे :"

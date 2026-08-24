@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-21 00:41+0000\n"
+"POT-Creation-Date: 2026-08-24 00:42+0000\n"
 "PO-Revision-Date: 2026-06-25 14:25+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -2382,7 +2382,7 @@ msgstr "Снять выделение"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:416
-#: lib/thumbnailview/previewitemdelegate.cpp:833
+#: lib/thumbnailview/previewitemdelegate.cpp:838
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
@@ -2932,6 +2932,43 @@ msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"
 msgstr "Случайно"
 
+#: lib/thumbnailview/previewitemdelegate.cpp:616
+#, fuzzy, kde-format
+#| msgctxt "@title:menu"
+#| msgid "Collections"
+msgctxt "@info:tooltip"
+msgid "Toggle selection"
+msgstr "Коллекции"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:621
+#, fuzzy, kde-format
+#| msgctxt "@action"
+#| msgid "Exit Full Screen"
+msgctxt "@info:tooltip"
+msgid "Full screen"
+msgstr "Выйти из полноэкранного режима"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:626
+#, fuzzy, kde-format
+#| msgid "Rotate Left"
+msgctxt "@info:tooltip"
+msgid "Rotate left"
+msgstr "Повернуть против часовой стрелки"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:631
+#, fuzzy, kde-format
+#| msgid "Rotate Right"
+msgctxt "@info:tooltip"
+msgid "Rotate right"
+msgstr "Повернуть по часовой стрелке"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:645
+#, fuzzy, kde-format
+#| msgid "Save"
+msgctxt "@info:tooltip"
+msgid "Save"
+msgstr "Сохранить"
+
 #: lib/transformimageoperation.cpp:58
 #, kde-format
 msgctxt "(qtundo-format)"
@@ -3058,10 +3095,6 @@ msgstr "&Вид"
 #~ msgctxt "@title:menu"
 #~ msgid "Batch Processing"
 #~ msgstr "Групповая обработка"
-
-#~ msgctxt "@title:menu"
-#~ msgid "Collections"
-#~ msgstr "Коллекции"
 
 #~ msgid ""
 #~ "Images will be uploaded here:\n"
@@ -3382,9 +3415,6 @@ msgstr "&Вид"
 
 #~ msgid "<b>Image View</b>"
 #~ msgstr "<b>Просмотр изображений</b>"
-
-#~ msgid "Save"
-#~ msgstr "Сохранить"
 
 #~ msgctxt "@action:inmenu Tools"
 #~ msgid "Show Filter Bar"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-07-21 00:41+0000\n"
+"POT-Creation-Date: 2026-08-24 00:42+0000\n"
 "PO-Revision-Date: 2009-02-26 15:00+0530\n"
 "Last-Translator: Ravishankar Shrivastava <raviratlami@aol.in>\n"
 "Language-Team: Hindi <kde-i18n-doc@lists.kde.org>\n"
@@ -2411,7 +2411,7 @@ msgstr "मेटाव"
 
 #: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:416
-#: lib/thumbnailview/previewitemdelegate.cpp:833
+#: lib/thumbnailview/previewitemdelegate.cpp:838
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
@@ -2933,6 +2933,41 @@ msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"
 msgstr "बेतरतीब"
 
+#: lib/thumbnailview/previewitemdelegate.cpp:616
+#, fuzzy, kde-format
+#| msgid "Collections"
+msgctxt "@info:tooltip"
+msgid "Toggle selection"
+msgstr "संग्रह"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:621
+#, fuzzy, kde-format
+#| msgid "Start in fullscreen mode"
+msgctxt "@info:tooltip"
+msgid "Full screen"
+msgstr "पूरा स्क्रीन मोड मं चालू करव"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:626
+#, fuzzy, kde-format
+#| msgid "Rotate Left"
+msgctxt "@info:tooltip"
+msgid "Rotate left"
+msgstr "डेरी मुड़ें"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:631
+#, fuzzy, kde-format
+#| msgid "Rotate Right"
+msgctxt "@info:tooltip"
+msgid "Rotate right"
+msgstr "जेवनी मुड़ें"
+
+#: lib/thumbnailview/previewitemdelegate.cpp:645
+#, fuzzy, kde-format
+#| msgid "Save"
+msgctxt "@info:tooltip"
+msgid "Save"
+msgstr "सहेजव"
+
 #: lib/transformimageoperation.cpp:58
 #, fuzzy, kde-format
 #| msgid "Rotate Right"
@@ -3070,12 +3105,6 @@ msgstr "देखव (&V)"
 #~ msgid "Batch Processing"
 #~ msgstr "बैच प्रोसेसिंग"
 
-#, fuzzy
-#~| msgid "Collections"
-#~ msgctxt "@title:menu"
-#~ msgid "Collections"
-#~ msgstr "संग्रह"
-
 #~ msgid "Thumbnail Bar"
 #~ msgstr "लघुफोटू पट्टी"
 
@@ -3098,12 +3127,6 @@ msgstr "देखव (&V)"
 #~ msgctxt "@action Open Recent menu"
 #~ msgid "Forget All Files && Folders"
 #~ msgstr "फोल्डर बनाव"
-
-#, fuzzy
-#~| msgid "Start in fullscreen mode"
-#~ msgctxt "@action"
-#~ msgid "Leave Fullscreen Mode"
-#~ msgstr "पूरा स्क्रीन मोड मं चालू करव"
 
 #, fuzzy
 #~| msgid "Cancel"
@@ -3374,9 +3397,6 @@ msgstr "देखव (&V)"
 #~ msgctxt "Verb"
 #~ msgid "&Trash"
 #~ msgstr "घुरुवा (&T)"
-
-#~ msgid "Save"
-#~ msgstr "सहेजव"
 
 #, fuzzy
 #~| msgid "Show Side Bar"
