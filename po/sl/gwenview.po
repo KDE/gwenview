@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-24 00:42+0000\n"
-"PO-Revision-Date: 2026-05-15 06:49+0200\n"
+"POT-Creation-Date: 2026-08-25 00:42+0000\n"
+"PO-Revision-Date: 2026-08-24 07:20+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
 "Language: sl\n"
@@ -535,7 +535,7 @@ msgid "Dimensions <="
 msgstr "Dimenzije <="
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:221
+#: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:222
 #: lib/resize/resizeimagewidget.ui:40
 #, kde-format
 msgid "Height"
@@ -544,7 +544,7 @@ msgstr "Višina"
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: app/filtercontroller.cpp:240 lib/crop/cropwidget.cpp:221
+#: app/filtercontroller.cpp:240 lib/crop/cropwidget.cpp:222
 #: lib/resize/resizeimagewidget.ui:30
 #, kde-format
 msgid "Width"
@@ -908,7 +908,7 @@ msgid "Resize"
 msgstr "Spremeni velikost"
 
 #: app/imageopscontextmanageritem.cpp:118 lib/crop/cropimageoperation.cpp:70
-#: lib/crop/cropwidget.cpp:262
+#: lib/crop/cropwidget.cpp:263
 #, kde-format
 msgid "Crop"
 msgstr "Obreži"
@@ -2228,66 +2228,73 @@ msgstr "Kontrast:"
 msgid "Gamma:"
 msgstr "Gama:"
 
-#: lib/crop/cropwidget.cpp:191
+#: lib/crop/cropwidget.cpp:192
 #, kde-format
 msgid "Current Image"
 msgstr "Trenutna slika"
 
-#: lib/crop/cropwidget.cpp:194
+#: lib/crop/cropwidget.cpp:195
 #, kde-format
 msgid "Square"
 msgstr "Kvadrat"
 
-#: lib/crop/cropwidget.cpp:197
+#: lib/crop/cropwidget.cpp:198
 #, kde-format
 msgid "This Screen"
 msgstr "Ta zaslon"
 
-#: lib/crop/cropwidget.cpp:199
+#: lib/crop/cropwidget.cpp:200
 #, kde-format
 msgid "Landscape"
 msgstr "Ležeče"
 
-#: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
+#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
 msgid "ISO (A4, A3...)"
 msgstr "ISO (A4, A3 …)"
 
-#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
+#: lib/crop/cropwidget.cpp:206 lib/crop/cropwidget.cpp:213
 #, kde-format
 msgid "US Letter"
 msgstr "US Letter"
 
-#: lib/crop/cropwidget.cpp:206
+#: lib/crop/cropwidget.cpp:207
 #, kde-format
 msgid "Portrait"
 msgstr "Pokončno"
 
-#: lib/crop/cropwidget.cpp:290
+#: lib/crop/cropwidget.cpp:291
 #, kde-format
 msgctxt "@option:check"
 msgid "Advanced settings"
 msgstr "Napredne nastavitve"
 
-#: lib/crop/cropwidget.cpp:299
+#: lib/crop/cropwidget.cpp:300
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Aspect ratio:"
 msgstr "Razmerje stranic:"
 
-#: lib/crop/cropwidget.cpp:312
+#: lib/crop/cropwidget.cpp:313
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Size:"
 msgstr "Velikost:"
 
-#: lib/crop/cropwidget.cpp:334
+#: lib/crop/cropwidget.cpp:335
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Position:"
 msgstr "Položaj:"
 
-#: lib/crop/cropwidget.cpp:355
+#: lib/crop/cropwidget.cpp:357
+#, fuzzy, kde-format
+#| msgid "Show videos"
+msgctxt "@option:check"
+msgid "Show Gridlines"
+msgstr "Prikaži video posnetke"
+
+#: lib/crop/cropwidget.cpp:365
 #, kde-format
 msgctxt "@option:check"
 msgid "Preserve aspect ratio"
@@ -2635,6 +2642,15 @@ msgstr ""
 "Zadnja uporabljena višina razmerja obrezovanja, kadar so omogočene Napredne "
 "nastavitve"
 
+#. i18n: ectx: label, entry (CropShowGridlinesEnabled), group (Crop)
+#: lib/gwenviewconfig.kcfg:388
+#, fuzzy, kde-format
+#| msgid "Last used crop ratio width when Advanced Settings enabled"
+msgid "Last used gridlines visibility when Advanced Settings enabled"
+msgstr ""
+"Zadnja uporabljena širina razmerja obrezovanja, kadar so omogočene Napredne "
+"nastavitve"
+
 #: lib/historymodel.cpp:146
 #, kde-format
 msgid "Last visited: %1"
@@ -2918,41 +2934,34 @@ msgid "Random"
 msgstr "Naključno"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:616
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Collections"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle selection"
-msgstr "Zbirke"
+msgstr "Preklopi izbiro"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:621
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Exit Full Screen"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Full screen"
-msgstr "Izhod iz celozaslonskega načina"
+msgstr "Celotni zaslon"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:626
-#, fuzzy, kde-format
-#| msgid "Rotate Left"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate left"
 msgstr "Zavrti v levo"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:631
-#, fuzzy, kde-format
-#| msgid "Rotate Right"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate right"
 msgstr "Zavrti v desno"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:645
-#, fuzzy, kde-format
-#| msgid "Save All"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Save"
-msgstr "Shrani vse"
+msgstr "Shrani"
 
 #: lib/transformimageoperation.cpp:58
 #, kde-format

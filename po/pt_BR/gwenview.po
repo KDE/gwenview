@@ -15,16 +15,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-24 00:42+0000\n"
-"PO-Revision-Date: 2026-05-15 04:45-0300\n"
+"POT-Creation-Date: 2026-08-25 00:42+0000\n"
+"PO-Revision-Date: 2026-08-24 07:32-0300\n"
 "Last-Translator: Marcus Gama <marcus.gama@gmail.com>\n"
-"Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
+"Language-Team: Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 26.04.1\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -534,7 +534,7 @@ msgid "Dimensions <="
 msgstr "Dimensões <="
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:221
+#: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:222
 #: lib/resize/resizeimagewidget.ui:40
 #, kde-format
 msgid "Height"
@@ -543,7 +543,7 @@ msgstr "Altura"
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: app/filtercontroller.cpp:240 lib/crop/cropwidget.cpp:221
+#: app/filtercontroller.cpp:240 lib/crop/cropwidget.cpp:222
 #: lib/resize/resizeimagewidget.ui:30
 #, kde-format
 msgid "Width"
@@ -906,7 +906,7 @@ msgid "Resize"
 msgstr "Redimensionar"
 
 #: app/imageopscontextmanageritem.cpp:118 lib/crop/cropimageoperation.cpp:70
-#: lib/crop/cropwidget.cpp:262
+#: lib/crop/cropwidget.cpp:263
 #, kde-format
 msgid "Crop"
 msgstr "Cortar"
@@ -2190,68 +2190,75 @@ msgstr "Contraste:"
 msgid "Gamma:"
 msgstr "Gama:"
 
-#: lib/crop/cropwidget.cpp:191
+#: lib/crop/cropwidget.cpp:192
 #, kde-format
 msgid "Current Image"
 msgstr "Imagem atual"
 
-#: lib/crop/cropwidget.cpp:194
+#: lib/crop/cropwidget.cpp:195
 #, kde-format
 msgid "Square"
 msgstr "Quadrado"
 
-#: lib/crop/cropwidget.cpp:197
+#: lib/crop/cropwidget.cpp:198
 #, kde-format
 msgid "This Screen"
 msgstr "Esta tela"
 
-#: lib/crop/cropwidget.cpp:199
+#: lib/crop/cropwidget.cpp:200
 #, kde-format
 msgid "Landscape"
 msgstr "Paisagem"
 
-#: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
+#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
 msgid "ISO (A4, A3...)"
 msgstr "ISO (A4, A3...)"
 
-#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
+#: lib/crop/cropwidget.cpp:206 lib/crop/cropwidget.cpp:213
 #, kde-format
 msgid "US Letter"
 msgstr "Carta EUA"
 
-#: lib/crop/cropwidget.cpp:206
+#: lib/crop/cropwidget.cpp:207
 #, kde-format
 msgid "Portrait"
 msgstr "Retrato"
 
-#: lib/crop/cropwidget.cpp:290
+#: lib/crop/cropwidget.cpp:291
 #, kde-format
 msgctxt "@option:check"
 msgid "Advanced settings"
 msgstr "Configurações avançadas"
 
 # TRADUÇÃO REDUZIDA PARA MELHOR ADAPTAÇÃO AO DIÁLOGO.
-#: lib/crop/cropwidget.cpp:299
+#: lib/crop/cropwidget.cpp:300
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Aspect ratio:"
 msgstr "Proporção:"
 
-#: lib/crop/cropwidget.cpp:312
+#: lib/crop/cropwidget.cpp:313
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Size:"
 msgstr "Tamanho:"
 
-#: lib/crop/cropwidget.cpp:334
+#: lib/crop/cropwidget.cpp:335
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Position:"
 msgstr "Posição:"
 
+#: lib/crop/cropwidget.cpp:357
+#, fuzzy, kde-format
+#| msgid "Show videos"
+msgctxt "@option:check"
+msgid "Show Gridlines"
+msgstr "Exibir vídeos"
+
 # TRADUÇÃO REDUZIDA PARA MELHOR ADAPTAÇÃO AO DIÁLOGO.
-#: lib/crop/cropwidget.cpp:355
+#: lib/crop/cropwidget.cpp:365
 #, kde-format
 msgctxt "@option:check"
 msgid "Preserve aspect ratio"
@@ -2597,6 +2604,15 @@ msgstr ""
 "Última altura da proporção de recorte usada quando as configurações "
 "avançadas estiverem ativadas"
 
+#. i18n: ectx: label, entry (CropShowGridlinesEnabled), group (Crop)
+#: lib/gwenviewconfig.kcfg:388
+#, fuzzy, kde-format
+#| msgid "Last used crop ratio width when Advanced Settings enabled"
+msgid "Last used gridlines visibility when Advanced Settings enabled"
+msgstr ""
+"Última largura da proporção de recorte usada quando as configurações "
+"avançadas estiverem ativadas"
+
 #: lib/historymodel.cpp:146
 #, kde-format
 msgid "Last visited: %1"
@@ -2882,41 +2898,34 @@ msgid "Random"
 msgstr "Aleatória"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:616
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Collections"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle selection"
-msgstr "Coleções"
+msgstr "Alternar seleção"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:621
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Exit Full Screen"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Full screen"
-msgstr "Sair da tela cheia"
+msgstr "Tela cheia"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:626
-#, fuzzy, kde-format
-#| msgid "Rotate Left"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate left"
 msgstr "Girar à esquerda"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:631
-#, fuzzy, kde-format
-#| msgid "Rotate Right"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate right"
 msgstr "Girar à direita"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:645
-#, fuzzy, kde-format
-#| msgid "Save All"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Save"
-msgstr "Salvar todas"
+msgstr "Salvar"
 
 #: lib/transformimageoperation.cpp:58
 #, kde-format

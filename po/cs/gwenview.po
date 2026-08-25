@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-24 00:42+0000\n"
-"PO-Revision-Date: 2026-07-10 11:19+0200\n"
+"POT-Creation-Date: 2026-08-25 00:42+0000\n"
+"PO-Revision-Date: 2026-08-24 19:58+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.9\n"
+"X-Generator: Lokalize 26.08.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -530,7 +530,7 @@ msgid "Dimensions <="
 msgstr "Rozměry <="
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:221
+#: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:222
 #: lib/resize/resizeimagewidget.ui:40
 #, kde-format
 msgid "Height"
@@ -539,7 +539,7 @@ msgstr "Výška"
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: app/filtercontroller.cpp:240 lib/crop/cropwidget.cpp:221
+#: app/filtercontroller.cpp:240 lib/crop/cropwidget.cpp:222
 #: lib/resize/resizeimagewidget.ui:30
 #, kde-format
 msgid "Width"
@@ -901,7 +901,7 @@ msgid "Resize"
 msgstr "Změnit velikost"
 
 #: app/imageopscontextmanageritem.cpp:118 lib/crop/cropimageoperation.cpp:70
-#: lib/crop/cropwidget.cpp:262
+#: lib/crop/cropwidget.cpp:263
 #, kde-format
 msgid "Crop"
 msgstr "Oříznout"
@@ -2196,66 +2196,73 @@ msgstr "Kontrast:"
 msgid "Gamma:"
 msgstr "Gama:"
 
-#: lib/crop/cropwidget.cpp:191
+#: lib/crop/cropwidget.cpp:192
 #, kde-format
 msgid "Current Image"
 msgstr "Současný obrázek"
 
-#: lib/crop/cropwidget.cpp:194
+#: lib/crop/cropwidget.cpp:195
 #, kde-format
 msgid "Square"
 msgstr "Čtverec"
 
-#: lib/crop/cropwidget.cpp:197
+#: lib/crop/cropwidget.cpp:198
 #, kde-format
 msgid "This Screen"
 msgstr "Tato obrazovka"
 
-#: lib/crop/cropwidget.cpp:199
+#: lib/crop/cropwidget.cpp:200
 #, kde-format
 msgid "Landscape"
 msgstr "Na šířku"
 
-#: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
+#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
 msgid "ISO (A4, A3...)"
 msgstr "ISO (A4, A3...)"
 
-#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
+#: lib/crop/cropwidget.cpp:206 lib/crop/cropwidget.cpp:213
 #, kde-format
 msgid "US Letter"
 msgstr "US Letter"
 
-#: lib/crop/cropwidget.cpp:206
+#: lib/crop/cropwidget.cpp:207
 #, kde-format
 msgid "Portrait"
 msgstr "Na výšku"
 
-#: lib/crop/cropwidget.cpp:290
+#: lib/crop/cropwidget.cpp:291
 #, kde-format
 msgctxt "@option:check"
 msgid "Advanced settings"
 msgstr "Pokročilá nastavení"
 
-#: lib/crop/cropwidget.cpp:299
+#: lib/crop/cropwidget.cpp:300
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Aspect ratio:"
 msgstr "Poměr stran:"
 
-#: lib/crop/cropwidget.cpp:312
+#: lib/crop/cropwidget.cpp:313
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Size:"
 msgstr "Velikost:"
 
-#: lib/crop/cropwidget.cpp:334
+#: lib/crop/cropwidget.cpp:335
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Position:"
 msgstr "Pozice:"
 
-#: lib/crop/cropwidget.cpp:355
+#: lib/crop/cropwidget.cpp:357
+#, fuzzy, kde-format
+#| msgid "Show videos"
+msgctxt "@option:check"
+msgid "Show Gridlines"
+msgstr "Zobrazit videa"
+
+#: lib/crop/cropwidget.cpp:365
 #, kde-format
 msgctxt "@option:check"
 msgid "Preserve aspect ratio"
@@ -2598,6 +2605,13 @@ msgstr "Naposled použitá šířka ořezu při povolení pokročilých nastaven
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr "Naposled použitá výška ořezu při povolení pokročilých nastavení"
 
+#. i18n: ectx: label, entry (CropShowGridlinesEnabled), group (Crop)
+#: lib/gwenviewconfig.kcfg:388
+#, fuzzy, kde-format
+#| msgid "Last used crop ratio width when Advanced Settings enabled"
+msgid "Last used gridlines visibility when Advanced Settings enabled"
+msgstr "Naposled použitá šířka ořezu při povolení pokročilých nastavení"
+
 #: lib/historymodel.cpp:146
 #, kde-format
 msgid "Last visited: %1"
@@ -2885,36 +2899,31 @@ msgstr "Náhodně"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle selection"
-msgstr ""
+msgstr "Přepnout výběr"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:621
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Exit Full Screen"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Full screen"
-msgstr "Ukončit celoobrazovkový režim"
+msgstr "Celá obrazovka"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:626
-#, fuzzy, kde-format
-#| msgid "Rotate Left"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate left"
-msgstr "Otočit vlevo"
+msgstr "Otočit doleva"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:631
-#, fuzzy, kde-format
-#| msgid "Rotate Right"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate right"
-msgstr "Otočit vpravo"
+msgstr "Otočit doprava"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:645
-#, fuzzy, kde-format
-#| msgid "Save All"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Save"
-msgstr "Uložit vše"
+msgstr "Uložit"
 
 #: lib/transformimageoperation.cpp:58
 #, kde-format

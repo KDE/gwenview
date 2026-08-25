@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-24 00:42+0000\n"
+"POT-Creation-Date: 2026-08-25 00:42+0000\n"
 "PO-Revision-Date: 2023-12-21 23:11+0900\n"
 "Last-Translator: Ryuichi Yamada <ryuichi_ya220@outlook.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -514,7 +514,7 @@ msgid "Dimensions <="
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:221
+#: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:222
 #: lib/resize/resizeimagewidget.ui:40
 #, kde-format
 msgid "Height"
@@ -523,7 +523,7 @@ msgstr "高さ"
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: app/filtercontroller.cpp:240 lib/crop/cropwidget.cpp:221
+#: app/filtercontroller.cpp:240 lib/crop/cropwidget.cpp:222
 #: lib/resize/resizeimagewidget.ui:30
 #, kde-format
 msgid "Width"
@@ -892,7 +892,7 @@ msgid "Resize"
 msgstr "サイズ変更"
 
 #: app/imageopscontextmanageritem.cpp:118 lib/crop/cropimageoperation.cpp:70
-#: lib/crop/cropwidget.cpp:262
+#: lib/crop/cropwidget.cpp:263
 #, kde-format
 msgid "Crop"
 msgstr "切り取り"
@@ -2138,68 +2138,75 @@ msgstr ""
 msgid "Gamma:"
 msgstr ""
 
-#: lib/crop/cropwidget.cpp:191
+#: lib/crop/cropwidget.cpp:192
 #, kde-format
 msgid "Current Image"
 msgstr "現在の画像"
 
-#: lib/crop/cropwidget.cpp:194
+#: lib/crop/cropwidget.cpp:195
 #, kde-format
 msgid "Square"
 msgstr "正方形"
 
-#: lib/crop/cropwidget.cpp:197
+#: lib/crop/cropwidget.cpp:198
 #, kde-format
 msgid "This Screen"
 msgstr "このスクリーン"
 
-#: lib/crop/cropwidget.cpp:199
+#: lib/crop/cropwidget.cpp:200
 #, kde-format
 msgid "Landscape"
 msgstr ""
 
-#: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
+#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
 msgid "ISO (A4, A3...)"
 msgstr ""
 
-#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
+#: lib/crop/cropwidget.cpp:206 lib/crop/cropwidget.cpp:213
 #, kde-format
 msgid "US Letter"
 msgstr ""
 
-#: lib/crop/cropwidget.cpp:206
+#: lib/crop/cropwidget.cpp:207
 #, kde-format
 msgid "Portrait"
 msgstr ""
 
-#: lib/crop/cropwidget.cpp:290
+#: lib/crop/cropwidget.cpp:291
 #, kde-format
 msgctxt "@option:check"
 msgid "Advanced settings"
 msgstr "詳細設定"
 
 # ACCELERATOR added by translator
-#: lib/crop/cropwidget.cpp:299
+#: lib/crop/cropwidget.cpp:300
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Aspect ratio:"
 msgstr "アスペクト比:"
 
-#: lib/crop/cropwidget.cpp:312
+#: lib/crop/cropwidget.cpp:313
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Size:"
 msgstr "サイズ:"
 
-#: lib/crop/cropwidget.cpp:334
+#: lib/crop/cropwidget.cpp:335
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Position:"
 msgstr "位置:"
 
+#: lib/crop/cropwidget.cpp:357
+#, fuzzy, kde-format
+#| msgid "Show videos"
+msgctxt "@option:check"
+msgid "Show Gridlines"
+msgstr "動画を表示"
+
 # ACCELERATOR added by translator
-#: lib/crop/cropwidget.cpp:355
+#: lib/crop/cropwidget.cpp:365
 #, kde-format
 msgctxt "@option:check"
 msgid "Preserve aspect ratio"
@@ -2502,6 +2509,12 @@ msgstr ""
 #: lib/gwenviewconfig.kcfg:384
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
+msgstr ""
+
+#. i18n: ectx: label, entry (CropShowGridlinesEnabled), group (Crop)
+#: lib/gwenviewconfig.kcfg:388
+#, kde-format
+msgid "Last used gridlines visibility when Advanced Settings enabled"
 msgstr ""
 
 #: lib/historymodel.cpp:146
