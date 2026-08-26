@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-25 00:42+0000\n"
-"PO-Revision-Date: 2026-08-24 19:30+0200\n"
+"PO-Revision-Date: 2026-08-25 08:30+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -2246,11 +2246,10 @@ msgid "Position:"
 msgstr "Posició:"
 
 #: lib/crop/cropwidget.cpp:357
-#, fuzzy, kde-format
-#| msgid "Show videos"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Gridlines"
-msgstr "Mostra els vídeos"
+msgstr "Mostra les línies de la quadrícula"
 
 #: lib/crop/cropwidget.cpp:365
 #, kde-format
@@ -2602,12 +2601,11 @@ msgstr ""
 
 #. i18n: ectx: label, entry (CropShowGridlinesEnabled), group (Crop)
 #: lib/gwenviewconfig.kcfg:388
-#, fuzzy, kde-format
-#| msgid "Last used crop ratio width when Advanced Settings enabled"
+#, kde-format
 msgid "Last used gridlines visibility when Advanced Settings enabled"
 msgstr ""
-"Darrera amplada usada de la relació d'escapçat quan l'arranjament avançat "
-"era actiu"
+"Darrera visibilitat utilitzada de les línies de quadrícula quan "
+"l'arranjament avançat era actiu"
 
 #: lib/historymodel.cpp:146
 #, kde-format

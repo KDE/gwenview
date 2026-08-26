@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-25 00:42+0000\n"
-"PO-Revision-Date: 2026-08-24 19:58+0200\n"
+"PO-Revision-Date: 2026-08-25 11:10+0200\n"
 "Last-Translator: Libor Filípek <libor.filipek@gmail.com>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
 "Language: cs\n"
@@ -2256,11 +2256,10 @@ msgid "Position:"
 msgstr "Pozice:"
 
 #: lib/crop/cropwidget.cpp:357
-#, fuzzy, kde-format
-#| msgid "Show videos"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Gridlines"
-msgstr "Zobrazit videa"
+msgstr "Zobrazit linky mřížky"
 
 #: lib/crop/cropwidget.cpp:365
 #, kde-format
@@ -2607,10 +2606,11 @@ msgstr "Naposled použitá výška ořezu při povolení pokročilých nastaven�
 
 #. i18n: ectx: label, entry (CropShowGridlinesEnabled), group (Crop)
 #: lib/gwenviewconfig.kcfg:388
-#, fuzzy, kde-format
-#| msgid "Last used crop ratio width when Advanced Settings enabled"
+#, kde-format
 msgid "Last used gridlines visibility when Advanced Settings enabled"
-msgstr "Naposled použitá šířka ořezu při povolení pokročilých nastavení"
+msgstr ""
+"Zachování nastavení viditelnosti mřížky z posledního použití při zapnutých "
+"pokročilých nastaveních"
 
 #: lib/historymodel.cpp:146
 #, kde-format

@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-25 00:42+0000\n"
-"PO-Revision-Date: 2026-08-24 12:34+0100\n"
+"PO-Revision-Date: 2026-08-25 11:53+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -2242,11 +2242,10 @@ msgid "Position:"
 msgstr "Posición:"
 
 #: lib/crop/cropwidget.cpp:357
-#, fuzzy, kde-format
-#| msgid "Show videos"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Gridlines"
-msgstr "Mostrar vídeos"
+msgstr "Mostrar cuadrícula"
 
 #: lib/crop/cropwidget.cpp:365
 #, kde-format
@@ -2601,12 +2600,11 @@ msgstr ""
 
 #. i18n: ectx: label, entry (CropShowGridlinesEnabled), group (Crop)
 #: lib/gwenviewconfig.kcfg:388
-#, fuzzy, kde-format
-#| msgid "Last used crop ratio width when Advanced Settings enabled"
+#, kde-format
 msgid "Last used gridlines visibility when Advanced Settings enabled"
 msgstr ""
-"Anchura de la proporción de recorte usada por última vez cuando las "
-"preferencias avanzadas están activadas"
+"Visibilidad de la cuadrícula usada por última vez cuando las preferencias "
+"avanzadas están activadas"
 
 #: lib/historymodel.cpp:146
 #, kde-format

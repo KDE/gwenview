@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-25 00:42+0000\n"
-"PO-Revision-Date: 2026-08-24 12:53+0300\n"
+"PO-Revision-Date: 2026-08-25 08:41+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2290,11 +2290,10 @@ msgid "Position:"
 msgstr "Розташування:"
 
 #: lib/crop/cropwidget.cpp:357
-#, fuzzy, kde-format
-#| msgid "Show videos"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Gridlines"
-msgstr "Показувати відео"
+msgstr "Показувати ґратку"
 
 #: lib/crop/cropwidget.cpp:365
 #, kde-format
@@ -2640,11 +2639,11 @@ msgstr ""
 
 #. i18n: ectx: label, entry (CropShowGridlinesEnabled), group (Crop)
 #: lib/gwenviewconfig.kcfg:388
-#, fuzzy, kde-format
-#| msgid "Last used crop ratio width when Advanced Settings enabled"
+#, kde-format
 msgid "Last used gridlines visibility when Advanced Settings enabled"
 msgstr ""
-"Остання використана ширина обрізання, коли було увімкнено додаткові параметри"
+"Останні використані параметри видимості ґратки, коли було увімкнено "
+"додаткові параметри"
 
 #: lib/historymodel.cpp:146
 #, kde-format
