@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-25 00:42+0000\n"
-"PO-Revision-Date: 2026-04-15 22:51+0200\n"
+"PO-Revision-Date: 2026-08-25 15:35+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@kde.org>\n"
 "Language-Team: fr\n"
 "Language: fr\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Accelerator-Marker: &\n"
 "X-Environment: kde\n"
-"X-Generator: Lokalize 26.04.1\n"
+"X-Generator: Lokalize 26.08.0\n"
 "X-Text-Markup: kde4\n"
 
 #, kde-format
@@ -2912,41 +2912,34 @@ msgid "Random"
 msgstr "Aléatoire"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:616
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Collections"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle selection"
-msgstr "Collections"
+msgstr "Basculer la sélection"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:621
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Exit Full Screen"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Full screen"
-msgstr "Sortir du mode plein écran"
+msgstr "Plein écran"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:626
-#, fuzzy, kde-format
-#| msgid "Rotate Left"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate left"
-msgstr "Tourner vers la gauche"
+msgstr "Faire pivoter vers la gauche"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:631
-#, fuzzy, kde-format
-#| msgid "Rotate Right"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate right"
-msgstr "Tourner vers la droite"
+msgstr "Faire pivoter vers la droite"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:645
-#, fuzzy, kde-format
-#| msgid "Save All"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Save"
-msgstr "Tout enregistrer"
+msgstr "Enregistrer"
 
 #: lib/transformimageoperation.cpp:58
 #, kde-format

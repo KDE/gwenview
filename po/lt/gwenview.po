@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-25 00:42+0000\n"
-"PO-Revision-Date: 2026-05-21 21:53+0300\n"
+"PO-Revision-Date: 2026-08-26 12:14+0300\n"
 "Last-Translator: Moo <<>>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
 "Language: lt\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n%10>=2 && (n%100<10 || n"
 "%100>=20) ? 1 : n%10==0 || (n%100>10 && n%100<20) ? 2 : 3);\n"
-"X-Generator: Poedit 3.8\n"
+"X-Generator: Poedit 3.9\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2288,11 +2288,10 @@ msgid "Position:"
 msgstr "Pozicija:"
 
 #: lib/crop/cropwidget.cpp:357
-#, fuzzy, kde-format
-#| msgid "Show videos"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Gridlines"
-msgstr "Rodyti vaizdo įrašus"
+msgstr "Rodyti tinklelio linijas"
 
 #: lib/crop/cropwidget.cpp:365
 #, kde-format
@@ -2646,11 +2645,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (CropShowGridlinesEnabled), group (Crop)
 #: lib/gwenviewconfig.kcfg:388
-#, fuzzy, kde-format
-#| msgid "Last used crop ratio width when Advanced Settings enabled"
+#, kde-format
 msgid "Last used gridlines visibility when Advanced Settings enabled"
 msgstr ""
-"Paskutinis naudotas apkirpimo proporcijų plotis, kai išplėstinės nuostatos "
+"Paskutinis naudotas tinklelio linijų matomumas, kai išplėstinės nuostatos "
 "yra įjungtos"
 
 #: lib/historymodel.cpp:146
@@ -2937,41 +2935,34 @@ msgid "Random"
 msgstr "Atsitiktinai"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:616
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Collections"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle selection"
-msgstr "Kolekcijos"
+msgstr "Perjungti žymėjimą"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:621
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Exit Full Screen"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Full screen"
-msgstr "Išeiti iš viso ekrano"
+msgstr "Visas ekranas"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:626
-#, fuzzy, kde-format
-#| msgid "Rotate Left"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate left"
 msgstr "Pasukti kairėn"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:631
-#, fuzzy, kde-format
-#| msgid "Rotate Right"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate right"
 msgstr "Pasukti dešinėn"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:645
-#, fuzzy, kde-format
-#| msgid "Save All"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Save"
-msgstr "Įrašyti visus"
+msgstr "Įrašyti"
 
 #: lib/transformimageoperation.cpp:58
 #, kde-format
