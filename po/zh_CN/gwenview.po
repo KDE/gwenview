@@ -2179,11 +2179,10 @@ msgid "Position:"
 msgstr "位置："
 
 #: lib/crop/cropwidget.cpp:357
-#, fuzzy, kde-format
-#| msgid "Show videos"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Gridlines"
-msgstr "显示视频"
+msgstr ""
 
 #: lib/crop/cropwidget.cpp:365
 #, kde-format
@@ -2503,10 +2502,9 @@ msgstr "高级控制选项启用时，上次使用的裁剪宽高比高度"
 
 #. i18n: ectx: label, entry (CropShowGridlinesEnabled), group (Crop)
 #: lib/gwenviewconfig.kcfg:388
-#, fuzzy, kde-format
-#| msgid "Last used crop ratio width when Advanced Settings enabled"
+#, kde-format
 msgid "Last used gridlines visibility when Advanced Settings enabled"
-msgstr "高级控制选项启用时，上次使用的裁剪宽高比宽度"
+msgstr ""
 
 #: lib/historymodel.cpp:146
 #, kde-format
@@ -2792,31 +2790,31 @@ msgstr "随机"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle selection"
-msgstr ""
+msgstr "显示/隐藏选区"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:621
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Full screen"
-msgstr ""
+msgstr "全屏"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:626
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate left"
-msgstr ""
+msgstr "旋转 (向左)"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:631
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate right"
-msgstr ""
+msgstr "旋转 (向右)"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:645
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save"
-msgstr ""
+msgstr "保存"
 
 #: lib/transformimageoperation.cpp:58
 #, kde-format
