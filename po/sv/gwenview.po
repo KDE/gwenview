@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-25 00:42+0000\n"
-"PO-Revision-Date: 2026-08-24 21:47+0200\n"
+"PO-Revision-Date: 2026-08-31 18:49+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@gmail.com>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
 "Language: sv\n"
@@ -2228,11 +2228,10 @@ msgid "Position:"
 msgstr "Position:"
 
 #: lib/crop/cropwidget.cpp:357
-#, fuzzy, kde-format
-#| msgid "Show videos"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Gridlines"
-msgstr "Visa videor"
+msgstr "Visa rutnätslinjer"
 
 #: lib/crop/cropwidget.cpp:365
 #, kde-format
@@ -2565,7 +2564,7 @@ msgstr ""
 msgid "Last used crop ratio width when Advanced Settings enabled"
 msgstr ""
 "Senast använda proportionella bredd för beskärning när Avancerade "
-"inställningar aktiverade"
+"inställningar aktiverades"
 
 #. i18n: ectx: label, entry (CropRatioHeight), group (Crop)
 #: lib/gwenviewconfig.kcfg:384
@@ -2573,16 +2572,15 @@ msgstr ""
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr ""
 "Senast använda proportionella höjd för beskärning när Avancerade "
-"inställningar aktiverade"
+"inställningar aktiverades"
 
 #. i18n: ectx: label, entry (CropShowGridlinesEnabled), group (Crop)
 #: lib/gwenviewconfig.kcfg:388
-#, fuzzy, kde-format
-#| msgid "Last used crop ratio width when Advanced Settings enabled"
+#, kde-format
 msgid "Last used gridlines visibility when Advanced Settings enabled"
 msgstr ""
-"Senast använda proportionella bredd för beskärning när Avancerade "
-"inställningar aktiverade"
+"Senast använda rutnätslinjers synlighet när Avancerade inställningar "
+"aktiverades"
 
 #: lib/historymodel.cpp:146
 #, kde-format
