@@ -2182,7 +2182,7 @@ msgstr "位置："
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Gridlines"
-msgstr ""
+msgstr "显示网格线"
 
 #: lib/crop/cropwidget.cpp:365
 #, kde-format
@@ -2504,7 +2504,7 @@ msgstr "高级控制选项启用时，上次使用的裁剪宽高比高度"
 #: lib/gwenviewconfig.kcfg:388
 #, kde-format
 msgid "Last used gridlines visibility when Advanced Settings enabled"
-msgstr ""
+msgstr "高级控制选项启用时，上次使用的网格线显示/隐藏状态"
 
 #: lib/historymodel.cpp:146
 #, kde-format
