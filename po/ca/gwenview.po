@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-25 00:42+0000\n"
-"PO-Revision-Date: 2026-08-25 08:30+0200\n"
+"PO-Revision-Date: 2026-09-06 18:16+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 25.04.0\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -532,7 +532,7 @@ msgstr "Dimensions <="
 #: lib/resize/resizeimagewidget.ui:40
 #, kde-format
 msgid "Height"
-msgstr "Alçada"
+msgstr "Altura"
 
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
@@ -625,7 +625,7 @@ msgstr "Mostra les miniatures"
 #: app/fullscreenconfigwidget.ui:130
 #, kde-format
 msgid "Height:"
-msgstr "Alçada:"
+msgstr "Altura:"
 
 #: app/fullscreencontent.cpp:239
 #, kde-format
@@ -2406,7 +2406,7 @@ msgstr ""
 #: lib/documentview/documentviewcontroller.cpp:84
 #, kde-format
 msgid "Zoom to fill window by fitting to width or height"
-msgstr "Amplia fins a omplir la finestra, ajustant a amplada o alçada"
+msgstr "Amplia fins a omplir la finestra, ajustant a amplada o altura"
 
 #: lib/documentview/documentviewcontroller.cpp:86
 #, kde-format
@@ -2596,7 +2596,7 @@ msgstr ""
 #, kde-format
 msgid "Last used crop ratio height when Advanced Settings enabled"
 msgstr ""
-"Darrera alçada usada de la relació d'escapçat quan l'arranjament avançat era "
+"Darrera altura usada de la relació d'escapçat quan l'arranjament avançat era "
 "actiu"
 
 #. i18n: ectx: label, entry (CropShowGridlinesEnabled), group (Crop)

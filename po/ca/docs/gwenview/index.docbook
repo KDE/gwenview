@@ -360,7 +360,7 @@
 >Ajusta</guibutton
 > ajustarà la imatge actual a la mida de la finestra, el botó <guibutton
 >Omple</guibutton
-> ajustarà la imatge fins a omplir la finestra, amb l'amplada o alçada, i el botó <guibutton
+> ajustarà la imatge fins a omplir la finestra, amb l'amplada o altura, i el botó <guibutton
 >100%</guibutton
 > ajustarà la imatge a la mida real dels píxels. La drecera <keycap
 >F</keycap
@@ -578,7 +578,7 @@
     <listitem
 ><para
 >El control lliscant <guilabel
->Alçada</guilabel
+>Altura</guilabel
 > canvia la mida de les miniatures mostrades.</para
 ></listitem>
 </itemizedlist>
