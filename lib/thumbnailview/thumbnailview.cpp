@@ -463,6 +463,20 @@ void ThumbnailView::setThumbnailProvider(ThumbnailProvider *thumbnailProvider)
     d->mThumbnailProvider = thumbnailProvider;
 }
 
+void ThumbnailView::changeEvent(QEvent *event)
+{
+    if (event->type() == QEvent::PaletteChange) {
+        // Only folder thumbnails might need to be reset here,
+        // given the icon used as background can be rendered based on the app color palette.
+        // For simple code and as app color palette changes do not often happen,
+        // the whole cache is discarded here.
+        d->mThumbnailForUrl.clear();
+        generateThumbnailsForItems();
+    }
+
+    QListView::changeEvent(event);
+}
+
 void ThumbnailView::updateThumbnailSize()
 {
     QSize value = d->mThumbnailSize;
