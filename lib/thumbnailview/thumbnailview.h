@@ -176,6 +176,8 @@ protected:
 
     void mousePressEvent(QMouseEvent *) override;
 
+    void changeEvent(QEvent *) override;
+
 protected Q_SLOTS:
     void rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end) override;
     void rowsInserted(const QModelIndex &parent, int start, int end) override;
