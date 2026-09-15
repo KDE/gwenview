@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-15 00:42+0000\n"
-"PO-Revision-Date: 2023-12-06 19:09+0100\n"
+"PO-Revision-Date: 2026-09-14 19:22+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
 "Language: sk\n"
@@ -1190,7 +1190,7 @@ msgstr "Nahradiť umiestnenie"
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
-msgstr "Prehlidať"
+msgstr "Prehliadať"
 
 #: app/mainwindow.cpp:407
 #, kde-format
