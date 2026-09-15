@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-25 00:42+0000\n"
-"PO-Revision-Date: 2023-12-06 19:09+0100\n"
+"PO-Revision-Date: 2026-09-14 19:22+0200\n"
 "Last-Translator: Roman Paholik <wizzardsk@gmail.com>\n"
 "Language-Team: Slovak <kde-sk@linux.sk>\n"
 "Language: sk\n"
@@ -1190,7 +1190,7 @@ msgstr "Nahradiť umiestnenie"
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
-msgstr "Prehlidať"
+msgstr "Prehliadať"
 
 #: app/mainwindow.cpp:404
 #, kde-format
@@ -2261,11 +2261,10 @@ msgid "Position:"
 msgstr "Pozícia:"
 
 #: lib/crop/cropwidget.cpp:357
-#, fuzzy, kde-format
-#| msgid "Show videos"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Gridlines"
-msgstr "Zobrazovať videá"
+msgstr "Zobraziť mriežku"
 
 #: lib/crop/cropwidget.cpp:365
 #, kde-format
@@ -2608,11 +2607,10 @@ msgstr ""
 
 #. i18n: ectx: label, entry (CropShowGridlinesEnabled), group (Crop)
 #: lib/gwenviewconfig.kcfg:388
-#, fuzzy, kde-format
-#| msgid "Last used crop ratio width when Advanced Settings enabled"
+#, kde-format
 msgid "Last used gridlines visibility when Advanced Settings enabled"
 msgstr ""
-"Naposledy použitá šírka pomeru orezania, keď sú povolené Pokročilé nastavenia"
+"Naposledy použitá viditeľnosť mriežky, keď sú povolené Pokročilé nastavenia"
 
 #: lib/historymodel.cpp:146
 #, kde-format
@@ -2898,41 +2896,34 @@ msgid "Random"
 msgstr "Náhodne"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:616
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Collections"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle selection"
-msgstr "Kolekcie"
+msgstr "Prepnúť výber"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:621
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Exit Full Screen"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Full screen"
-msgstr "Ukončiť režim celej obrazovky"
+msgstr "Celá obrazovka"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:626
-#, fuzzy, kde-format
-#| msgid "Rotate Left"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate left"
 msgstr "Otočiť doľava"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:631
-#, fuzzy, kde-format
-#| msgid "Rotate Right"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate right"
 msgstr "Otočiť doprava"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:645
-#, fuzzy, kde-format
-#| msgid "Save All"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Save"
-msgstr "Uložiť všetko"
+msgstr "Uložiť"
 
 #: lib/transformimageoperation.cpp:58
 #, kde-format
