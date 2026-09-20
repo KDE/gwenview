@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-08-25 00:42+0000\n"
-"PO-Revision-Date: 2026-05-15 22:52+0200\n"
+"PO-Revision-Date: 2026-09-19 17:09+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@nuug.no>\n"
 "Language: nn\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 26.04.1\n"
+"X-Generator: Lokalize 26.08.1\n"
 "X-Environment: kde\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
@@ -2240,11 +2240,10 @@ msgid "Position:"
 msgstr "Plassering:"
 
 #: lib/crop/cropwidget.cpp:357
-#, fuzzy, kde-format
-#| msgid "Show videos"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Gridlines"
-msgstr "Vis videoar"
+msgstr "Vis rutenett"
 
 #: lib/crop/cropwidget.cpp:365
 #, kde-format
@@ -2589,10 +2588,9 @@ msgstr "Sist brukte relativ høgd når avanserte innstillingar er på"
 
 #. i18n: ectx: label, entry (CropShowGridlinesEnabled), group (Crop)
 #: lib/gwenviewconfig.kcfg:388
-#, fuzzy, kde-format
-#| msgid "Last used crop ratio width when Advanced Settings enabled"
+#, kde-format
 msgid "Last used gridlines visibility when Advanced Settings enabled"
-msgstr "Sist brukte relativ breidd når avanserte innstillingar er på"
+msgstr "Sist brukte rutenett-innstilling når avanserte innstillingar er på"
 
 #: lib/historymodel.cpp:146
 #, kde-format
@@ -2880,36 +2878,31 @@ msgstr "Vilkårleg"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle selection"
-msgstr ""
+msgstr "Slå utvalet av/på"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:621
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Exit Full Screen"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Full screen"
-msgstr "Gå ut av fullskjermsmodus"
+msgstr "Fullskjerm"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:626
-#, fuzzy, kde-format
-#| msgid "Rotate Left"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate left"
 msgstr "Drei til venstre"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:631
-#, fuzzy, kde-format
-#| msgid "Rotate Right"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate right"
 msgstr "Drei til høgre"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:645
-#, fuzzy, kde-format
-#| msgid "Save All"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Save"
-msgstr "Lagra alle"
+msgstr "Lagra"
 
 #: lib/transformimageoperation.cpp:58
 #, kde-format
