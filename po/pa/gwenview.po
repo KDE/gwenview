@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-25 00:42+0000\n"
+"POT-Creation-Date: 2026-09-22 15:58+0000\n"
 "PO-Revision-Date: 2024-10-01 21:29-0500\n"
 "Last-Translator: A S Alam <aman@punlinux.org>\n"
 "Language-Team: pa\n"
@@ -2101,8 +2101,9 @@ msgid "Listing content of:"
 msgstr "ਇਸ ਦੀ ਸਮੱਗਰੀ ਸੂਚੀਬੱਧ ਹੈ:"
 
 #: lib/about.cpp:38
-#, kde-format
-msgid "Copyright 2000-2022 Gwenview authors"
+#, fuzzy, kde-format
+#| msgid "Copyright 2000-2022 Gwenview authors"
+msgid "Copyright 2000–%1 Gwenview authors"
 msgstr "ਕਾਪੀਰਾਈਟ 2000-2022 ਗਵਿਨ-ਵਿਊ ਲੇਖਕ"
 
 #: lib/about.cpp:40

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-25 00:42+0000\n"
+"POT-Creation-Date: 2026-09-22 15:58+0000\n"
 "PO-Revision-Date: 2022-02-10 12:40+0530\n"
 "Last-Translator: Raghavendra Kamath <raghu@raghukamath.com>\n"
 "Language-Team: Hindi <kde-l10n-hi@kde.org>\n"
@@ -2170,7 +2170,7 @@ msgstr ""
 #: lib/about.cpp:38
 #, fuzzy, kde-format
 #| msgid "Copyright 2007, Aurélien Gâteau <aurelien.gateau@free.fr>"
-msgid "Copyright 2000-2022 Gwenview authors"
+msgid "Copyright 2000–%1 Gwenview authors"
 msgstr "सर्वाधिकार 2007, ऑरेलिएन गातेऊ <aurelien.gateau@free.fr>"
 
 #: lib/about.cpp:40

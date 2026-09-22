@@ -7,10 +7,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-25 00:42+0000\n"
-"PO-Revision-Date: 2026-05-30 16:31-0400\n"
+"POT-Creation-Date: 2026-09-22 15:58+0000\n"
+"PO-Revision-Date: 2026-09-22 18:03+0900\n"
 "Last-Translator: Abduqadir Abliz <sahranbay@gmail.com>\n"
-"Language-Team: Uyghur Computer Science Association <UKIJ@yahoogroups.com>\n"
+"Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
 "Language: ug\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -42,9 +42,6 @@ msgid ""
 "storing thumbnails on disk and will prefer embedded thumbnails of lower "
 "quality that are faster to load, if available."
 msgstr ""
-"ئەگەر دىسكا بوشلۇقى كۆپ بولمىسا بۇ تاللانما قوزغىتىلىدۇ. بۇ كىچىك سۈرەتنى "
-"دىسكىغا يېزىشنىڭ ئالدىنى ئېلىپ سۈپىتى تۆۋەن سىڭدۈرمە كىچىك سۈرەتنى ئىشلىتىپ "
-"يۈكلەشنى تېزلىتىدۇ. ئەگەر ئىشلەتكىلى بولسا."
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: app/advancedconfigpage.ui:82
@@ -119,11 +116,6 @@ msgid ""
 "is only appropriate for displays that are calibrated to the sRGB color space "
 "or are known to provide an incorrect color profile."
 msgstr ""
-"رەڭ باشقۇرغۇچ چەكلەنگەندە، Gwenview سۈرەتنى ئۇ بايقىغان ئېكران رەڭ سەپلىمە "
-"بوشلۇقىغا ئەمەس بەلكى sRGB رەڭ بوشلۇقىغا ئايلاندۇرىدۇ. ئادەتتە رەڭ "
-"باشقۇرۇشنى چەكلەش تەۋسىيە قىلىنمايدۇ،  ئېكران sRGB رەڭ بوشلۇقىغا تۈزىتىلگەن "
-"بولسا ياكى ئېكران تەمىنلىگەن رەڭ ئالاھىدىلىك سەپلىمە ھۆججىتىدە  مەسىلە "
-"بولغان بولسا. ئۇ باشقا گەپ."
 
 #. i18n: ectx: property (text), widget (QLabel, colorProfileLabel)
 #: app/advancedconfigpage.ui:275
@@ -728,7 +720,7 @@ msgstr "خورىغان سۈرەت سۈپىتىدە ساقلايدۇ:"
 #: app/generalconfigpage.ui:198
 #, no-c-format, kde-format
 msgid "%"
-msgstr "%"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, lossyImageFormatHelpLabel)
 #: app/generalconfigpage.ui:226
@@ -737,9 +729,6 @@ msgid ""
 "The quality level when saving images using lossy image formats such as JPEG, "
 "WEBP, AVIF, HEIF, and HEIC. Higher quality increases the file size."
 msgstr ""
-"سۈرەتنى JPEG، WEBP، AVIF، HEIF ۋە HEIC قاتارلىق خورىغان سۈرەت پىچىمىدا "
-"ساقلىغاندىكى سۈرەت سۈپىتىنى تەڭشەيدۇ، سۈرەت سۈپىتى قانچە يۇقىرى بولسا "
-"ھۆججەتنىڭ سىغىمى شۇنچە چوڭ بولىدۇ."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/generalconfigpage.ui:252
@@ -775,7 +764,7 @@ msgstr "سۈرەت سۈپىتى(&Q):"
 #, kde-format
 msgctxt "@label:spinbox Percentage 1-100"
 msgid "%v%"
-msgstr "%v%"
+msgstr ""
 
 #: app/gvcore.cpp:116
 #, kde-format
@@ -1020,7 +1009,7 @@ msgstr "جانلاندۇرۇم:"
 #: app/imageviewconfigpage.ui:415
 #, kde-format
 msgid "OpenGL"
-msgstr "OpenGL"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QRadioButton, softwareAnimationRadioButton)
 #: app/imageviewconfigpage.ui:442
@@ -1069,7 +1058,7 @@ msgstr "قۇر سانى:"
 msgctxt ""
 "@item:intext %1 is a key, we append a colon to it. A value is displayed after"
 msgid "%1:"
-msgstr "%1:"
+msgstr ""
 
 #: app/infocontextmanageritem.cpp:228
 #, kde-format
@@ -1391,8 +1380,6 @@ msgstr "ئەگەر ھازىر چېكىنسىڭىز، ئۆزگەرتىشىڭىز 
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
-"بۇ مەشغۇلات تىزىملىك بالداقنى پۈتۈنلەي يوشۇرىدۇ. %1 نى بېسىپ قايتا "
-"كۆرسىتەلەيسىز."
 
 #: app/mainwindow.cpp:1918
 #, kde-format
@@ -1471,7 +1458,7 @@ msgctxt ""
 "@info %1 is the name of the document which failed to save, %2 is the reason "
 "for the failure"
 msgid "<filename>%1</filename>: %2"
-msgstr "<filename>%1</filename>: %2"
+msgstr ""
 
 #: app/savebar.cpp:55
 #, kde-format
@@ -1479,8 +1466,6 @@ msgid ""
 "You have modified many images. To avoid memory problems, you should save "
 "your changes."
 msgstr ""
-"كۆپ سۈرەتنى ئۆزگەرتتىڭىز. ئەسلەك مەسىلىسىنىڭ ئالدىنى ئېلىش ئۈچۈن، "
-"ئۆزگەرتىشلىرىڭىزنى ساقلىشىڭىز كېرەك."
 
 #: app/savebar.cpp:81
 #, kde-format
@@ -1662,8 +1647,6 @@ msgid ""
 "Browsing by tags is not available. Make sure Nepomuk is properly installed "
 "on your computer."
 msgstr ""
-"بەلگە بويىچە كۆز يۈگۈرتۈشنى ئىشلەتكىلى بولمايدۇ. كومپيۇتېرغا Nepomuk توغرا "
-"ئورنىتىلغانلىقىنى جەزملەڭ."
 
 #: app/viewmainpage.cpp:148 app/viewmainpage.cpp:432
 #, kde-format
@@ -1687,13 +1670,6 @@ msgid ""
 "and contain multiple rows of images; <link url='%1'>configure these options "
 "in the settings</link>.</para>"
 msgstr ""
-"<para>بۇ كىچىك بالداقنى كۆرسىتىپ ياكى يوشۇرۇشنى ئالماشتۇرۇپ، نۆۋەتتىكى "
-"قىسقۇچتىكى بارلىق باشقا سۈرەتنى كۆرسىتىشكە ئىشلىتىلىدۇ. بۇ بالداقتا كۆرۈنگەن "
-"خالىغان سۈرەت تاللانسا نۆۋەتتە كۆرۈۋاتقان سۈرەتنى ئالماشتۇرىدۇ.</"
-"para><para>بىرلا ۋاقىتتا كۆپ سۈرەت تاللانسا ئۇلارنى يانمۇيان كۆرسىتىدۇ.</"
-"para><para>بۇ بالداقنى ئېكراننىڭ ئوڭ تەرىپىگە يۆتكەپ كۆپ رەت سۈرەت "
-"كۆرسەتكىلى بولىدۇ؛<link url='%1'>پىروگرامما تەڭشىكىدە بۇ تاللانمىنى "
-"سەپلىگىلى بولىدۇ</link>.</para>"
 
 #: app/viewmainpage.cpp:571
 #, kde-format
@@ -1713,8 +1689,6 @@ msgctxt "@info"
 msgid ""
 "This image has been modified. Reloading it will discard all your changes."
 msgstr ""
-"بۇ سۈرەت ئۆزگەرتىلگەن. قايتا يۈكلەنسە ئۆزگەرتىشلىرىڭىزنىڭ ھەممىسىنى "
-"تاشلىۋېتىدۇ."
 
 #: importer/dialogpage.cpp:52
 #, kde-format
@@ -1889,7 +1863,7 @@ msgstr "ۋاقىتلىق يۈكلەش مۇندەرىجىسىنى قۇرالما�
 #, kde-format
 msgctxt "%1 is the importer keyword, %2 is keyword explanation"
 msgid "%1: %2"
-msgstr "%1: %2"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QCheckBox, kcfg_AutoRename)
 #: importer/importerconfigdialog.ui:17
@@ -1974,7 +1948,7 @@ msgstr "كامېرايىڭىزنى قوللايدىغان يۇمشاق دېتا�
 #, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
-msgstr "«%1» كېلىشىمنى قوللايدىغان ئامبار ئورنىتىلمىغان. خاتالىق: %2"
+msgstr "«%1» كېلىشىمنى قوللايدىغان ئامبار ئورنىتىلمىغان. Error: %2"
 
 #: importer/thumbnailpage.cpp:235
 #, kde-format
@@ -2011,9 +1985,6 @@ msgid ""
 "to launch Discover to install Kamera to enable protocol support for "
 "\"camera:/\" on your system."
 msgstr ""
-"كامېرانى ئوقۇش ئۈچۈن سىستېمىڭىزغا Kamera نى ئورنىتىشىڭىز كېرەك. بۇ جاينى "
-"چېكىپ Discover نى قوزغىتىپ Kamera نى سىستېمىڭىزغا ئورنىتىپ «camera:/» "
-"كېلىشىمىنى قوللاش ئىقتىدارىنى قوزغىتالايسىز."
 
 #: importer/thumbnailpage.cpp:260
 #, kde-format
@@ -2053,7 +2024,7 @@ msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
 "with other search engines"
 msgid "https://duckduckgo.com/?q=%1"
-msgstr "https://duckduckgo.com/?q=%1"
+msgstr ""
 
 #: importer/thumbnailpage.cpp:323
 #, kde-format
@@ -2112,8 +2083,9 @@ msgid "Listing content of:"
 msgstr "كۆرسىتىۋاتقان مەزمۇن:"
 
 #: lib/about.cpp:38
-#, kde-format
-msgid "Copyright 2000-2022 Gwenview authors"
+#, fuzzy, kde-format
+#| msgid "Copyright 2000-2022 Gwenview authors"
+msgid "Copyright 2000–%1 Gwenview authors"
 msgstr "نەشر ھوقۇقى 2000-2022 Gwenview يازغۇچىلىرىغا تەۋە"
 
 #: lib/about.cpp:40
@@ -2169,7 +2141,7 @@ msgstr "توغرىسىغا"
 #: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
 msgid "ISO (A4, A3...)"
-msgstr "ISO (A4, A3...)"
+msgstr ""
 
 #: lib/crop/cropwidget.cpp:206 lib/crop/cropwidget.cpp:213
 #, kde-format
@@ -2206,11 +2178,10 @@ msgid "Position:"
 msgstr "ئورنى:"
 
 #: lib/crop/cropwidget.cpp:357
-#, fuzzy, kde-format
-#| msgid "Show videos"
+#, kde-format
 msgctxt "@option:check"
 msgid "Show Gridlines"
-msgstr "سىن كۆرسەت"
+msgstr ""
 
 #: lib/crop/cropwidget.cpp:365
 #, kde-format
@@ -2231,8 +2202,6 @@ msgid ""
 "Gwenview cannot display documents of type %1. Install the kimageformats "
 "package to gain support for a wider range of media types."
 msgstr ""
-"Gwenview تۈرى %1 بولغان پۈتۈكنى كۆرسىتەلمەيدۇ. kimageformats بوغچىسى "
-"ئورنىتىلسا تېخىمۇ كەڭ دائىرىدىكى ۋاسىتە تۈرىنى قوللايدۇ."
 
 #: lib/document/loadingdocumentimpl.cpp:404
 #, kde-format
@@ -2295,13 +2264,13 @@ msgstr "تاللىما"
 #, kde-format
 msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
-msgstr "%1x%2"
+msgstr ""
 
 #: lib/documentview/documentview.cpp:265 lib/zoomcombobox/zoomcombobox.cpp:317
 #, kde-format
 msgctxt "Percent value"
 msgid "%1%"
-msgstr "%1%"
+msgstr ""
 
 #: lib/documentview/documentview.cpp:544
 #, kde-format
@@ -2350,16 +2319,6 @@ msgid ""
 "are displayed at a previous zoom value instead <link url='%2'>in the "
 "settings</link>.</para>"
 msgstr ""
-"<para>بۇ سۈرەتنى كۆرگىلى بولىدىغان رايونغا ماسلاشتۇرىدۇ:<list><item>كۆرۈش "
-"رايونىدىن چوڭراق سۈرەت كىچىكرەك ھالەتتە كۆرسىتىلىدۇ، شۇڭا سىغىدۇ.</"
-"item><item>كۆرۈش رايونىدىن كىچىك سۈرەت نورمال چوڭلۇقتا كۆرسىتىلىدۇ. ئەگەر "
-"كىچىك سۈرەت ئۇنىڭ ئورنىغا بارلىق كۆرۈش رايونىنى ئىشلىتىدىغان بولسا، <link "
-"url='%2'>تەڭشەك</link>تىكى <emphasis>كىچىك سۈرەتنى چوڭايت</emphasis> "
-"تاللىنىدۇ.</item></list></para><para>ئەگەر «%1» ئاللىبۇرۇن قوزغىتىلغان "
-"بولسا، ئۇنى يەنە بىر چېكىپ ئۇنى تاقىغاندىن كېيىن، سۈرەت ئەسلى چوڭلۇقىدا "
-"كۆرۈنىدۇ.</para><para>«%1» سۈرەتنىڭ كۆڭۈلدىكى نىسبەت قىممىتى.  <link "
-"url='%2'>تەڭشەك</link> تىكى كۆڭۈلدىكى نىسبەت قىممىتىنى سۈرەتنى ئالدىنقى "
-"نىسبەت قىممىتىدە كۆرسەتنى تاللاپ ئۆزگەرتەلەيسىز.</para>"
 
 #: lib/documentview/documentviewcontroller.cpp:84
 #, kde-format
@@ -2378,7 +2337,7 @@ msgstr "تولدۇر"
 #, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
-msgstr "100%"
+msgstr ""
 
 #: lib/documentview/documentviewcontroller.cpp:99
 #, kde-format
@@ -2418,7 +2377,7 @@ msgstr "ھېچقانداق پۈتۈك تاللانمىدى"
 #, kde-format
 msgctxt "@info:tooltip of custom toolbar button"
 msgid "%1"
-msgstr "%1"
+msgstr ""
 
 #. i18n: ectx: whatsthis, entry (PercentageOfMemoryUsageWarning), group (General)
 #: lib/gwenviewconfig.kcfg:63
@@ -2427,9 +2386,6 @@ msgid ""
 "The percentage of memory used by Gwenview before it\n"
 "            warns the user and suggest saving changes."
 msgstr ""
-"Gwenview ئىشلىتەلەيدىغان ئەسلەك پىرسەنتى\n"
-"بۇ چەكتىن ئېشىپ كەتسە ئىشلەتكۈچىنى ئاگاھلاندۇرۇپ ئۆزگىرىشنى ساقلاشنى تەۋسىيە "
-"قىلىدۇ."
 
 #. i18n: ectx: whatsthis, entry (BlackListedExtensions), group (General)
 #: lib/gwenviewconfig.kcfg:70
@@ -2439,9 +2395,6 @@ msgid ""
 "            load. We exclude *.new as well because this is the extension\n"
 "            used for temporary files by KSaveFile."
 msgstr ""
-"Gwenview يۈكلەشنى سىنىمايدىغان ھۆججەتنىڭ كېڭەيتىلگەن ئىسىم تىزىمى. بىز *.new "
-"نى مۇستەسنا قىلدۇق چۈنكى بۇ  KSaveFile نىڭ ۋاقىتلىق ھۆججىتىنىڭ كېڭەيتىلگەن "
-"ئىسمى."
 
 #. i18n: ectx: whatsthis, entry (ZoomMode), group (ImageView)
 #: lib/gwenviewconfig.kcfg:214
@@ -2459,16 +2412,6 @@ msgid ""
 "            own zoom and position (if these are changed, image A will NOT\n"
 "            be displayed with the updated zoom and position)."
 msgstr ""
-"ئا سۈرەتنىڭ مەلۇم دائىرىسىنى يېقىنلاتقاندا  ب سۈرەتنىڭ قانداق "
-"تەسىرلىشىدىغانلىقىنى بەلگىلەيدۇ. ئەگەر ئۆزلۈكىدىن تەڭشەشكە بەلگىلەنسە، ب "
-"سۈرەتمۇ ئۆزلۈكىدىن تەڭشىلىپ ئېكرانغا ماسلىشىدۇ. ئەگەر ھەممە سۈرەتنى ئەسلى "
-"پېتى قالدۇرۇشقا تەڭشەلسە، ھەممە سۈرەت ئوخشاش نىسبەت ۋە ئورۇن تەڭشىكىنى "
-"ئىشلىتىدۇ: شۇڭلاشقا ب سۈرەت ئا سۈرەتكە ئوخشاش كۆرسىتىش نىسبىتىگە تەڭشىلىدۇ "
-"(ئا سۈرەتمۇ يېڭىلانغاندىن كېيىنكى نىسبەتتە كۆرسىتىلىدۇ). ئەگەر ئايرىم قىلىپ "
-"تەڭشەلسە، ھەر بىر سۈرەت ئۆزىنىڭ كۆرسىتىش نىسبىتى ۋە ئورنىنى ئەستە تۇتىدۇ: ب "
-"سۈرەت دەسلەپتە ئا سۈرەت بىلەن ئوخشاش كۆرسىتىش نىسبىتىگە تەڭشىلىدۇ ئەمما "
-"ئۇنىڭدىن كېيىن ئا سۈرەتنىڭ كۆرسىتىش نىسبىتى ئۆزگەرگەن بولسا ئۆزىنىڭكىنى "
-"ئەستە تۇتىدۇ."
 
 #. i18n: ectx: whatsthis, entry (RenderingIntent), group (ImageView)
 #: lib/gwenviewconfig.kcfg:228
@@ -2482,12 +2425,6 @@ msgid ""
 "colors\n"
 "            that cannot be displayed, and leave the other colors alone."
 msgstr ""
-"ئېكران بىلەن سۈرەتنىڭ ICC رەڭ سەپلىمىسىنىڭ خاسلىقى پەرقلىق بولغاندا رەڭنىڭ "
-"قانداق كۆرسىتىلىدىغانلىقىنى بەلگىلەيدۇ.\n"
-"«سەزگۈ» پۈتكۈل سۈرەتتىكى رەڭنى ئۆلچەپ كۆرسەتكۈچ رەڭ سەپلىمە ھۆججىتىدىكى رەڭ "
-"دائىرىسىگە ماسلاشتۇرىدۇ.\n"
-"«مۇناسىۋەتلىك» كۆرسەتكۈچ رەڭ سەپلىمە ھۆججىتىدە يوق رەڭنى قىسقارتىپ باشقا "
-"رەڭنى ساقلاپ قالىدۇ."
 
 #. i18n: ectx: label, entry (random), group (slide show)
 #: lib/gwenviewconfig.kcfg:340
@@ -2546,10 +2483,9 @@ msgstr "ئالىي تەڭشەك قوزغىتىلغاندا ئالدىنقى تە
 
 #. i18n: ectx: label, entry (CropShowGridlinesEnabled), group (Crop)
 #: lib/gwenviewconfig.kcfg:388
-#, fuzzy, kde-format
-#| msgid "Last used crop ratio width when Advanced Settings enabled"
+#, kde-format
 msgid "Last used gridlines visibility when Advanced Settings enabled"
-msgstr "ئالىي تەڭشەك قوزغىتىلغاندا ئالدىنقى تەرەپ نىسبىتىدىكى كەڭلىك"
+msgstr ""
 
 #: lib/historymodel.cpp:146
 #, kde-format
@@ -2626,7 +2562,7 @@ msgstr "ئادەتتىكى"
 #, kde-format
 msgctxt "@item:intable %1 is number of millions of pixels in image"
 msgid "(%1MP)"
-msgstr "(%1MP)"
+msgstr ""
 
 #: lib/imagemetainfomodel.cpp:597
 #, kde-format
@@ -2698,7 +2634,7 @@ msgstr "نىسبىتى(&B):"
 #, kde-format
 msgctxt "Dimension separator, as in: '15 x 10 centimeters'"
 msgid "x"
-msgstr "x"
+msgstr ""
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_PrintUnit)
 #: lib/print/printoptionspage.ui:185
@@ -2782,14 +2718,14 @@ msgstr "يېڭى چوڭلۇقى:"
 #: lib/resize/resizeimagewidget.ui:63 lib/resize/resizeimagewidget.ui:195
 #, no-c-format, kde-format
 msgid " %"
-msgstr " %"
+msgstr ""
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, mHeightSpinBox)
 #. i18n: ectx: property (suffix), widget (QSpinBox, mWidthSpinBox)
 #: lib/resize/resizeimagewidget.ui:86 lib/resize/resizeimagewidget.ui:102
 #, kde-format
 msgid " px"
-msgstr " px"
+msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, mCurrentSizeLabel)
 #: lib/resize/resizeimagewidget.ui:115
@@ -2833,41 +2769,34 @@ msgid "Random"
 msgstr "ئىختىيارىي"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:616
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Collections"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle selection"
-msgstr "توپلاملار"
+msgstr ""
 
 #: lib/thumbnailview/previewitemdelegate.cpp:621
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Exit Full Screen"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Full screen"
-msgstr "پۈتۈن ئېكراننى ئاخىرلاشتۇر"
+msgstr "پۈتۈن ئېكران"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:626
-#, fuzzy, kde-format
-#| msgid "Rotate Left"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate left"
-msgstr "سولغا ئايلاندۇر"
+msgstr ""
 
 #: lib/thumbnailview/previewitemdelegate.cpp:631
-#, fuzzy, kde-format
-#| msgid "Rotate Right"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate right"
-msgstr "ئوڭغا ئايلاندۇر"
+msgstr ""
 
 #: lib/thumbnailview/previewitemdelegate.cpp:645
-#, fuzzy, kde-format
-#| msgid "Save All"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Save"
-msgstr "ھەممىنى ساقلا"
+msgstr "ساقلا"
 
 #: lib/transformimageoperation.cpp:58
 #, kde-format

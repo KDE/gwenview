@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-25 00:42+0000\n"
+"POT-Creation-Date: 2026-09-22 15:58+0000\n"
 "PO-Revision-Date: 2012-07-13 22:35+0530\n"
 "Last-Translator: Deepayan Sarkar <deepayan.sarkar@gmail.com>\n"
 "Language-Team: American English <kde-translation@bengalinux.org>\n"
@@ -2165,7 +2165,7 @@ msgstr ""
 #: lib/about.cpp:38
 #, fuzzy, kde-format
 #| msgid "Copyright 2000-2012 Aurélien Gâteau"
-msgid "Copyright 2000-2022 Gwenview authors"
+msgid "Copyright 2000–%1 Gwenview authors"
 msgstr "Copyright 2000-2012 Aurélien Gâteau"
 
 #: lib/about.cpp:40
