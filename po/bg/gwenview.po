@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-22 15:58+0000\n"
-"PO-Revision-Date: 2026-09-09 16:52+0200\n"
+"PO-Revision-Date: 2026-09-22 23:31+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
 "Language: bg\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 26.08.0\n"
+"X-Generator: Lokalize 26.08.1\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2142,10 +2142,9 @@ msgid "Listing content of:"
 msgstr "Показване съдържанието на:"
 
 #: lib/about.cpp:38
-#, fuzzy, kde-format
-#| msgid "Copyright 2000-2022 Gwenview authors"
+#, kde-format
 msgid "Copyright 2000–%1 Gwenview authors"
-msgstr "Copyright 2000-2022 Gwenview authors"
+msgstr "Авторски права 2000–%1, автори на Gwenview"
 
 #: lib/about.cpp:40
 #, kde-format

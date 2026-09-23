@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-25 00:42+0000\n"
+"POT-Creation-Date: 2026-09-22 15:58+0000\n"
 "PO-Revision-Date: 2026-09-19 17:09+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@nuug.no>\n"
@@ -2146,8 +2146,8 @@ msgstr "Viser innhaldet i:"
 
 #: lib/about.cpp:38
 #, kde-format
-msgid "Copyright 2000-2022 Gwenview authors"
-msgstr "© 2000–2022 Gwenview-utviklarane"
+msgid "Copyright 2000–%1 Gwenview authors"
+msgstr ""
 
 #: lib/about.cpp:40
 #, kde-format

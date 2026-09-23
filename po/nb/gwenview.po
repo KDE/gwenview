@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-08-25 00:42+0000\n"
+"POT-Creation-Date: 2026-09-22 15:58+0000\n"
 "PO-Revision-Date: 2020-08-10 14:45+0200\n"
 "Last-Translator: Dan Åsen Hansen <post@danhansen.net>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@nuug.no>\n"
@@ -833,7 +833,6 @@ msgstr "&Vurdering"
 #. i18n: ectx: Menu (settings)
 #: app/gwenviewui.rc:87
 #, fuzzy, kde-format
-#| msgid "Settings..."
 msgid "Settings"
 msgstr "Innstillinger …"
 
@@ -2118,7 +2117,7 @@ msgstr "Lister innholdet i:"
 
 #: lib/about.cpp:38
 #, kde-format
-msgid "Copyright 2000-2022 Gwenview authors"
+msgid "Copyright 2000–%1 Gwenview authors"
 msgstr ""
 
 #: lib/about.cpp:40
@@ -2212,7 +2211,6 @@ msgstr "Plassering:"
 
 #: lib/crop/cropwidget.cpp:357
 #, fuzzy, kde-format
-#| msgid "Show videos"
 msgctxt "@option:check"
 msgid "Show Gridlines"
 msgstr "Vis videoer"
@@ -2546,7 +2544,6 @@ msgstr "Sist brukte relative høyde når avanserte innstillinger er på"
 #. i18n: ectx: label, entry (CropShowGridlinesEnabled), group (Crop)
 #: lib/gwenviewconfig.kcfg:388
 #, fuzzy, kde-format
-#| msgid "Last used crop ratio width when Advanced Settings enabled"
 msgid "Last used gridlines visibility when Advanced Settings enabled"
 msgstr "Sist brukte relative bredde når avanserte innstillinger er på"
 
@@ -2838,29 +2835,24 @@ msgstr ""
 
 #: lib/thumbnailview/previewitemdelegate.cpp:621
 #, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Exit Full Screen"
 msgctxt "@info:tooltip"
 msgid "Full screen"
 msgstr "Gå ut av fullskjermmodus"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:626
 #, fuzzy, kde-format
-#| msgid "Rotate Left"
 msgctxt "@info:tooltip"
 msgid "Rotate left"
 msgstr "Drei til venstre"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:631
 #, fuzzy, kde-format
-#| msgid "Rotate Right"
 msgctxt "@info:tooltip"
 msgid "Rotate right"
 msgstr "Drei mot høyre"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:645
 #, fuzzy, kde-format
-#| msgid "Save All"
 msgctxt "@info:tooltip"
 msgid "Save"
 msgstr "Lagre alle"
