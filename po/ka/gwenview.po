@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-09-22 15:58+0000\n"
-"PO-Revision-Date: 2026-08-25 06:26+0200\n"
+"PO-Revision-Date: 2026-09-23 08:08+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -2134,10 +2134,9 @@ msgid "Listing content of:"
 msgstr "ნაჩვენებია სია:"
 
 #: lib/about.cpp:38
-#, fuzzy, kde-format
-#| msgid "Copyright 2000-2022 Gwenview authors"
+#, kde-format
 msgid "Copyright 2000–%1 Gwenview authors"
-msgstr "2000-2022 Gwenview-ის ავტორები, ყველა უფლება დაცულია"
+msgstr "2000-%1 Gwenview-ის ავტორები, ყველა უფლება დაცულია"
 
 #: lib/about.cpp:40
 #, kde-format
