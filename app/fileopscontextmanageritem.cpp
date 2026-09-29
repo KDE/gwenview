@@ -34,7 +34,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KActionCollection>
 #include <KFileItem>
 #include <KFileItemActions>
-#include <KFileItemListProperties>
 #include <KIO/ApplicationLauncherJob>
 #include <KIO/JobUiDelegate>
 #include <KIO/JobUiDelegateFactory>
@@ -44,9 +43,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <KIO/RestoreJob>
 #include <KJobWidgets>
 #include <KLocalizedString>
-#include <KOpenWithDialog>
 #include <KPropertiesDialog>
-#include <KUrlMimeData>
 #include <KXMLGUIClient>
 
 // Local

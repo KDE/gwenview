@@ -41,7 +41,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // KF
 #include <KDirLister>
 #include <KDirModel>
-#include <KIconLoader>
 #include <KPixmapSequence>
 #include <KPixmapSequenceLoader>
 #include <KUrlMimeData>

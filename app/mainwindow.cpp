@@ -31,7 +31,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <QLineEdit>
 #include <QMenuBar>
 #include <QMouseEvent>
-#include <QPushButton>
 #include <QShortcut>
 #include <QSplitter>
 #include <QStackedWidget>

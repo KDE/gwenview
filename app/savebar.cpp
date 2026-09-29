@@ -22,10 +22,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include "savebar.h"
 
 // Qt
-#include <QHBoxLayout>
 #include <QIcon>
-#include <QToolTip>
 #include <QUrl>
+#include <QVBoxLayout>
 
 // KF
 #include <KActionCollection>

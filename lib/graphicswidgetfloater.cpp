@@ -22,11 +22,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "graphicswidgetfloater.h"
 
 // Qt
-#include <QApplication>
 #include <QEvent>
 #include <QGraphicsWidget>
 #include <QPointer>
-#include <QStyle>
 
 // Local
 

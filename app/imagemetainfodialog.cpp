@@ -26,7 +26,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <QDialogButtonBox>
 #include <QHeaderView>
 #include <QPainter>
-#include <QPushButton>
 #include <QStyledItemDelegate>
 #include <QTreeView>
 #include <QVBoxLayout>

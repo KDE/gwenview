@@ -32,7 +32,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KFileItem>
 #include <KIO/CopyJob>
 #include <KIO/Job>
-#include <KIO/JobUiDelegate>
 #include <KIO/StatJob>
 #include <KIO/StoredTransferJob>
 #include <KJobWidgets>

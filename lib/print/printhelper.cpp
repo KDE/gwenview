@@ -25,7 +25,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <memory>
 
 // Qt
-#include <QCheckBox>
 #include <QPainter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>

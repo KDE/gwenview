@@ -22,8 +22,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include "saveallhelper.h"
 
 // Qt
-#include <QFuture>
-#include <QFutureWatcher>
 #include <QProgressDialog>
 #include <QSet>
 #include <QStringList>

@@ -20,8 +20,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 #include "slideshowfileitemaction.h"
 
-#include <QMenu>
+#include <QAction>
 #include <QMimeDatabase>
+#include <QWidget>
 
 #include <KFileItem>
 #include <KIO/CommandLauncherJob>

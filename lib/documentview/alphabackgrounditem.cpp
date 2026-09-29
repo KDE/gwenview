@@ -6,7 +6,6 @@
 
 #include "alphabackgrounditem.h"
 
-#include <QApplication>
 #include <QPainter>
 
 using namespace Gwenview;

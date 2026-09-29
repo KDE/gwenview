@@ -37,8 +37,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPainter>
 #include <QPointer>
 
-#include <QCryptographicHash>
-
 namespace Gwenview
 {
 /*
