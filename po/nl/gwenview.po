@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-22 15:58+0000\n"
+"POT-Creation-Date: 2026-09-30 00:43+0000\n"
 "PO-Revision-Date: 2026-09-23 15:02+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -143,7 +143,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Zijbalk uitlijnafstandshouder"
 
-#: app/browsemainpage.cpp:151 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
+#: app/browsemainpage.cpp:151 app/mainwindow.cpp:375 app/viewmainpage.cpp:410
 #: lib/documentview/documentviewcontroller.cpp:56
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -240,8 +240,8 @@ msgctxt "@action:inmenu View"
 msgid "Show Hidden Files"
 msgstr "Verborgen bestanden tonen"
 
-#: app/browsemainpage.cpp:209 app/fileopscontextmanageritem.cpp:136
-#: app/mainwindow.cpp:375
+#: app/browsemainpage.cpp:209 app/fileopscontextmanageritem.cpp:133
+#: app/mainwindow.cpp:374
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -304,13 +304,13 @@ msgstr "Afbeeldingsweergave"
 msgid "Advanced"
 msgstr "Geavanceerd"
 
-#: app/fileoperations.cpp:64
+#: app/fileoperations.cpp:63
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "%1 kopiëren"
 
-#: app/fileoperations.cpp:66
+#: app/fileoperations.cpp:65
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
@@ -318,19 +318,19 @@ msgid_plural "Copy %1 images"
 msgstr[0] "%1 afbeelding kopiëren"
 msgstr[1] "%1 afbeeldingen kopiëren"
 
-#: app/fileoperations.cpp:68
+#: app/fileoperations.cpp:67
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Kopiëren"
 
-#: app/fileoperations.cpp:72
+#: app/fileoperations.cpp:71
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "%1 verplaatsen"
 
-#: app/fileoperations.cpp:74
+#: app/fileoperations.cpp:73
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
@@ -338,19 +338,19 @@ msgid_plural "Move %1 images"
 msgstr[0] "%1 afbeelding verplaatsen"
 msgstr[1] "%1 afbeeldingen verplaatsen"
 
-#: app/fileoperations.cpp:76
+#: app/fileoperations.cpp:75
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "Verplaatsen"
 
-#: app/fileoperations.cpp:80
+#: app/fileoperations.cpp:79
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "%1 koppelen"
 
-#: app/fileoperations.cpp:82
+#: app/fileoperations.cpp:81
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
@@ -358,177 +358,177 @@ msgid_plural "Link %1 images"
 msgstr[0] "%1 afbeelding koppelen"
 msgstr[1] "%1 afbeeldingen koppelen"
 
-#: app/fileoperations.cpp:84
+#: app/fileoperations.cpp:83
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "Koppelen"
 
-#: app/fileoperations.cpp:195
+#: app/fileoperations.cpp:194
 #, kde-format
 msgid "Move Here"
 msgstr "Hierheen verplaatsen"
 
-#: app/fileoperations.cpp:196
+#: app/fileoperations.cpp:195
 #, kde-format
 msgid "Copy Here"
 msgstr "Hierheen kopiëren"
 
-#: app/fileoperations.cpp:197
+#: app/fileoperations.cpp:196
 #, kde-format
 msgid "Link Here"
 msgstr "Hierheen koppelen"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:198
 #, kde-format
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: app/fileopscontextmanageritem.cpp:126
+#: app/fileopscontextmanageritem.cpp:123
 #, kde-format
 msgid "File Operations"
 msgstr "Bestandsoperaties"
 
-#: app/fileopscontextmanageritem.cpp:137
+#: app/fileopscontextmanageritem.cpp:134
 #: app/semanticinfocontextmanageritem.cpp:203
 #, kde-format
 msgctxt "@title actions category"
 msgid "Edit"
 msgstr "Bewerken"
 
-#: app/fileopscontextmanageritem.cpp:144
+#: app/fileopscontextmanageritem.cpp:141
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
 msgstr "Kopiëren naar..."
 
-#: app/fileopscontextmanageritem.cpp:149
+#: app/fileopscontextmanageritem.cpp:146
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
 msgstr "Verplaatsen naar..."
 
-#: app/fileopscontextmanageritem.cpp:154
+#: app/fileopscontextmanageritem.cpp:151
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
 msgstr "Koppeling naar..."
 
-#: app/fileopscontextmanageritem.cpp:159
+#: app/fileopscontextmanageritem.cpp:156
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
 msgstr "Hernoemen..."
 
-#: app/fileopscontextmanageritem.cpp:164
+#: app/fileopscontextmanageritem.cpp:161
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
 msgstr "Prullenbak"
 
-#: app/fileopscontextmanageritem.cpp:171
+#: app/fileopscontextmanageritem.cpp:168
 #, kde-format
 msgid "Restore"
 msgstr "Terugzetten"
 
-#: app/fileopscontextmanageritem.cpp:175
+#: app/fileopscontextmanageritem.cpp:172
 #, kde-format
 msgid "Properties"
 msgstr "Eigenschappen"
 
-#: app/fileopscontextmanageritem.cpp:180
+#: app/fileopscontextmanageritem.cpp:177
 #, kde-format
 msgid "Create Folder..."
 msgstr "Map aanmaken..."
 
-#: app/fileopscontextmanageritem.cpp:184
+#: app/fileopscontextmanageritem.cpp:181
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
 msgstr "In nieuw venster openen"
 
-#: app/fileopscontextmanageritem.cpp:189
+#: app/fileopscontextmanageritem.cpp:186
 #, kde-format
 msgid "Open With"
 msgstr "Openen met"
 
-#: app/fileopscontextmanageritem.cpp:197
+#: app/fileopscontextmanageritem.cpp:194
 #, kde-format
 msgid "Open Containing Folder"
 msgstr "Bevattende map openen"
 
-#: app/fileopscontextmanageritem.cpp:387
+#: app/fileopscontextmanageritem.cpp:384
 #, kde-format
 msgid "Other Application..."
 msgstr "Ander programma..."
 
-#: app/filtercontroller.cpp:60
+#: app/filtercontroller.cpp:59
 #, kde-format
 msgid "Name contains"
 msgstr "Naam bevat"
 
-#: app/filtercontroller.cpp:61
+#: app/filtercontroller.cpp:60
 #, kde-format
 msgid "Name does not contain"
 msgstr "Naam bevat geen"
 
-#: app/filtercontroller.cpp:99
+#: app/filtercontroller.cpp:98
 #, kde-format
 msgid "Date >="
 msgstr "Datum >="
 
-#: app/filtercontroller.cpp:100
+#: app/filtercontroller.cpp:99
 #, kde-format
 msgid "Date ="
 msgstr "Datum ="
 
-#: app/filtercontroller.cpp:101
+#: app/filtercontroller.cpp:100
 #, kde-format
 msgid "Date <="
 msgstr "Datum <="
 
-#: app/filtercontroller.cpp:132
+#: app/filtercontroller.cpp:131
 #, kde-format
 msgid "Rating >="
 msgstr "Waardering >="
 
-#: app/filtercontroller.cpp:133
+#: app/filtercontroller.cpp:132
 #, kde-format
 msgid "Rating ="
 msgstr "Waardering ="
 
-#: app/filtercontroller.cpp:134
+#: app/filtercontroller.cpp:133
 #, kde-format
 msgid "Rating <="
 msgstr "Waardering <="
 
-#: app/filtercontroller.cpp:174
+#: app/filtercontroller.cpp:173
 #, kde-format
 msgid "Tagged"
 msgstr "Getagd"
 
-#: app/filtercontroller.cpp:175
+#: app/filtercontroller.cpp:174
 #, kde-format
 msgid "Not Tagged"
 msgstr "Niet getagd"
 
-#: app/filtercontroller.cpp:229
+#: app/filtercontroller.cpp:228
 #, kde-format
 msgid "Dimensions >="
 msgstr "Afmetingen >="
 
-#: app/filtercontroller.cpp:230
+#: app/filtercontroller.cpp:229
 #, kde-format
 msgid "Dimensions ="
 msgstr "Afmetingen ="
 
-#: app/filtercontroller.cpp:231
+#: app/filtercontroller.cpp:230
 #, kde-format
 msgid "Dimensions <="
 msgstr "Afmetingen <="
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:222
+#: app/filtercontroller.cpp:237 lib/crop/cropwidget.cpp:221
 #: lib/resize/resizeimagewidget.ui:40
 #, kde-format
 msgid "Height"
@@ -537,37 +537,37 @@ msgstr "Hoogte"
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: app/filtercontroller.cpp:240 lib/crop/cropwidget.cpp:222
+#: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
 #: lib/resize/resizeimagewidget.ui:30
 #, kde-format
 msgid "Width"
 msgstr "Breedte"
 
-#: app/filtercontroller.cpp:330
+#: app/filtercontroller.cpp:329
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Name"
 msgstr "Op naam filteren"
 
-#: app/filtercontroller.cpp:332
+#: app/filtercontroller.cpp:331
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Date"
 msgstr "Op datum filteren"
 
-#: app/filtercontroller.cpp:335
+#: app/filtercontroller.cpp:334
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Rating"
 msgstr "Op waardering filteren"
 
-#: app/filtercontroller.cpp:337
+#: app/filtercontroller.cpp:336
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Tag"
 msgstr "Op tag filteren"
 
-#: app/filtercontroller.cpp:339
+#: app/filtercontroller.cpp:338
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Dimensions"
@@ -627,13 +627,13 @@ msgstr "Toon miniaturen"
 msgid "Height:"
 msgstr "Hoogte:"
 
-#: app/fullscreencontent.cpp:239
+#: app/fullscreencontent.cpp:238
 #, kde-format
 msgctxt "@item:intext fullscreen meta info separator"
 msgid ", "
 msgstr ", "
 
-#: app/fullscreencontent.cpp:289
+#: app/fullscreencontent.cpp:288
 #, kde-format
 msgctxt "Slideshow interval in seconds"
 msgid "%1 sec"
@@ -641,18 +641,18 @@ msgid_plural "%1 secs"
 msgstr[0] "%1 sec"
 msgstr[1] "%1 secs"
 
-#: app/fullscreencontent.cpp:400
+#: app/fullscreencontent.cpp:399
 #, kde-format
 msgid "Configure"
 msgstr "Configureren"
 
-#: app/fullscreencontent.cpp:401
+#: app/fullscreencontent.cpp:400
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure full screen mode"
 msgstr "Modus schermvullend instellen"
 
-#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:389
+#: app/fullscreencontent.cpp:551 app/viewmainpage.cpp:389
 #, kde-format
 msgctxt "@info:status %1 current document index, %2 total documents"
 msgid "%1 of %2"
@@ -849,7 +849,7 @@ msgstr "Instellingen"
 msgid "Main Toolbar"
 msgstr "Hoofdwerkbalk"
 
-#: app/imagemetainfodialog.cpp:130
+#: app/imagemetainfodialog.cpp:129
 #, kde-format
 msgctxt "@title:window"
 msgid "Image Information"
@@ -899,7 +899,7 @@ msgid "Resize"
 msgstr "Grootte wijzigen"
 
 #: app/imageopscontextmanageritem.cpp:118 lib/crop/cropimageoperation.cpp:70
-#: lib/crop/cropwidget.cpp:263
+#: lib/crop/cropwidget.cpp:262
 #, kde-format
 msgid "Crop"
 msgstr "Uitsnijden"
@@ -1076,26 +1076,26 @@ msgstr "Verticaal"
 msgid "Row count:"
 msgstr "Aantal rijen:"
 
-#: app/infocontextmanageritem.cpp:151
+#: app/infocontextmanageritem.cpp:150
 #, kde-format
 msgctxt ""
 "@item:intext %1 is a key, we append a colon to it. A value is displayed after"
 msgid "%1:"
 msgstr "%1:"
 
-#: app/infocontextmanageritem.cpp:228
+#: app/infocontextmanageritem.cpp:227
 #, kde-format
 msgctxt "@action show more image meta info"
 msgid "Show more details..."
 msgstr "Meer details tonen..."
 
-#: app/infocontextmanageritem.cpp:242
+#: app/infocontextmanageritem.cpp:241
 #, kde-format
 msgctxt "@title:group"
 msgid "Image Information"
 msgstr "Afbeeldingsinformatie"
 
-#: app/infocontextmanageritem.cpp:331
+#: app/infocontextmanageritem.cpp:330
 #, kde-format
 msgctxt "@label"
 msgid "%1 file selected"
@@ -1103,7 +1103,7 @@ msgid_plural "%1 files selected"
 msgstr[0] "%1 bestand geselecteerd"
 msgstr[1] "%1 bestanden geselecteerd"
 
-#: app/infocontextmanageritem.cpp:333
+#: app/infocontextmanageritem.cpp:332
 #, kde-format
 msgctxt "@label"
 msgid "%1 folder selected"
@@ -1111,20 +1111,20 @@ msgid_plural "%1 folders selected"
 msgstr[0] "%1 map geselecteerd"
 msgstr[1] "%1 mappen geselecteerd"
 
-#: app/infocontextmanageritem.cpp:336
+#: app/infocontextmanageritem.cpp:335
 #, kde-format
 msgctxt "@label. The two parameters are strings like '2 folders' and '1 file'."
 msgid "%1 and %2 selected"
 msgstr "%1 en %2 geselecteerd"
 
-#: app/infocontextmanageritem.cpp:337
+#: app/infocontextmanageritem.cpp:336
 #, kde-format
 msgid "%1 folder"
 msgid_plural "%1 folders"
 msgstr[0] "%1 map"
 msgstr[1] "%1 mappen"
 
-#: app/infocontextmanageritem.cpp:338
+#: app/infocontextmanageritem.cpp:337
 #, kde-format
 msgid "%1 file"
 msgid_plural "%1 files"
@@ -1161,144 +1161,144 @@ msgstr "In modus schijnwerper starten"
 msgid "A starting file or folders"
 msgstr "Een beginbestand of -mappen"
 
-#: app/mainwindow.cpp:385
+#: app/mainwindow.cpp:384
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "Lijst wissen"
 
-#: app/mainwindow.cpp:393
+#: app/mainwindow.cpp:392
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "Herladen"
 
-#: app/mainwindow.cpp:398
+#: app/mainwindow.cpp:397
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "Locatie vervangen"
 
-#: app/mainwindow.cpp:403
+#: app/mainwindow.cpp:402
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "Bladeren"
 
-#: app/mainwindow.cpp:404
+#: app/mainwindow.cpp:403
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "Mappen doorbladeren naar afbeeldingen"
 
-#: app/mainwindow.cpp:411
+#: app/mainwindow.cpp:410
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "Weergeven"
 
-#: app/mainwindow.cpp:412
+#: app/mainwindow.cpp:411
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "Geselecteerde afbeeldingen bekijken"
 
-#: app/mainwindow.cpp:431
+#: app/mainwindow.cpp:430
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "Volledig scherm verlaten"
 
-#: app/mainwindow.cpp:435
+#: app/mainwindow.cpp:434
 #, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr "Modus schijnwerper"
 
-#: app/mainwindow.cpp:441
+#: app/mainwindow.cpp:440
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "Vorige"
 
-#: app/mainwindow.cpp:442
+#: app/mainwindow.cpp:441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "Ga naar vorige afbeelding"
 
-#: app/mainwindow.cpp:448
+#: app/mainwindow.cpp:447
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "Volgende"
 
-#: app/mainwindow.cpp:449
+#: app/mainwindow.cpp:448
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "Ga naar volgende afbeelding"
 
-#: app/mainwindow.cpp:455
+#: app/mainwindow.cpp:454
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "Eerste"
 
-#: app/mainwindow.cpp:456
+#: app/mainwindow.cpp:455
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "Ga naar de eerste afbeelding"
 
-#: app/mainwindow.cpp:462
+#: app/mainwindow.cpp:461
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "Laatste"
 
-#: app/mainwindow.cpp:463
+#: app/mainwindow.cpp:462
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "Ga naar de laatste afbeelding"
 
-#: app/mainwindow.cpp:473
+#: app/mainwindow.cpp:472
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "Startpagina"
 
-#: app/mainwindow.cpp:474
+#: app/mainwindow.cpp:473
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "Open de startpagina"
 
-#: app/mainwindow.cpp:481
+#: app/mainwindow.cpp:480
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "Zijbalk"
 
-#: app/mainwindow.cpp:486
+#: app/mainwindow.cpp:485
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "Hulpmiddelen voor bewerking tonen"
 
-#: app/mainwindow.cpp:521
+#: app/mainwindow.cpp:520
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "Delen"
 
-#: app/mainwindow.cpp:530
+#: app/mainwindow.cpp:529
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "Fout bij delen: %1"
 
-#: app/mainwindow.cpp:537
+#: app/mainwindow.cpp:536
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1307,104 +1307,104 @@ msgstr ""
 "De gedeelde koppeling naar afbeelding (<a href=\"%1\">%1</a>) is naar het "
 "klembord gekopieerd."
 
-#: app/mainwindow.cpp:587
+#: app/mainwindow.cpp:586
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "Configureren"
 
-#: app/mainwindow.cpp:602
+#: app/mainwindow.cpp:601
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Bewerken"
 
-#: app/mainwindow.cpp:607
+#: app/mainwindow.cpp:606
 #, kde-format
 msgid "Redo"
 msgstr "Opnieuw"
 
-#: app/mainwindow.cpp:615
+#: app/mainwindow.cpp:614
 #, kde-format
 msgid "Undo"
 msgstr "Ongedaan maken"
 
-#: app/mainwindow.cpp:642
+#: app/mainwindow.cpp:641
 #, kde-format
 msgid "Folders"
 msgstr "Mappen"
 
-#: app/mainwindow.cpp:648
+#: app/mainwindow.cpp:647
 #, kde-format
 msgid "Information"
 msgstr "Informatie"
 
-#: app/mainwindow.cpp:687
+#: app/mainwindow.cpp:686
 #, kde-format
 msgid "Operations"
 msgstr "Bewerkingen"
 
-#: app/mainwindow.cpp:956
+#: app/mainwindow.cpp:955
 #, kde-format
 msgid "Viewing media"
 msgstr "Media bekijken"
 
-#: app/mainwindow.cpp:1442
+#: app/mainwindow.cpp:1441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Zijbalk verbergen"
 
-#: app/mainwindow.cpp:1442
+#: app/mainwindow.cpp:1441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Zijbalk tonen"
 
-#: app/mainwindow.cpp:1792
+#: app/mainwindow.cpp:1791
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Afbeelding openen"
 
-#: app/mainwindow.cpp:1853
+#: app/mainwindow.cpp:1852
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "Diashow pauzeren"
 
-#: app/mainwindow.cpp:1856
+#: app/mainwindow.cpp:1855
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "Diashow hervatten"
 
-#: app/mainwindow.cpp:1856
+#: app/mainwindow.cpp:1855
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Diavoorstelling starten"
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1868
 #, kde-format
 msgid "Save All Changes"
 msgstr "Alle wijzigingen opslaan"
 
-#: app/mainwindow.cpp:1870
+#: app/mainwindow.cpp:1869
 #, kde-format
 msgid "Discard Changes"
 msgstr "Wijzigingen negeren"
 
-#: app/mainwindow.cpp:1872
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "Eén afbeelding is gewijzigd."
 msgstr[1] "%1 afbeeldingen zijn gewijzigd."
 
-#: app/mainwindow.cpp:1872
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Als u nu afsluit zullen al uw wijzigingen verloren gaan."
 
-#: app/mainwindow.cpp:1915
+#: app/mainwindow.cpp:1914
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1412,37 +1412,37 @@ msgstr ""
 "Hierdoor wordt de menubalk geheel verborgen. U kunt die weer zichtbaar maken "
 "door %1 te typen."
 
-#: app/mainwindow.cpp:1918
+#: app/mainwindow.cpp:1917
 #, kde-format
 msgid "Hide menu bar"
 msgstr "Menubalk verbergen"
 
-#: app/mainwindow.cpp:2139
+#: app/mainwindow.cpp:2138
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "U hebt het eerste document bereikt, wat wilt u gaan doen?"
 
-#: app/mainwindow.cpp:2140 app/mainwindow.cpp:2154
+#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
 #, kde-format
 msgid "Stay There"
 msgstr "Daar blijven"
 
-#: app/mainwindow.cpp:2141
+#: app/mainwindow.cpp:2140
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "Ga naar het laatste document"
 
-#: app/mainwindow.cpp:2142 app/mainwindow.cpp:2156
+#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "Ga terug naar de lijst met documenten"
 
-#: app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2152
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "U hebt het laatste document bereikt, wat wilt u gaan doen?"
 
-#: app/mainwindow.cpp:2155
+#: app/mainwindow.cpp:2154
 #, kde-format
 msgid "Go to the First Document"
 msgstr "Ga naar het eerste document"
@@ -1465,18 +1465,18 @@ msgctxt "@title:window"
 msgid "Rename"
 msgstr "Hernoemen"
 
-#: app/saveallhelper.cpp:56
+#: app/saveallhelper.cpp:54
 #, kde-format
 msgctxt "@info:progress saving all image changes"
 msgid "Saving..."
 msgstr "Opslaan..."
 
-#: app/saveallhelper.cpp:57
+#: app/saveallhelper.cpp:55
 #, kde-format
 msgid "&Stop"
 msgstr "&Stoppen"
 
-#: app/saveallhelper.cpp:82
+#: app/saveallhelper.cpp:80
 #, kde-format
 msgctxt "@info"
 msgid "One document could not be saved:"
@@ -1484,7 +1484,7 @@ msgid_plural "%1 documents could not be saved:"
 msgstr[0] "Eén document kon niet opgeslagen worden:"
 msgstr[1] "%1 documenten konden niet opgeslagen worden:"
 
-#: app/saveallhelper.cpp:106
+#: app/saveallhelper.cpp:104
 #, kde-kuit-format
 msgctxt ""
 "@info %1 is the name of the document which failed to save, %2 is the reason "
@@ -1492,7 +1492,7 @@ msgctxt ""
 msgid "<filename>%1</filename>: %2"
 msgstr "<filename>%1</filename>: %2"
 
-#: app/savebar.cpp:55
+#: app/savebar.cpp:54
 #, kde-format
 msgid ""
 "You have modified many images. To avoid memory problems, you should save "
@@ -1501,44 +1501,44 @@ msgstr ""
 "U hebt veel afbeeldingen gewijzigd. Om geheugenproblemen te voorkomen dient "
 "u uw wijzigingen op te slaan."
 
-#: app/savebar.cpp:81
+#: app/savebar.cpp:80
 #, kde-format
 msgid "Current image modified"
 msgstr "Huidige afbeelding gewijzigd"
 
-#: app/savebar.cpp:94
+#: app/savebar.cpp:93
 #, kde-format
 msgid "Previous modified image"
 msgstr "Vorige gewijzigde afbeelding"
 
-#: app/savebar.cpp:95
+#: app/savebar.cpp:94
 #, kde-format
 msgid "Next modified image"
 msgstr "Volgende gewijzigde afbeelding"
 
-#: app/savebar.cpp:108
+#: app/savebar.cpp:107
 #, kde-format
 msgid "One image modified"
 msgid_plural "%1 images modified"
 msgstr[0] "Een afbeelding gewijzigd"
 msgstr[1] "%1 afbeeldingen gewijzigd"
 
-#: app/savebar.cpp:110
+#: app/savebar.cpp:109
 #, kde-format
 msgid "Go to first modified image"
 msgstr "Ga naar eerste gewijzigde afbeelding"
 
-#: app/savebar.cpp:112
+#: app/savebar.cpp:111
 #, kde-format
 msgid "Go to it"
 msgstr "Ga er naar toe"
 
-#: app/savebar.cpp:135
+#: app/savebar.cpp:134
 #, kde-format
 msgid "Save All"
 msgstr "Alles opslaan"
 
-#: app/savebar.cpp:136
+#: app/savebar.cpp:135
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all modified images"
@@ -1597,49 +1597,49 @@ msgstr "Tags:"
 msgid "Description"
 msgstr "Beschrijving"
 
-#: app/slideshowfileitemaction.cpp:61
+#: app/slideshowfileitemaction.cpp:62
 #, kde-format
 msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
 msgid "Start a Slideshow"
 msgstr "Een diavoorstelling starten"
 
-#: app/slideshowfileitemaction.cpp:66
+#: app/slideshowfileitemaction.cpp:67
 #, kde-format
 msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
 msgid "Start a Slideshow with selected images"
 msgstr "Een diavoorstelling starten met geselecteerde afbeeldingen"
 
-#: app/startmainpage.cpp:291
+#: app/startmainpage.cpp:290
 #, kde-format
 msgctxt "@action Recent Folders view"
 msgid "Add Folder to Places"
 msgstr "Map aan locaties toevoegen"
 
-#: app/startmainpage.cpp:292
+#: app/startmainpage.cpp:291
 #, kde-format
 msgctxt "@action Recent Folders view"
 msgid "Forget This Folder"
 msgstr "Deze map vergeten"
 
-#: app/startmainpage.cpp:293
+#: app/startmainpage.cpp:292
 #, kde-format
 msgctxt "@action Recent Folders view"
 msgid "Forget All Folders"
 msgstr "Alle mappen vergeten"
 
-#: app/startmainpage.cpp:295
+#: app/startmainpage.cpp:294
 #, kde-format
 msgctxt "@action Recent Files view"
 msgid "Add Containing Folder to Places"
 msgstr "Map met inhoud aan locaties toevoegen"
 
-#: app/startmainpage.cpp:296
+#: app/startmainpage.cpp:295
 #, kde-format
 msgctxt "@action Recent Files view"
 msgid "Forget This File"
 msgstr "Dit bestand vergeten"
 
-#: app/startmainpage.cpp:297
+#: app/startmainpage.cpp:296
 #, kde-format
 msgctxt "@action Recent Files view"
 msgid "Forget All Files"
@@ -1909,12 +1909,12 @@ msgstr "Meer documenten importeren"
 msgid "Quit"
 msgstr "Afsluiten"
 
-#: importer/importer.cpp:79
+#: importer/importer.cpp:78
 #, kde-format
 msgid "Could not create destination folder."
 msgstr "Kon de bestemmingsmap niet aanmaken."
 
-#: importer/importer.cpp:94 importer/importer.cpp:100
+#: importer/importer.cpp:93 importer/importer.cpp:99
 #, kde-format
 msgid "Could not create temporary upload folder."
 msgstr "Kon de tijdelijke upload-map niet aanmaken."
@@ -2000,13 +2000,13 @@ msgstr "Ongeldige bronmap."
 msgid "Importing documents..."
 msgstr "Documenten importeren ..."
 
-#: importer/thumbnailpage.cpp:231
+#: importer/thumbnailpage.cpp:230
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
 msgstr "Ondersteuning voor uw camera is niet geïnstalleerd."
 
-#: importer/thumbnailpage.cpp:233
+#: importer/thumbnailpage.cpp:232
 #, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
@@ -2014,7 +2014,7 @@ msgstr ""
 "De bibliotheek voor ondersteuning van het protocol voor \"%1\" is niet "
 "geïnstalleerd. Fout: %2"
 
-#: importer/thumbnailpage.cpp:235
+#: importer/thumbnailpage.cpp:234
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
@@ -2022,7 +2022,7 @@ msgstr ""
 "De bibliotheek voor ondersteuning van het protocol voor \"%1\" is niet "
 "geïnstalleerd"
 
-#: importer/thumbnailpage.cpp:247
+#: importer/thumbnailpage.cpp:246
 #, kde-format
 msgctxt "@info:usagetip above install button"
 msgid ""
@@ -2031,7 +2031,7 @@ msgstr ""
 "Na het beëindigen van het installatieproces, start deze importeur opnieuw om "
 "door te gaan."
 
-#: importer/thumbnailpage.cpp:254
+#: importer/thumbnailpage.cpp:253
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
@@ -2039,13 +2039,13 @@ msgstr ""
 "Start Ontdekken om de bibliotheek voor ondersteuning van het protocol voor "
 "\"%1\" te installeren"
 
-#: importer/thumbnailpage.cpp:256
+#: importer/thumbnailpage.cpp:255
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
 msgstr "Ondersteuning voor deze camera installeren…"
 
-#: importer/thumbnailpage.cpp:257
+#: importer/thumbnailpage.cpp:256
 #, kde-format
 msgctxt "@info:whatsthis for a button when Kamera is not installed"
 msgid ""
@@ -2058,13 +2058,13 @@ msgstr ""
 "ondersteuning op uw systeem voor het protocol voor \"camera:/\" in te "
 "schakelen."
 
-#: importer/thumbnailpage.cpp:260
+#: importer/thumbnailpage.cpp:259
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
 msgstr "Ondersteuning voor protocol voor \"%1\" installeren…"
 
-#: importer/thumbnailpage.cpp:261
+#: importer/thumbnailpage.cpp:260
 #, kde-format
 msgctxt "@info:whatsthis for a button, %1 protocol name"
 msgid ""
@@ -2074,7 +2074,7 @@ msgstr ""
 "Klik hier om Ontdekken te starten om de ontbrekende bibliotheek voor van het "
 "protocol voor \"%1\" op uw systeem te installeren om het in te schakelen."
 
-#: importer/thumbnailpage.cpp:265
+#: importer/thumbnailpage.cpp:264
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
@@ -2082,7 +2082,7 @@ msgstr ""
 "Zoek op het web naar hoe ondersteuning voor het protocol voor \"%1\" te "
 "installeren…"
 
-#: importer/thumbnailpage.cpp:281
+#: importer/thumbnailpage.cpp:280
 #, kde-format
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
@@ -2091,7 +2091,7 @@ msgid "How to install protocol support for \"%1\" on Linux"
 msgstr ""
 "Hoe ondersteuning voor het protocol voor \"%1\" onder Linux te installeren"
 
-#: importer/thumbnailpage.cpp:282
+#: importer/thumbnailpage.cpp:281
 #, kde-format
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
@@ -2099,17 +2099,17 @@ msgctxt ""
 msgid "https://duckduckgo.com/?q=%1"
 msgstr "https://duckduckgo.com/?q=%1"
 
-#: importer/thumbnailpage.cpp:323
+#: importer/thumbnailpage.cpp:322
 #, kde-format
 msgid "Import Selected"
 msgstr "Geselecteerden importeren"
 
-#: importer/thumbnailpage.cpp:326
+#: importer/thumbnailpage.cpp:325
 #, kde-format
 msgid "Import All"
 msgstr "Alles importeren"
 
-#: importer/thumbnailpage.cpp:488
+#: importer/thumbnailpage.cpp:487
 #, kde-kuit-format
 msgctxt "@info when failing to open the appstream URL"
 msgid ""
@@ -2120,7 +2120,7 @@ msgstr ""
 "geïnstalleerd op uw systeem of gebruik de pakketbeheerder van uw systeem om "
 "pakket \"Kamera\" te installeren."
 
-#: importer/thumbnailpage.cpp:492
+#: importer/thumbnailpage.cpp:491
 #, kde-kuit-format
 msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
 msgid ""
@@ -2192,72 +2192,72 @@ msgstr "Contrast:"
 msgid "Gamma:"
 msgstr "Gamma:"
 
-#: lib/crop/cropwidget.cpp:192
+#: lib/crop/cropwidget.cpp:191
 #, kde-format
 msgid "Current Image"
 msgstr "Huidige afbeelding"
 
-#: lib/crop/cropwidget.cpp:195
+#: lib/crop/cropwidget.cpp:194
 #, kde-format
 msgid "Square"
 msgstr "Vierkant"
 
-#: lib/crop/cropwidget.cpp:198
+#: lib/crop/cropwidget.cpp:197
 #, kde-format
 msgid "This Screen"
 msgstr "Dit scherm"
 
-#: lib/crop/cropwidget.cpp:200
+#: lib/crop/cropwidget.cpp:199
 #, kde-format
 msgid "Landscape"
 msgstr "Landschap"
 
-#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
+#: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
 #, kde-format
 msgid "ISO (A4, A3...)"
 msgstr "ISO (A4, A3...)"
 
-#: lib/crop/cropwidget.cpp:206 lib/crop/cropwidget.cpp:213
+#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
 msgid "US Letter"
 msgstr "US Letter"
 
-#: lib/crop/cropwidget.cpp:207
+#: lib/crop/cropwidget.cpp:206
 #, kde-format
 msgid "Portrait"
 msgstr "Portret"
 
-#: lib/crop/cropwidget.cpp:291
+#: lib/crop/cropwidget.cpp:290
 #, kde-format
 msgctxt "@option:check"
 msgid "Advanced settings"
 msgstr "Geavanceerde instellingen"
 
-#: lib/crop/cropwidget.cpp:300
+#: lib/crop/cropwidget.cpp:299
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Aspect ratio:"
 msgstr "Beeldverhouding:"
 
-#: lib/crop/cropwidget.cpp:313
+#: lib/crop/cropwidget.cpp:312
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Size:"
 msgstr "Grootte:"
 
-#: lib/crop/cropwidget.cpp:335
+#: lib/crop/cropwidget.cpp:334
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Position:"
 msgstr "Positie:"
 
-#: lib/crop/cropwidget.cpp:357
+#: lib/crop/cropwidget.cpp:356
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Gridlines"
 msgstr "Roosterlijnen tonen"
 
-#: lib/crop/cropwidget.cpp:365
+#: lib/crop/cropwidget.cpp:364
 #, kde-format
 msgctxt "@option:check"
 msgid "Preserve aspect ratio"
@@ -2323,19 +2323,19 @@ msgstr ""
 "Kon het bestand niet overschrijven, controleer dat u de noodzakelijke "
 "rechten hebt om in <filename>%1</filename> te schrijven."
 
-#: lib/documentview/documentview.cpp:214
+#: lib/documentview/documentview.cpp:212
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "Prullenbak"
 
-#: lib/documentview/documentview.cpp:215
+#: lib/documentview/documentview.cpp:213
 #, kde-format
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "Selectie opheffen"
 
-#: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
+#: lib/documentview/documentview.cpp:258 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:416
 #: lib/thumbnailview/previewitemdelegate.cpp:838
 #, kde-format
@@ -2343,18 +2343,18 @@ msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: lib/documentview/documentview.cpp:265 lib/zoomcombobox/zoomcombobox.cpp:317
+#: lib/documentview/documentview.cpp:263 lib/zoomcombobox/zoomcombobox.cpp:317
 #, kde-format
 msgctxt "Percent value"
 msgid "%1%"
 msgstr "%1%"
 
-#: lib/documentview/documentview.cpp:544
+#: lib/documentview/documentview.cpp:542
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "Gwenview weet niet hoe dit soort document weer te geven"
 
-#: lib/documentview/documentview.cpp:650
+#: lib/documentview/documentview.cpp:648
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Laden van <filename>%1</filename> is mislukt"
@@ -2716,7 +2716,7 @@ msgctxt "@info"
 msgid "No data to store."
 msgstr "Geen gegevens om op te slaan."
 
-#: lib/print/printhelper.cpp:124
+#: lib/print/printhelper.cpp:123
 #, kde-format
 msgid "Print Image"
 msgstr "Afbeelding afdrukken"

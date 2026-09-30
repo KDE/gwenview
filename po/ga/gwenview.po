@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics/gwenview.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-22 15:58+0000\n"
+"POT-Creation-Date: 2026-09-30 00:43+0000\n"
 "PO-Revision-Date: 2007-09-30 16:51-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -124,7 +124,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr ""
 
-#: app/browsemainpage.cpp:151 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
+#: app/browsemainpage.cpp:151 app/mainwindow.cpp:375 app/viewmainpage.cpp:410
 #: lib/documentview/documentviewcontroller.cpp:56
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -221,8 +221,8 @@ msgctxt "@action:inmenu View"
 msgid "Show Hidden Files"
 msgstr ""
 
-#: app/browsemainpage.cpp:209 app/fileopscontextmanageritem.cpp:136
-#: app/mainwindow.cpp:375
+#: app/browsemainpage.cpp:209 app/fileopscontextmanageritem.cpp:133
+#: app/mainwindow.cpp:374
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -285,13 +285,13 @@ msgstr "Amharc Íomhánna"
 msgid "Advanced"
 msgstr "Casta"
 
-#: app/fileoperations.cpp:64
+#: app/fileoperations.cpp:63
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr ""
 
-#: app/fileoperations.cpp:66
+#: app/fileoperations.cpp:65
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
@@ -299,19 +299,19 @@ msgid_plural "Copy %1 images"
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/fileoperations.cpp:68
+#: app/fileoperations.cpp:67
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "Cóipeáil"
 
-#: app/fileoperations.cpp:72
+#: app/fileoperations.cpp:71
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr ""
 
-#: app/fileoperations.cpp:74
+#: app/fileoperations.cpp:73
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
@@ -319,19 +319,19 @@ msgid_plural "Move %1 images"
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/fileoperations.cpp:76
+#: app/fileoperations.cpp:75
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "Bog"
 
-#: app/fileoperations.cpp:80
+#: app/fileoperations.cpp:79
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr ""
 
-#: app/fileoperations.cpp:82
+#: app/fileoperations.cpp:81
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
@@ -339,177 +339,177 @@ msgid_plural "Link %1 images"
 msgstr[0] ""
 msgstr[1] ""
 
-#: app/fileoperations.cpp:84
+#: app/fileoperations.cpp:83
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "Nasc"
 
-#: app/fileoperations.cpp:195
+#: app/fileoperations.cpp:194
 #, kde-format
 msgid "Move Here"
 msgstr "Bog Anseo"
 
-#: app/fileoperations.cpp:196
+#: app/fileoperations.cpp:195
 #, kde-format
 msgid "Copy Here"
 msgstr "Cóipeáil Anseo"
 
-#: app/fileoperations.cpp:197
+#: app/fileoperations.cpp:196
 #, kde-format
 msgid "Link Here"
 msgstr "Nasc Anseo"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:198
 #, kde-format
 msgid "Cancel"
 msgstr "Cealaigh"
 
-#: app/fileopscontextmanageritem.cpp:126
+#: app/fileopscontextmanageritem.cpp:123
 #, kde-format
 msgid "File Operations"
 msgstr "Oibríochtaí Comhad"
 
-#: app/fileopscontextmanageritem.cpp:137
+#: app/fileopscontextmanageritem.cpp:134
 #: app/semanticinfocontextmanageritem.cpp:203
 #, kde-format
 msgctxt "@title actions category"
 msgid "Edit"
 msgstr "Eagar"
 
-#: app/fileopscontextmanageritem.cpp:144
+#: app/fileopscontextmanageritem.cpp:141
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
 msgstr "Cóipeáil Go..."
 
-#: app/fileopscontextmanageritem.cpp:149
+#: app/fileopscontextmanageritem.cpp:146
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
 msgstr "Bog Go..."
 
-#: app/fileopscontextmanageritem.cpp:154
+#: app/fileopscontextmanageritem.cpp:151
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
 msgstr "Nasc Le..."
 
-#: app/fileopscontextmanageritem.cpp:159
+#: app/fileopscontextmanageritem.cpp:156
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
 msgstr ""
 
-#: app/fileopscontextmanageritem.cpp:164
+#: app/fileopscontextmanageritem.cpp:161
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
 msgstr "Cuir sa Bhruscar"
 
-#: app/fileopscontextmanageritem.cpp:171
+#: app/fileopscontextmanageritem.cpp:168
 #, kde-format
 msgid "Restore"
 msgstr "Athchóirigh"
 
-#: app/fileopscontextmanageritem.cpp:175
+#: app/fileopscontextmanageritem.cpp:172
 #, kde-format
 msgid "Properties"
 msgstr "Airíonna"
 
-#: app/fileopscontextmanageritem.cpp:180
+#: app/fileopscontextmanageritem.cpp:177
 #, kde-format
 msgid "Create Folder..."
 msgstr "Cruthaigh Fillteán..."
 
-#: app/fileopscontextmanageritem.cpp:184
+#: app/fileopscontextmanageritem.cpp:181
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
 msgstr ""
 
-#: app/fileopscontextmanageritem.cpp:189
+#: app/fileopscontextmanageritem.cpp:186
 #, kde-format
 msgid "Open With"
 msgstr "Oscail Le"
 
-#: app/fileopscontextmanageritem.cpp:197
+#: app/fileopscontextmanageritem.cpp:194
 #, kde-format
 msgid "Open Containing Folder"
 msgstr ""
 
-#: app/fileopscontextmanageritem.cpp:387
+#: app/fileopscontextmanageritem.cpp:384
 #, kde-format
 msgid "Other Application..."
 msgstr "Feidhmchlár Eile..."
 
-#: app/filtercontroller.cpp:60
+#: app/filtercontroller.cpp:59
 #, kde-format
 msgid "Name contains"
 msgstr "San ainm"
 
-#: app/filtercontroller.cpp:61
+#: app/filtercontroller.cpp:60
 #, kde-format
 msgid "Name does not contain"
 msgstr "Nach bhfuil san ainm"
 
-#: app/filtercontroller.cpp:99
+#: app/filtercontroller.cpp:98
 #, kde-format
 msgid "Date >="
 msgstr "Dáta >="
 
-#: app/filtercontroller.cpp:100
+#: app/filtercontroller.cpp:99
 #, kde-format
 msgid "Date ="
 msgstr "Dáta =="
 
-#: app/filtercontroller.cpp:101
+#: app/filtercontroller.cpp:100
 #, kde-format
 msgid "Date <="
 msgstr "Dáta <="
 
-#: app/filtercontroller.cpp:132
+#: app/filtercontroller.cpp:131
 #, kde-format
 msgid "Rating >="
 msgstr "Rátáil >="
 
-#: app/filtercontroller.cpp:133
+#: app/filtercontroller.cpp:132
 #, kde-format
 msgid "Rating ="
 msgstr "Rátáil ="
 
-#: app/filtercontroller.cpp:134
+#: app/filtercontroller.cpp:133
 #, kde-format
 msgid "Rating <="
 msgstr "Rátáil <="
 
-#: app/filtercontroller.cpp:174
+#: app/filtercontroller.cpp:173
 #, kde-format
 msgid "Tagged"
 msgstr "Clibeáilte"
 
-#: app/filtercontroller.cpp:175
+#: app/filtercontroller.cpp:174
 #, kde-format
 msgid "Not Tagged"
 msgstr "Gan Chlib"
 
-#: app/filtercontroller.cpp:229
+#: app/filtercontroller.cpp:228
 #, kde-format
 msgid "Dimensions >="
 msgstr ""
 
-#: app/filtercontroller.cpp:230
+#: app/filtercontroller.cpp:229
 #, kde-format
 msgid "Dimensions ="
 msgstr ""
 
-#: app/filtercontroller.cpp:231
+#: app/filtercontroller.cpp:230
 #, kde-format
 msgid "Dimensions <="
 msgstr ""
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:222
+#: app/filtercontroller.cpp:237 lib/crop/cropwidget.cpp:221
 #: lib/resize/resizeimagewidget.ui:40
 #, kde-format
 msgid "Height"
@@ -518,37 +518,37 @@ msgstr "Airde"
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: app/filtercontroller.cpp:240 lib/crop/cropwidget.cpp:222
+#: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
 #: lib/resize/resizeimagewidget.ui:30
 #, kde-format
 msgid "Width"
 msgstr "Leithead"
 
-#: app/filtercontroller.cpp:330
+#: app/filtercontroller.cpp:329
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Name"
 msgstr "Scag de réir Ainm"
 
-#: app/filtercontroller.cpp:332
+#: app/filtercontroller.cpp:331
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Date"
 msgstr "Scag de réir Dáta"
 
-#: app/filtercontroller.cpp:335
+#: app/filtercontroller.cpp:334
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Rating"
 msgstr "Scag de réir Rátála"
 
-#: app/filtercontroller.cpp:337
+#: app/filtercontroller.cpp:336
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Tag"
 msgstr "Scag de réir Clibe"
 
-#: app/filtercontroller.cpp:339
+#: app/filtercontroller.cpp:338
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Dimensions"
@@ -608,13 +608,13 @@ msgstr "Taispeáin mionsamhlacha"
 msgid "Height:"
 msgstr "Airde:"
 
-#: app/fullscreencontent.cpp:239
+#: app/fullscreencontent.cpp:238
 #, kde-format
 msgctxt "@item:intext fullscreen meta info separator"
 msgid ", "
 msgstr ", "
 
-#: app/fullscreencontent.cpp:289
+#: app/fullscreencontent.cpp:288
 #, kde-format
 msgctxt "Slideshow interval in seconds"
 msgid "%1 sec"
@@ -625,18 +625,18 @@ msgstr[2] "%1 shoic"
 msgstr[3] "%1 soic"
 msgstr[4] "%1 soic"
 
-#: app/fullscreencontent.cpp:400
+#: app/fullscreencontent.cpp:399
 #, kde-format
 msgid "Configure"
 msgstr ""
 
-#: app/fullscreencontent.cpp:401
+#: app/fullscreencontent.cpp:400
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure full screen mode"
 msgstr "Cumraigh an mód lánscáileáin"
 
-#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:389
+#: app/fullscreencontent.cpp:551 app/viewmainpage.cpp:389
 #, kde-format
 msgctxt "@info:status %1 current document index, %2 total documents"
 msgid "%1 of %2"
@@ -828,7 +828,7 @@ msgstr ""
 msgid "Main Toolbar"
 msgstr "Príomhbharra Uirlisí"
 
-#: app/imagemetainfodialog.cpp:130
+#: app/imagemetainfodialog.cpp:129
 #, kde-format
 msgctxt "@title:window"
 msgid "Image Information"
@@ -878,7 +878,7 @@ msgid "Resize"
 msgstr "Athraigh an mhéid"
 
 #: app/imageopscontextmanageritem.cpp:118 lib/crop/cropimageoperation.cpp:70
-#: lib/crop/cropwidget.cpp:263
+#: lib/crop/cropwidget.cpp:262
 #, kde-format
 msgid "Crop"
 msgstr "Bearr"
@@ -1055,26 +1055,26 @@ msgstr "Ingearach"
 msgid "Row count:"
 msgstr ""
 
-#: app/infocontextmanageritem.cpp:151
+#: app/infocontextmanageritem.cpp:150
 #, kde-format
 msgctxt ""
 "@item:intext %1 is a key, we append a colon to it. A value is displayed after"
 msgid "%1:"
 msgstr "%1:"
 
-#: app/infocontextmanageritem.cpp:228
+#: app/infocontextmanageritem.cpp:227
 #, kde-format
 msgctxt "@action show more image meta info"
 msgid "Show more details..."
 msgstr ""
 
-#: app/infocontextmanageritem.cpp:242
+#: app/infocontextmanageritem.cpp:241
 #, kde-format
 msgctxt "@title:group"
 msgid "Image Information"
 msgstr ""
 
-#: app/infocontextmanageritem.cpp:331
+#: app/infocontextmanageritem.cpp:330
 #, kde-format
 msgctxt "@label"
 msgid "%1 file selected"
@@ -1085,7 +1085,7 @@ msgstr[2] "Roghnaíodh %1 chomhad"
 msgstr[3] "Roghnaíodh %1 gcomhad"
 msgstr[4] "Roghnaíodh %1 comhad"
 
-#: app/infocontextmanageritem.cpp:333
+#: app/infocontextmanageritem.cpp:332
 #, kde-format
 msgctxt "@label"
 msgid "%1 folder selected"
@@ -1096,13 +1096,13 @@ msgstr[2] "Roghnaíodh %1 fhillteán"
 msgstr[3] "Roghnaíodh %1 bhfillteán"
 msgstr[4] "Roghnaíodh %1 fillteán"
 
-#: app/infocontextmanageritem.cpp:336
+#: app/infocontextmanageritem.cpp:335
 #, kde-format
 msgctxt "@label. The two parameters are strings like '2 folders' and '1 file'."
 msgid "%1 and %2 selected"
 msgstr "Roghnaíodh %1 agus %2"
 
-#: app/infocontextmanageritem.cpp:337
+#: app/infocontextmanageritem.cpp:336
 #, kde-format
 msgid "%1 folder"
 msgid_plural "%1 folders"
@@ -1112,7 +1112,7 @@ msgstr[2] "%1 fhillteán"
 msgstr[3] "%1 bhfillteán"
 msgstr[4] "%1 fillteán"
 
-#: app/infocontextmanageritem.cpp:338
+#: app/infocontextmanageritem.cpp:337
 #, kde-format
 msgid "%1 file"
 msgid_plural "%1 files"
@@ -1152,236 +1152,236 @@ msgstr ""
 msgid "A starting file or folders"
 msgstr ""
 
-#: app/mainwindow.cpp:385
+#: app/mainwindow.cpp:384
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr ""
 
-#: app/mainwindow.cpp:393
+#: app/mainwindow.cpp:392
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "Athluchtaigh"
 
-#: app/mainwindow.cpp:398
+#: app/mainwindow.cpp:397
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr ""
 
-#: app/mainwindow.cpp:403
+#: app/mainwindow.cpp:402
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "Brabhsáil"
 
-#: app/mainwindow.cpp:404
+#: app/mainwindow.cpp:403
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr ""
 
-#: app/mainwindow.cpp:411
+#: app/mainwindow.cpp:410
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "Amharc"
 
-#: app/mainwindow.cpp:412
+#: app/mainwindow.cpp:411
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr ""
 
-#: app/mainwindow.cpp:431
+#: app/mainwindow.cpp:430
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr ""
 
-#: app/mainwindow.cpp:435
+#: app/mainwindow.cpp:434
 #, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr ""
 
-#: app/mainwindow.cpp:441
+#: app/mainwindow.cpp:440
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "Siar"
 
-#: app/mainwindow.cpp:442
+#: app/mainwindow.cpp:441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "Go dtí an íomhá roimhe seo"
 
-#: app/mainwindow.cpp:448
+#: app/mainwindow.cpp:447
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "Ar Aghaidh"
 
-#: app/mainwindow.cpp:449
+#: app/mainwindow.cpp:448
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "Go dtí an chéad íomhá eile"
 
-#: app/mainwindow.cpp:455
+#: app/mainwindow.cpp:454
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "An Chéad Íomhá"
 
-#: app/mainwindow.cpp:456
+#: app/mainwindow.cpp:455
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "Go dtí an chéad íomhá"
 
-#: app/mainwindow.cpp:462
+#: app/mainwindow.cpp:461
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "Deireadh"
 
-#: app/mainwindow.cpp:463
+#: app/mainwindow.cpp:462
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "Go dtí an íomhá dheiridh"
 
-#: app/mainwindow.cpp:473
+#: app/mainwindow.cpp:472
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "Leathanach Tosaigh"
 
-#: app/mainwindow.cpp:474
+#: app/mainwindow.cpp:473
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr ""
 
-#: app/mainwindow.cpp:481
+#: app/mainwindow.cpp:480
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "Barra Taoibh"
 
-#: app/mainwindow.cpp:486
+#: app/mainwindow.cpp:485
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr ""
 
-#: app/mainwindow.cpp:521
+#: app/mainwindow.cpp:520
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr ""
 
-#: app/mainwindow.cpp:530
+#: app/mainwindow.cpp:529
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr ""
 
-#: app/mainwindow.cpp:537
+#: app/mainwindow.cpp:536
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr ""
 
-#: app/mainwindow.cpp:587
+#: app/mainwindow.cpp:586
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr ""
 
-#: app/mainwindow.cpp:602
+#: app/mainwindow.cpp:601
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "Eagar"
 
-#: app/mainwindow.cpp:607
+#: app/mainwindow.cpp:606
 #, kde-format
 msgid "Redo"
 msgstr "Athdhéan"
 
-#: app/mainwindow.cpp:615
+#: app/mainwindow.cpp:614
 #, kde-format
 msgid "Undo"
 msgstr "Cealaigh"
 
-#: app/mainwindow.cpp:642
+#: app/mainwindow.cpp:641
 #, kde-format
 msgid "Folders"
 msgstr "Fillteáin"
 
-#: app/mainwindow.cpp:648
+#: app/mainwindow.cpp:647
 #, kde-format
 msgid "Information"
 msgstr "Eolas"
 
-#: app/mainwindow.cpp:687
+#: app/mainwindow.cpp:686
 #, kde-format
 msgid "Operations"
 msgstr "Oibríochtaí"
 
-#: app/mainwindow.cpp:956
+#: app/mainwindow.cpp:955
 #, kde-format
 msgid "Viewing media"
 msgstr ""
 
-#: app/mainwindow.cpp:1442
+#: app/mainwindow.cpp:1441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "Folaigh an barra taoibh"
 
-#: app/mainwindow.cpp:1442
+#: app/mainwindow.cpp:1441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "Taispeáin an barra taoibh"
 
-#: app/mainwindow.cpp:1792
+#: app/mainwindow.cpp:1791
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "Oscail Íomhá"
 
-#: app/mainwindow.cpp:1853
+#: app/mainwindow.cpp:1852
 #, kde-format
 msgid "Pause Slideshow"
 msgstr ""
 
-#: app/mainwindow.cpp:1856
+#: app/mainwindow.cpp:1855
 #, kde-format
 msgid "Resume Slideshow"
 msgstr ""
 
-#: app/mainwindow.cpp:1856
+#: app/mainwindow.cpp:1855
 #, kde-format
 msgid "Start Slideshow"
 msgstr "Rith an Taispeántas Sleamhnán"
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1868
 #, kde-format
 msgid "Save All Changes"
 msgstr "Sábháil na hAthruithe"
 
-#: app/mainwindow.cpp:1870
+#: app/mainwindow.cpp:1869
 #, kde-format
 msgid "Discard Changes"
 msgstr "Ná Sábháil na hAthruithe"
 
-#: app/mainwindow.cpp:1872
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1391,48 +1391,48 @@ msgstr[2] "Athraíodh %1 íomhá."
 msgstr[3] "Athraíodh %1 n-íomhá."
 msgstr[4] "Athraíodh %1 íomhá."
 
-#: app/mainwindow.cpp:1872
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "Má éiríonn tú as anois, caillfidh tú do chuid athruithe."
 
-#: app/mainwindow.cpp:1915
+#: app/mainwindow.cpp:1914
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 
-#: app/mainwindow.cpp:1918
+#: app/mainwindow.cpp:1917
 #, kde-format
 msgid "Hide menu bar"
 msgstr ""
 
-#: app/mainwindow.cpp:2139
+#: app/mainwindow.cpp:2138
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2140 app/mainwindow.cpp:2154
+#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
 #, kde-format
 msgid "Stay There"
 msgstr ""
 
-#: app/mainwindow.cpp:2141
+#: app/mainwindow.cpp:2140
 #, kde-format
 msgid "Go to the Last Document"
 msgstr ""
 
-#: app/mainwindow.cpp:2142 app/mainwindow.cpp:2156
+#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr ""
 
-#: app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2152
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr ""
 
-#: app/mainwindow.cpp:2155
+#: app/mainwindow.cpp:2154
 #, kde-format
 msgid "Go to the First Document"
 msgstr ""
@@ -1455,18 +1455,18 @@ msgctxt "@title:window"
 msgid "Rename"
 msgstr "Athainmnigh"
 
-#: app/saveallhelper.cpp:56
+#: app/saveallhelper.cpp:54
 #, kde-format
 msgctxt "@info:progress saving all image changes"
 msgid "Saving..."
 msgstr "Á Shábháil..."
 
-#: app/saveallhelper.cpp:57
+#: app/saveallhelper.cpp:55
 #, kde-format
 msgid "&Stop"
 msgstr "&Stad"
 
-#: app/saveallhelper.cpp:82
+#: app/saveallhelper.cpp:80
 #, kde-format
 msgctxt "@info"
 msgid "One document could not be saved:"
@@ -1477,7 +1477,7 @@ msgstr[2] "Níorbh fhéidir %1 cháipéis a shábháil:"
 msgstr[3] "Níorbh fhéidir %1 gcáipéis a shábháil:"
 msgstr[4] "Níorbh fhéidir %1 cáipéis a shábháil:"
 
-#: app/saveallhelper.cpp:106
+#: app/saveallhelper.cpp:104
 #, kde-kuit-format
 msgctxt ""
 "@info %1 is the name of the document which failed to save, %2 is the reason "
@@ -1485,7 +1485,7 @@ msgctxt ""
 msgid "<filename>%1</filename>: %2"
 msgstr "<filename>%1</filename>: %2"
 
-#: app/savebar.cpp:55
+#: app/savebar.cpp:54
 #, kde-format
 msgid ""
 "You have modified many images. To avoid memory problems, you should save "
@@ -1494,22 +1494,22 @@ msgstr ""
 "D'athraigh tú a lán íomhánna.  Chun fadhbanna cuimhne a sheachaint, ba chóir "
 "duit do chuid athruithe a shábháil."
 
-#: app/savebar.cpp:81
+#: app/savebar.cpp:80
 #, kde-format
 msgid "Current image modified"
 msgstr "Tá an íomhá reatha athraithe"
 
-#: app/savebar.cpp:94
+#: app/savebar.cpp:93
 #, kde-format
 msgid "Previous modified image"
 msgstr "An íomhá athraithe roimhe seo"
 
-#: app/savebar.cpp:95
+#: app/savebar.cpp:94
 #, kde-format
 msgid "Next modified image"
 msgstr "An chéad íomhá athraithe eile"
 
-#: app/savebar.cpp:108
+#: app/savebar.cpp:107
 #, kde-format
 msgid "One image modified"
 msgid_plural "%1 images modified"
@@ -1519,22 +1519,22 @@ msgstr[2] "Athraíodh %1 íomhá"
 msgstr[3] "Athraíodh %1 n-íomhá"
 msgstr[4] "Athraíodh %1 íomhá"
 
-#: app/savebar.cpp:110
+#: app/savebar.cpp:109
 #, kde-format
 msgid "Go to first modified image"
 msgstr "Téigh go dtí an chéad íomhá athraithe"
 
-#: app/savebar.cpp:112
+#: app/savebar.cpp:111
 #, kde-format
 msgid "Go to it"
 msgstr "Téigh go dtí é"
 
-#: app/savebar.cpp:135
+#: app/savebar.cpp:134
 #, kde-format
 msgid "Save All"
 msgstr "Sábháil Uile"
 
-#: app/savebar.cpp:136
+#: app/savebar.cpp:135
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all modified images"
@@ -1593,49 +1593,49 @@ msgstr "Clibeanna:"
 msgid "Description"
 msgstr "Cur Síos"
 
-#: app/slideshowfileitemaction.cpp:61
+#: app/slideshowfileitemaction.cpp:62
 #, kde-format
 msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
 msgid "Start a Slideshow"
 msgstr ""
 
-#: app/slideshowfileitemaction.cpp:66
+#: app/slideshowfileitemaction.cpp:67
 #, kde-format
 msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
 msgid "Start a Slideshow with selected images"
 msgstr ""
 
-#: app/startmainpage.cpp:291
+#: app/startmainpage.cpp:290
 #, kde-format
 msgctxt "@action Recent Folders view"
 msgid "Add Folder to Places"
 msgstr ""
 
-#: app/startmainpage.cpp:292
+#: app/startmainpage.cpp:291
 #, kde-format
 msgctxt "@action Recent Folders view"
 msgid "Forget This Folder"
 msgstr ""
 
-#: app/startmainpage.cpp:293
+#: app/startmainpage.cpp:292
 #, kde-format
 msgctxt "@action Recent Folders view"
 msgid "Forget All Folders"
 msgstr ""
 
-#: app/startmainpage.cpp:295
+#: app/startmainpage.cpp:294
 #, kde-format
 msgctxt "@action Recent Files view"
 msgid "Add Containing Folder to Places"
 msgstr ""
 
-#: app/startmainpage.cpp:296
+#: app/startmainpage.cpp:295
 #, kde-format
 msgctxt "@action Recent Files view"
 msgid "Forget This File"
 msgstr ""
 
-#: app/startmainpage.cpp:297
+#: app/startmainpage.cpp:296
 #, kde-format
 msgctxt "@action Recent Files view"
 msgid "Forget All Files"
@@ -1908,12 +1908,12 @@ msgstr ""
 msgid "Quit"
 msgstr "Scoir"
 
-#: importer/importer.cpp:79
+#: importer/importer.cpp:78
 #, kde-format
 msgid "Could not create destination folder."
 msgstr ""
 
-#: importer/importer.cpp:94 importer/importer.cpp:100
+#: importer/importer.cpp:93 importer/importer.cpp:99
 #, kde-format
 msgid "Could not create temporary upload folder."
 msgstr ""
@@ -1995,44 +1995,44 @@ msgstr ""
 msgid "Importing documents..."
 msgstr "Cáipéisí á n-iompórtáil..."
 
-#: importer/thumbnailpage.cpp:231
+#: importer/thumbnailpage.cpp:230
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
 msgstr ""
 
-#: importer/thumbnailpage.cpp:233
+#: importer/thumbnailpage.cpp:232
 #, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
 msgstr ""
 
-#: importer/thumbnailpage.cpp:235
+#: importer/thumbnailpage.cpp:234
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
 msgstr ""
 
-#: importer/thumbnailpage.cpp:247
+#: importer/thumbnailpage.cpp:246
 #, kde-format
 msgctxt "@info:usagetip above install button"
 msgid ""
 "After finishing the installation process, restart this Importer to continue."
 msgstr ""
 
-#: importer/thumbnailpage.cpp:254
+#: importer/thumbnailpage.cpp:253
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
 msgstr ""
 
-#: importer/thumbnailpage.cpp:256
+#: importer/thumbnailpage.cpp:255
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
 msgstr ""
 
-#: importer/thumbnailpage.cpp:257
+#: importer/thumbnailpage.cpp:256
 #, kde-format
 msgctxt "@info:whatsthis for a button when Kamera is not installed"
 msgid ""
@@ -2041,13 +2041,13 @@ msgid ""
 "\"camera:/\" on your system."
 msgstr ""
 
-#: importer/thumbnailpage.cpp:260
+#: importer/thumbnailpage.cpp:259
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
 msgstr ""
 
-#: importer/thumbnailpage.cpp:261
+#: importer/thumbnailpage.cpp:260
 #, kde-format
 msgctxt "@info:whatsthis for a button, %1 protocol name"
 msgid ""
@@ -2055,13 +2055,13 @@ msgid ""
 "library to enable the protocol support for \"%1:/\" on your system."
 msgstr ""
 
-#: importer/thumbnailpage.cpp:265
+#: importer/thumbnailpage.cpp:264
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr ""
 
-#: importer/thumbnailpage.cpp:281
+#: importer/thumbnailpage.cpp:280
 #, kde-format
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
@@ -2069,7 +2069,7 @@ msgctxt ""
 msgid "How to install protocol support for \"%1\" on Linux"
 msgstr ""
 
-#: importer/thumbnailpage.cpp:282
+#: importer/thumbnailpage.cpp:281
 #, kde-format
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
@@ -2077,17 +2077,17 @@ msgctxt ""
 msgid "https://duckduckgo.com/?q=%1"
 msgstr ""
 
-#: importer/thumbnailpage.cpp:323
+#: importer/thumbnailpage.cpp:322
 #, kde-format
 msgid "Import Selected"
 msgstr ""
 
-#: importer/thumbnailpage.cpp:326
+#: importer/thumbnailpage.cpp:325
 #, kde-format
 msgid "Import All"
 msgstr "Iompórtáil Uile"
 
-#: importer/thumbnailpage.cpp:488
+#: importer/thumbnailpage.cpp:487
 #, kde-kuit-format
 msgctxt "@info when failing to open the appstream URL"
 msgid ""
@@ -2095,7 +2095,7 @@ msgid ""
 "system, or use your system's package manager to install \"Kamera\" package."
 msgstr ""
 
-#: importer/thumbnailpage.cpp:492
+#: importer/thumbnailpage.cpp:491
 #, kde-kuit-format
 msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
 msgid ""
@@ -2163,73 +2163,73 @@ msgstr ""
 msgid "Gamma:"
 msgstr ""
 
-#: lib/crop/cropwidget.cpp:192
+#: lib/crop/cropwidget.cpp:191
 #, kde-format
 msgid "Current Image"
 msgstr ""
 
-#: lib/crop/cropwidget.cpp:195
+#: lib/crop/cropwidget.cpp:194
 #, kde-format
 msgid "Square"
 msgstr "Cearnóg"
 
-#: lib/crop/cropwidget.cpp:198
+#: lib/crop/cropwidget.cpp:197
 #, kde-format
 msgid "This Screen"
 msgstr ""
 
-#: lib/crop/cropwidget.cpp:200
+#: lib/crop/cropwidget.cpp:199
 #, kde-format
 msgid "Landscape"
 msgstr "Tírdhreach"
 
-#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
+#: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
 #, kde-format
 msgid "ISO (A4, A3...)"
 msgstr ""
 
-#: lib/crop/cropwidget.cpp:206 lib/crop/cropwidget.cpp:213
+#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
 msgid "US Letter"
 msgstr "Litir Mheiriceánach"
 
-#: lib/crop/cropwidget.cpp:207
+#: lib/crop/cropwidget.cpp:206
 #, kde-format
 msgid "Portrait"
 msgstr "Portráid"
 
-#: lib/crop/cropwidget.cpp:291
+#: lib/crop/cropwidget.cpp:290
 #, kde-format
 msgctxt "@option:check"
 msgid "Advanced settings"
 msgstr ""
 
-#: lib/crop/cropwidget.cpp:300
+#: lib/crop/cropwidget.cpp:299
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Aspect ratio:"
 msgstr ""
 
-#: lib/crop/cropwidget.cpp:313
+#: lib/crop/cropwidget.cpp:312
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Size:"
 msgstr ""
 
-#: lib/crop/cropwidget.cpp:335
+#: lib/crop/cropwidget.cpp:334
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Position:"
 msgstr ""
 
-#: lib/crop/cropwidget.cpp:357
+#: lib/crop/cropwidget.cpp:356
 #, fuzzy, kde-format
 #| msgid "Show videos"
 msgctxt "@option:check"
 msgid "Show Gridlines"
 msgstr "Taispeáin físeáin"
 
-#: lib/crop/cropwidget.cpp:365
+#: lib/crop/cropwidget.cpp:364
 #, kde-format
 msgctxt "@option:check"
 msgid "Preserve aspect ratio"
@@ -2288,19 +2288,19 @@ msgid ""
 "in <filename>%1</filename>."
 msgstr ""
 
-#: lib/documentview/documentview.cpp:214
+#: lib/documentview/documentview.cpp:212
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "Bruscar"
 
-#: lib/documentview/documentview.cpp:215
+#: lib/documentview/documentview.cpp:213
 #, kde-format
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "Díroghnaigh"
 
-#: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
+#: lib/documentview/documentview.cpp:258 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:416
 #: lib/thumbnailview/previewitemdelegate.cpp:838
 #, kde-format
@@ -2308,18 +2308,18 @@ msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
 msgstr "%1×%2"
 
-#: lib/documentview/documentview.cpp:265 lib/zoomcombobox/zoomcombobox.cpp:317
+#: lib/documentview/documentview.cpp:263 lib/zoomcombobox/zoomcombobox.cpp:317
 #, kde-format
 msgctxt "Percent value"
 msgid "%1%"
 msgstr ""
 
-#: lib/documentview/documentview.cpp:544
+#: lib/documentview/documentview.cpp:542
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr ""
 
-#: lib/documentview/documentview.cpp:650
+#: lib/documentview/documentview.cpp:648
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Níorbh fhéidir <filename>%1</filename> a luchtú"
@@ -2629,7 +2629,7 @@ msgctxt "@info"
 msgid "No data to store."
 msgstr ""
 
-#: lib/print/printhelper.cpp:124
+#: lib/print/printhelper.cpp:123
 #, kde-format
 msgid "Print Image"
 msgstr "Priontáil an Íomhá"

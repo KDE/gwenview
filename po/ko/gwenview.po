@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-22 15:58+0000\n"
+"POT-Creation-Date: 2026-09-30 00:43+0000\n"
 "PO-Revision-Date: 2026-09-29 00:46+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -134,7 +134,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "사이드바 정렬 공백"
 
-#: app/browsemainpage.cpp:151 app/mainwindow.cpp:376 app/viewmainpage.cpp:410
+#: app/browsemainpage.cpp:151 app/mainwindow.cpp:375 app/viewmainpage.cpp:410
 #: lib/documentview/documentviewcontroller.cpp:56
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -231,8 +231,8 @@ msgctxt "@action:inmenu View"
 msgid "Show Hidden Files"
 msgstr "숨겨진 파일 표시"
 
-#: app/browsemainpage.cpp:209 app/fileopscontextmanageritem.cpp:136
-#: app/mainwindow.cpp:375
+#: app/browsemainpage.cpp:209 app/fileopscontextmanageritem.cpp:133
+#: app/mainwindow.cpp:374
 #, kde-format
 msgctxt "@title actions category"
 msgid "File"
@@ -293,228 +293,228 @@ msgstr "그림 보기"
 msgid "Advanced"
 msgstr "고급"
 
-#: app/fileoperations.cpp:64
+#: app/fileoperations.cpp:63
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Copy %1"
 msgstr "%1 복사"
 
-#: app/fileoperations.cpp:66
+#: app/fileoperations.cpp:65
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Copy %1 image"
 msgid_plural "Copy %1 images"
 msgstr[0] "그림 %1개 복사"
 
-#: app/fileoperations.cpp:68
+#: app/fileoperations.cpp:67
 #, kde-format
 msgctxt "@action:button"
 msgid "Copy"
 msgstr "복사"
 
-#: app/fileoperations.cpp:72
+#: app/fileoperations.cpp:71
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Move %1"
 msgstr "%1 이동"
 
-#: app/fileoperations.cpp:74
+#: app/fileoperations.cpp:73
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Move %1 image"
 msgid_plural "Move %1 images"
 msgstr[0] "그림 %1개 이동"
 
-#: app/fileoperations.cpp:76
+#: app/fileoperations.cpp:75
 #, kde-format
 msgctxt "@action:button"
 msgid "Move"
 msgstr "이동"
 
-#: app/fileoperations.cpp:80
+#: app/fileoperations.cpp:79
 #, kde-format
 msgctxt "@title:window %1 file name"
 msgid "Link %1"
 msgstr "%1 링크"
 
-#: app/fileoperations.cpp:82
+#: app/fileoperations.cpp:81
 #, kde-format
 msgctxt "@title:window %1 number of images"
 msgid "Link %1 image"
 msgid_plural "Link %1 images"
 msgstr[0] "그림 %1개 링크"
 
-#: app/fileoperations.cpp:84
+#: app/fileoperations.cpp:83
 #, kde-format
 msgctxt "@action:button"
 msgid "Link"
 msgstr "링크"
 
-#: app/fileoperations.cpp:195
+#: app/fileoperations.cpp:194
 #, kde-format
 msgid "Move Here"
 msgstr "여기에 이동"
 
-#: app/fileoperations.cpp:196
+#: app/fileoperations.cpp:195
 #, kde-format
 msgid "Copy Here"
 msgstr "여기에 복사"
 
-#: app/fileoperations.cpp:197
+#: app/fileoperations.cpp:196
 #, kde-format
 msgid "Link Here"
 msgstr "여기에 링크 만들기"
 
-#: app/fileoperations.cpp:199
+#: app/fileoperations.cpp:198
 #, kde-format
 msgid "Cancel"
 msgstr "취소"
 
-#: app/fileopscontextmanageritem.cpp:126
+#: app/fileopscontextmanageritem.cpp:123
 #, kde-format
 msgid "File Operations"
 msgstr "파일 작업"
 
-#: app/fileopscontextmanageritem.cpp:137
+#: app/fileopscontextmanageritem.cpp:134
 #: app/semanticinfocontextmanageritem.cpp:203
 #, kde-format
 msgctxt "@title actions category"
 msgid "Edit"
 msgstr "편집"
 
-#: app/fileopscontextmanageritem.cpp:144
+#: app/fileopscontextmanageritem.cpp:141
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
 msgstr "다음으로 복사..."
 
-#: app/fileopscontextmanageritem.cpp:149
+#: app/fileopscontextmanageritem.cpp:146
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
 msgstr "다음으로 이동..."
 
-#: app/fileopscontextmanageritem.cpp:154
+#: app/fileopscontextmanageritem.cpp:151
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
 msgstr "다음으로 링크..."
 
-#: app/fileopscontextmanageritem.cpp:159
+#: app/fileopscontextmanageritem.cpp:156
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
 msgstr "이름 바꾸기..."
 
-#: app/fileopscontextmanageritem.cpp:164
+#: app/fileopscontextmanageritem.cpp:161
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
 msgstr "휴지통으로 이동"
 
-#: app/fileopscontextmanageritem.cpp:171
+#: app/fileopscontextmanageritem.cpp:168
 #, kde-format
 msgid "Restore"
 msgstr "복원"
 
-#: app/fileopscontextmanageritem.cpp:175
+#: app/fileopscontextmanageritem.cpp:172
 #, kde-format
 msgid "Properties"
 msgstr "속성"
 
-#: app/fileopscontextmanageritem.cpp:180
+#: app/fileopscontextmanageritem.cpp:177
 #, kde-format
 msgid "Create Folder..."
 msgstr "폴더 만들기..."
 
-#: app/fileopscontextmanageritem.cpp:184
+#: app/fileopscontextmanageritem.cpp:181
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Open in New Window"
 msgstr "새 창으로 열기"
 
-#: app/fileopscontextmanageritem.cpp:189
+#: app/fileopscontextmanageritem.cpp:186
 #, kde-format
 msgid "Open With"
 msgstr "다음으로 열기"
 
-#: app/fileopscontextmanageritem.cpp:197
+#: app/fileopscontextmanageritem.cpp:194
 #, kde-format
 msgid "Open Containing Folder"
 msgstr "포함하는 폴더 열기"
 
-#: app/fileopscontextmanageritem.cpp:387
+#: app/fileopscontextmanageritem.cpp:384
 #, kde-format
 msgid "Other Application..."
 msgstr "다른 앱..."
 
-#: app/filtercontroller.cpp:60
+#: app/filtercontroller.cpp:59
 #, kde-format
 msgid "Name contains"
 msgstr "이름에 들어 있음"
 
-#: app/filtercontroller.cpp:61
+#: app/filtercontroller.cpp:60
 #, kde-format
 msgid "Name does not contain"
 msgstr "이름에 없음"
 
-#: app/filtercontroller.cpp:99
+#: app/filtercontroller.cpp:98
 #, kde-format
 msgid "Date >="
 msgstr "날짜가 다음 이후"
 
-#: app/filtercontroller.cpp:100
+#: app/filtercontroller.cpp:99
 #, kde-format
 msgid "Date ="
 msgstr "날짜가 다음과 같음"
 
-#: app/filtercontroller.cpp:101
+#: app/filtercontroller.cpp:100
 #, kde-format
 msgid "Date <="
 msgstr "날짜가 다음 이전"
 
-#: app/filtercontroller.cpp:132
+#: app/filtercontroller.cpp:131
 #, kde-format
 msgid "Rating >="
 msgstr "별점이 다음 이상"
 
-#: app/filtercontroller.cpp:133
+#: app/filtercontroller.cpp:132
 #, kde-format
 msgid "Rating ="
 msgstr "별점이 다음과 같음"
 
-#: app/filtercontroller.cpp:134
+#: app/filtercontroller.cpp:133
 #, kde-format
 msgid "Rating <="
 msgstr "별점이 다음 이하"
 
-#: app/filtercontroller.cpp:174
+#: app/filtercontroller.cpp:173
 #, kde-format
 msgid "Tagged"
 msgstr "태그가 붙음"
 
-#: app/filtercontroller.cpp:175
+#: app/filtercontroller.cpp:174
 #, kde-format
 msgid "Not Tagged"
 msgstr "태그가 붙지 않음"
 
-#: app/filtercontroller.cpp:229
+#: app/filtercontroller.cpp:228
 #, kde-format
 msgid "Dimensions >="
 msgstr "크기가 다음 이상"
 
-#: app/filtercontroller.cpp:230
+#: app/filtercontroller.cpp:229
 #, kde-format
 msgid "Dimensions ="
 msgstr "크기가 다음과 같음"
 
-#: app/filtercontroller.cpp:231
+#: app/filtercontroller.cpp:230
 #, kde-format
 msgid "Dimensions <="
 msgstr "크기가 다음 이하"
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
-#: app/filtercontroller.cpp:238 lib/crop/cropwidget.cpp:222
+#: app/filtercontroller.cpp:237 lib/crop/cropwidget.cpp:221
 #: lib/resize/resizeimagewidget.ui:40
 #, kde-format
 msgid "Height"
@@ -523,37 +523,37 @@ msgstr "높이"
 #. i18n("%1:%2") because ':' should not be translated, it is
 #. used to parse the ratio string.
 #. i18n: ectx: property (text), widget (QLabel, label_3)
-#: app/filtercontroller.cpp:240 lib/crop/cropwidget.cpp:222
+#: app/filtercontroller.cpp:239 lib/crop/cropwidget.cpp:221
 #: lib/resize/resizeimagewidget.ui:30
 #, kde-format
 msgid "Width"
 msgstr "너비"
 
-#: app/filtercontroller.cpp:330
+#: app/filtercontroller.cpp:329
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Name"
 msgstr "이름으로 필터"
 
-#: app/filtercontroller.cpp:332
+#: app/filtercontroller.cpp:331
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Date"
 msgstr "날짜로 필터"
 
-#: app/filtercontroller.cpp:335
+#: app/filtercontroller.cpp:334
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Rating"
 msgstr "별점으로 필터"
 
-#: app/filtercontroller.cpp:337
+#: app/filtercontroller.cpp:336
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Tag"
 msgstr "태그로 필터"
 
-#: app/filtercontroller.cpp:339
+#: app/filtercontroller.cpp:338
 #, kde-format
 msgctxt "@action:inmenu"
 msgid "Filter by Dimensions"
@@ -613,31 +613,31 @@ msgstr "섬네일 표시"
 msgid "Height:"
 msgstr "높이:"
 
-#: app/fullscreencontent.cpp:239
+#: app/fullscreencontent.cpp:238
 #, kde-format
 msgctxt "@item:intext fullscreen meta info separator"
 msgid ", "
 msgstr ", "
 
-#: app/fullscreencontent.cpp:289
+#: app/fullscreencontent.cpp:288
 #, kde-format
 msgctxt "Slideshow interval in seconds"
 msgid "%1 sec"
 msgid_plural "%1 secs"
 msgstr[0] "%1초"
 
-#: app/fullscreencontent.cpp:400
+#: app/fullscreencontent.cpp:399
 #, kde-format
 msgid "Configure"
 msgstr "설정"
 
-#: app/fullscreencontent.cpp:401
+#: app/fullscreencontent.cpp:400
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Configure full screen mode"
 msgstr "전체 화면 모드 설정"
 
-#: app/fullscreencontent.cpp:552 app/viewmainpage.cpp:389
+#: app/fullscreencontent.cpp:551 app/viewmainpage.cpp:389
 #, kde-format
 msgctxt "@info:status %1 current document index, %2 total documents"
 msgid "%1 of %2"
@@ -833,7 +833,7 @@ msgstr "설정"
 msgid "Main Toolbar"
 msgstr "주 도구 모음"
 
-#: app/imagemetainfodialog.cpp:130
+#: app/imagemetainfodialog.cpp:129
 #, kde-format
 msgctxt "@title:window"
 msgid "Image Information"
@@ -883,7 +883,7 @@ msgid "Resize"
 msgstr "크기 조정"
 
 #: app/imageopscontextmanageritem.cpp:118 lib/crop/cropimageoperation.cpp:70
-#: lib/crop/cropwidget.cpp:263
+#: lib/crop/cropwidget.cpp:262
 #, kde-format
 msgid "Crop"
 msgstr "자르기"
@@ -1060,52 +1060,52 @@ msgstr "수직"
 msgid "Row count:"
 msgstr "줄 수:"
 
-#: app/infocontextmanageritem.cpp:151
+#: app/infocontextmanageritem.cpp:150
 #, kde-format
 msgctxt ""
 "@item:intext %1 is a key, we append a colon to it. A value is displayed after"
 msgid "%1:"
 msgstr "%1:"
 
-#: app/infocontextmanageritem.cpp:228
+#: app/infocontextmanageritem.cpp:227
 #, kde-format
 msgctxt "@action show more image meta info"
 msgid "Show more details..."
 msgstr "자세한 정보 표시..."
 
-#: app/infocontextmanageritem.cpp:242
+#: app/infocontextmanageritem.cpp:241
 #, kde-format
 msgctxt "@title:group"
 msgid "Image Information"
 msgstr "그림 정보"
 
-#: app/infocontextmanageritem.cpp:331
+#: app/infocontextmanageritem.cpp:330
 #, kde-format
 msgctxt "@label"
 msgid "%1 file selected"
 msgid_plural "%1 files selected"
 msgstr[0] "파일 %1개 선택됨"
 
-#: app/infocontextmanageritem.cpp:333
+#: app/infocontextmanageritem.cpp:332
 #, kde-format
 msgctxt "@label"
 msgid "%1 folder selected"
 msgid_plural "%1 folders selected"
 msgstr[0] "폴더 %1개 선택됨"
 
-#: app/infocontextmanageritem.cpp:336
+#: app/infocontextmanageritem.cpp:335
 #, kde-format
 msgctxt "@label. The two parameters are strings like '2 folders' and '1 file'."
 msgid "%1 and %2 selected"
 msgstr "%1, %2 선택됨"
 
-#: app/infocontextmanageritem.cpp:337
+#: app/infocontextmanageritem.cpp:336
 #, kde-format
 msgid "%1 folder"
 msgid_plural "%1 folders"
 msgstr[0] "폴더 %1개"
 
-#: app/infocontextmanageritem.cpp:338
+#: app/infocontextmanageritem.cpp:337
 #, kde-format
 msgid "%1 file"
 msgid_plural "%1 files"
@@ -1141,283 +1141,283 @@ msgstr "스포트라이트 모드에서 시작하기"
 msgid "A starting file or folders"
 msgstr "시작할 파일이나 폴더"
 
-#: app/mainwindow.cpp:385
+#: app/mainwindow.cpp:384
 #, kde-format
 msgctxt "@action Open Recent menu"
 msgid "Clear List"
 msgstr "목록 비우기"
 
-#: app/mainwindow.cpp:393
+#: app/mainwindow.cpp:392
 #, kde-format
 msgctxt "@action reload the currently viewed image"
 msgid "Reload"
 msgstr "새로 고침"
 
-#: app/mainwindow.cpp:398
+#: app/mainwindow.cpp:397
 #, kde-format
 msgctxt "@action:inmenu Navigation Bar"
 msgid "Replace Location"
 msgstr "위치 바꾸기"
 
-#: app/mainwindow.cpp:403
+#: app/mainwindow.cpp:402
 #, kde-format
 msgctxt "@action:intoolbar Switch to file list"
 msgid "Browse"
 msgstr "찾아보기"
 
-#: app/mainwindow.cpp:404
+#: app/mainwindow.cpp:403
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Browse folders for images"
 msgstr "그림이 있는 폴더 찾아보기"
 
-#: app/mainwindow.cpp:411
+#: app/mainwindow.cpp:410
 #, kde-format
 msgctxt "@action:intoolbar Switch to image view"
 msgid "View"
 msgstr "보기"
 
-#: app/mainwindow.cpp:412
+#: app/mainwindow.cpp:411
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "View selected images"
 msgstr "선택한 그림 보기"
 
-#: app/mainwindow.cpp:431
+#: app/mainwindow.cpp:430
 #, kde-format
 msgctxt "@action"
 msgid "Exit Full Screen"
 msgstr "전체 화면 나가기"
 
-#: app/mainwindow.cpp:435
+#: app/mainwindow.cpp:434
 #, kde-format
 msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr "스포트라이트 모드"
 
-#: app/mainwindow.cpp:441
+#: app/mainwindow.cpp:440
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "이전"
 
-#: app/mainwindow.cpp:442
+#: app/mainwindow.cpp:441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "이전 그림으로 가기"
 
-#: app/mainwindow.cpp:448
+#: app/mainwindow.cpp:447
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "다음"
 
-#: app/mainwindow.cpp:449
+#: app/mainwindow.cpp:448
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "다음 그림으로 가기"
 
-#: app/mainwindow.cpp:455
+#: app/mainwindow.cpp:454
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "처음"
 
-#: app/mainwindow.cpp:456
+#: app/mainwindow.cpp:455
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "첫 그림으로 가기"
 
-#: app/mainwindow.cpp:462
+#: app/mainwindow.cpp:461
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "끝"
 
-#: app/mainwindow.cpp:463
+#: app/mainwindow.cpp:462
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "마지막 그림으로 가기"
 
-#: app/mainwindow.cpp:473
+#: app/mainwindow.cpp:472
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "시작 페이지"
 
-#: app/mainwindow.cpp:474
+#: app/mainwindow.cpp:473
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "시작 페이지 열기"
 
-#: app/mainwindow.cpp:481
+#: app/mainwindow.cpp:480
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "사이드바"
 
-#: app/mainwindow.cpp:486
+#: app/mainwindow.cpp:485
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "편집 도구 표시"
 
-#: app/mainwindow.cpp:521
+#: app/mainwindow.cpp:520
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "공유"
 
-#: app/mainwindow.cpp:530
+#: app/mainwindow.cpp:529
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "공유하는 중 오류 발생: %1"
 
-#: app/mainwindow.cpp:537
+#: app/mainwindow.cpp:536
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr "공유된 그림 링크(<a href=\"%1\">%1</a>)를 클립보드에 복사했습니다."
 
-#: app/mainwindow.cpp:587
+#: app/mainwindow.cpp:586
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "설정"
 
-#: app/mainwindow.cpp:602
+#: app/mainwindow.cpp:601
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "편집"
 
-#: app/mainwindow.cpp:607
+#: app/mainwindow.cpp:606
 #, kde-format
 msgid "Redo"
 msgstr "다시 실행"
 
-#: app/mainwindow.cpp:615
+#: app/mainwindow.cpp:614
 #, kde-format
 msgid "Undo"
 msgstr "실행 취소"
 
-#: app/mainwindow.cpp:642
+#: app/mainwindow.cpp:641
 #, kde-format
 msgid "Folders"
 msgstr "폴더"
 
-#: app/mainwindow.cpp:648
+#: app/mainwindow.cpp:647
 #, kde-format
 msgid "Information"
 msgstr "정보"
 
-#: app/mainwindow.cpp:687
+#: app/mainwindow.cpp:686
 #, kde-format
 msgid "Operations"
 msgstr "작업"
 
-#: app/mainwindow.cpp:956
+#: app/mainwindow.cpp:955
 #, kde-format
 msgid "Viewing media"
 msgstr "미디어 표시"
 
-#: app/mainwindow.cpp:1442
+#: app/mainwindow.cpp:1441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "사이드바 숨기기"
 
-#: app/mainwindow.cpp:1442
+#: app/mainwindow.cpp:1441
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "사이드바 표시"
 
-#: app/mainwindow.cpp:1792
+#: app/mainwindow.cpp:1791
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "그림 열기"
 
-#: app/mainwindow.cpp:1853
+#: app/mainwindow.cpp:1852
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "슬라이드 쇼 일시 정지"
 
-#: app/mainwindow.cpp:1856
+#: app/mainwindow.cpp:1855
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "슬라이드 쇼 다시 시작"
 
-#: app/mainwindow.cpp:1856
+#: app/mainwindow.cpp:1855
 #, kde-format
 msgid "Start Slideshow"
 msgstr "슬라이드 쇼 시작하기"
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1868
 #, kde-format
 msgid "Save All Changes"
 msgstr "모든 변경 사항 저장하기"
 
-#: app/mainwindow.cpp:1870
+#: app/mainwindow.cpp:1869
 #, kde-format
 msgid "Discard Changes"
 msgstr "변경 사항 취소"
 
-#: app/mainwindow.cpp:1872
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "그림 %1개를 수정했습니다."
 
-#: app/mainwindow.cpp:1872
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "지금 종료하면 변경 사항이 저장되지 않습니다."
 
-#: app/mainwindow.cpp:1915
+#: app/mainwindow.cpp:1914
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "메뉴 표시줄을 완전히 숨깁니다. %1 키를 눌러서 다시 볼 수 있습니다."
 
-#: app/mainwindow.cpp:1918
+#: app/mainwindow.cpp:1917
 #, kde-format
 msgid "Hide menu bar"
 msgstr "메뉴 표시줄 숨기기"
 
-#: app/mainwindow.cpp:2139
+#: app/mainwindow.cpp:2138
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "첫 문서에 도달했습니다. 무엇을 하시겠습니까?"
 
-#: app/mainwindow.cpp:2140 app/mainwindow.cpp:2154
+#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
 #, kde-format
 msgid "Stay There"
 msgstr "그대로 있기"
 
-#: app/mainwindow.cpp:2141
+#: app/mainwindow.cpp:2140
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "마지막 문서로 가기"
 
-#: app/mainwindow.cpp:2142 app/mainwindow.cpp:2156
+#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "문서 목록으로 가기"
 
-#: app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2152
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "마지막 문서에 도달했습니다. 무엇을 하시겠습니까?"
 
-#: app/mainwindow.cpp:2155
+#: app/mainwindow.cpp:2154
 #, kde-format
 msgid "Go to the First Document"
 msgstr "첫 문서로 가기"
@@ -1440,25 +1440,25 @@ msgctxt "@title:window"
 msgid "Rename"
 msgstr "이름 바꾸기"
 
-#: app/saveallhelper.cpp:56
+#: app/saveallhelper.cpp:54
 #, kde-format
 msgctxt "@info:progress saving all image changes"
 msgid "Saving..."
 msgstr "저장하는 중..."
 
-#: app/saveallhelper.cpp:57
+#: app/saveallhelper.cpp:55
 #, kde-format
 msgid "&Stop"
 msgstr "정지(&S)"
 
-#: app/saveallhelper.cpp:82
+#: app/saveallhelper.cpp:80
 #, kde-format
 msgctxt "@info"
 msgid "One document could not be saved:"
 msgid_plural "%1 documents could not be saved:"
 msgstr[0] "문서 %1개를 저장할 수 없습니다:"
 
-#: app/saveallhelper.cpp:106
+#: app/saveallhelper.cpp:104
 #, kde-kuit-format
 msgctxt ""
 "@info %1 is the name of the document which failed to save, %2 is the reason "
@@ -1466,7 +1466,7 @@ msgctxt ""
 msgid "<filename>%1</filename>: %2"
 msgstr "<filename>%1</filename>: %2"
 
-#: app/savebar.cpp:55
+#: app/savebar.cpp:54
 #, kde-format
 msgid ""
 "You have modified many images. To avoid memory problems, you should save "
@@ -1475,43 +1475,43 @@ msgstr ""
 "그림 여러 개를 수정했습니다. 메모리 문제를 막으려면 변경 사항을 저장해야 합니"
 "다."
 
-#: app/savebar.cpp:81
+#: app/savebar.cpp:80
 #, kde-format
 msgid "Current image modified"
 msgstr "현재 그림이 수정됨"
 
-#: app/savebar.cpp:94
+#: app/savebar.cpp:93
 #, kde-format
 msgid "Previous modified image"
 msgstr "이전 수정된 그림"
 
-#: app/savebar.cpp:95
+#: app/savebar.cpp:94
 #, kde-format
 msgid "Next modified image"
 msgstr "다음 수정된 그림"
 
-#: app/savebar.cpp:108
+#: app/savebar.cpp:107
 #, kde-format
 msgid "One image modified"
 msgid_plural "%1 images modified"
 msgstr[0] "%1개 그림 수정됨"
 
-#: app/savebar.cpp:110
+#: app/savebar.cpp:109
 #, kde-format
 msgid "Go to first modified image"
 msgstr "첫 번째 수정된 그림으로 가기"
 
-#: app/savebar.cpp:112
+#: app/savebar.cpp:111
 #, kde-format
 msgid "Go to it"
 msgstr "가기"
 
-#: app/savebar.cpp:135
+#: app/savebar.cpp:134
 #, kde-format
 msgid "Save All"
 msgstr "모두 저장"
 
-#: app/savebar.cpp:136
+#: app/savebar.cpp:135
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Save all modified images"
@@ -1570,49 +1570,49 @@ msgstr "태그:"
 msgid "Description"
 msgstr "설명"
 
-#: app/slideshowfileitemaction.cpp:61
+#: app/slideshowfileitemaction.cpp:62
 #, kde-format
 msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
 msgid "Start a Slideshow"
 msgstr "슬라이드 쇼 시작"
 
-#: app/slideshowfileitemaction.cpp:66
+#: app/slideshowfileitemaction.cpp:67
 #, kde-format
 msgctxt "@action:inmenu Start a slideshow Dolphin context menu"
 msgid "Start a Slideshow with selected images"
 msgstr "선택한 그림으로 슬라이드 쇼 시작"
 
-#: app/startmainpage.cpp:291
+#: app/startmainpage.cpp:290
 #, kde-format
 msgctxt "@action Recent Folders view"
 msgid "Add Folder to Places"
 msgstr "폴더를 위치에 추가하기"
 
-#: app/startmainpage.cpp:292
+#: app/startmainpage.cpp:291
 #, kde-format
 msgctxt "@action Recent Folders view"
 msgid "Forget This Folder"
 msgstr "이 폴더 잊어버리기"
 
-#: app/startmainpage.cpp:293
+#: app/startmainpage.cpp:292
 #, kde-format
 msgctxt "@action Recent Folders view"
 msgid "Forget All Folders"
 msgstr "모든 폴더 잊어버리기"
 
-#: app/startmainpage.cpp:295
+#: app/startmainpage.cpp:294
 #, kde-format
 msgctxt "@action Recent Files view"
 msgid "Add Containing Folder to Places"
 msgstr "포함하는 폴더를 위치에 추가하기"
 
-#: app/startmainpage.cpp:296
+#: app/startmainpage.cpp:295
 #, kde-format
 msgctxt "@action Recent Files view"
 msgid "Forget This File"
 msgstr "이 파일 잊어버리기"
 
-#: app/startmainpage.cpp:297
+#: app/startmainpage.cpp:296
 #, kde-format
 msgctxt "@action Recent Files view"
 msgid "Forget All Files"
@@ -1862,12 +1862,12 @@ msgstr "더 많은 문서 가져오기"
 msgid "Quit"
 msgstr "끝내기"
 
-#: importer/importer.cpp:79
+#: importer/importer.cpp:78
 #, kde-format
 msgid "Could not create destination folder."
 msgstr "대상 폴더를 만들 수 없습니다."
 
-#: importer/importer.cpp:94 importer/importer.cpp:100
+#: importer/importer.cpp:93 importer/importer.cpp:99
 #, kde-format
 msgid "Could not create temporary upload folder."
 msgstr "임시 업로드 폴더를 만들 수 없습니다."
@@ -1950,44 +1950,44 @@ msgstr "원본 폴더가 잘못되었습니다."
 msgid "Importing documents..."
 msgstr "문서 가져오는 중..."
 
-#: importer/thumbnailpage.cpp:231
+#: importer/thumbnailpage.cpp:230
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
 msgstr "카메라 지원이 설치되어 있지 않습니다."
 
-#: importer/thumbnailpage.cpp:233
+#: importer/thumbnailpage.cpp:232
 #, kde-format
 msgctxt "@info above install button, %1 protocol name %2 error text from KIO"
 msgid "The protocol support library for \"%1\" is not installed. Error: %2"
 msgstr "\"%1\" 프로토콜 지원 라이브러리가 설치되어 있지 않습니다. 오류: %2"
 
-#: importer/thumbnailpage.cpp:235
+#: importer/thumbnailpage.cpp:234
 #, kde-format
 msgctxt "@info above install button, %1 protocol name"
 msgid "The protocol support library for \"%1\" is not installed."
 msgstr "\"%1\" 프로토콜 지원 라이브러리가 설치되어 있지 않습니다."
 
-#: importer/thumbnailpage.cpp:247
+#: importer/thumbnailpage.cpp:246
 #, kde-format
 msgctxt "@info:usagetip above install button"
 msgid ""
 "After finishing the installation process, restart this Importer to continue."
 msgstr "설치를 완료한 다음 가져오기 도구를 다시 시작하여 계속 진행하십시오."
 
-#: importer/thumbnailpage.cpp:254
+#: importer/thumbnailpage.cpp:253
 #, kde-format
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
 msgstr "Discover를 실행하여 \"%1\" 프로토콜 지원 라이브러리 설치"
 
-#: importer/thumbnailpage.cpp:256
+#: importer/thumbnailpage.cpp:255
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
 msgstr "이 카메라 지원 설치…"
 
-#: importer/thumbnailpage.cpp:257
+#: importer/thumbnailpage.cpp:256
 #, kde-format
 msgctxt "@info:whatsthis for a button when Kamera is not installed"
 msgid ""
@@ -1998,13 +1998,13 @@ msgstr ""
 "카메라에서 읽으려면 시스템에 Kamera를 설치해야 합니다. Discover를 실행하여 시"
 "스템에 \"camera:/\" 프로토콜 지원을 설치하려면 클릭하십시오."
 
-#: importer/thumbnailpage.cpp:260
+#: importer/thumbnailpage.cpp:259
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Install Protocol Support for \"%1\"…"
 msgstr "\"%1\" 프로토콜 지원 설치…"
 
-#: importer/thumbnailpage.cpp:261
+#: importer/thumbnailpage.cpp:260
 #, kde-format
 msgctxt "@info:whatsthis for a button, %1 protocol name"
 msgid ""
@@ -2014,13 +2014,13 @@ msgstr ""
 "Discover를 실행하여 시스템에 \"%1:/\" 프로토콜 지원 라이브러리를 설치하려면 "
 "클릭하십시오."
 
-#: importer/thumbnailpage.cpp:265
+#: importer/thumbnailpage.cpp:264
 #, kde-format
 msgctxt "@action:button %1 protocol name"
 msgid "Search the Web for How to Install Protocol Support for \"%1\"…"
 msgstr "\"%1\" 프로토콜 지원 설치 방법을 웹에서 검색…"
 
-#: importer/thumbnailpage.cpp:281
+#: importer/thumbnailpage.cpp:280
 #, kde-format
 msgctxt ""
 "@info this text will be used as a search term in an online search engine, %1 "
@@ -2028,7 +2028,7 @@ msgctxt ""
 msgid "How to install protocol support for \"%1\" on Linux"
 msgstr "리눅스에 \"%1\" 프로토콜 지원을 설치하는 방법"
 
-#: importer/thumbnailpage.cpp:282
+#: importer/thumbnailpage.cpp:281
 #, kde-format
 msgctxt ""
 "search engine URL, %1 search keyword, and translators can replace duckduckgo "
@@ -2036,17 +2036,17 @@ msgctxt ""
 msgid "https://duckduckgo.com/?q=%1"
 msgstr "https://duckduckgo.com/?q=%1"
 
-#: importer/thumbnailpage.cpp:323
+#: importer/thumbnailpage.cpp:322
 #, kde-format
 msgid "Import Selected"
 msgstr "선택한 항목 가져오기"
 
-#: importer/thumbnailpage.cpp:326
+#: importer/thumbnailpage.cpp:325
 #, kde-format
 msgid "Import All"
 msgstr "모두 가져오기"
 
-#: importer/thumbnailpage.cpp:488
+#: importer/thumbnailpage.cpp:487
 #, kde-kuit-format
 msgctxt "@info when failing to open the appstream URL"
 msgid ""
@@ -2056,7 +2056,7 @@ msgstr ""
 "Discover를 열 수 없습니다.<nl/>시스템에 Discover가 설치되어 있거나, 시스템의 "
 "패키지 관리자를 사용하여 \"Kamera\" 패키지를 설치하십시오."
 
-#: importer/thumbnailpage.cpp:492
+#: importer/thumbnailpage.cpp:491
 #, kde-kuit-format
 msgctxt "@info when failing to launch plasma-discover, %1 protocol name"
 msgid ""
@@ -2127,72 +2127,72 @@ msgstr "명암:"
 msgid "Gamma:"
 msgstr "감마:"
 
-#: lib/crop/cropwidget.cpp:192
+#: lib/crop/cropwidget.cpp:191
 #, kde-format
 msgid "Current Image"
 msgstr "현재 그림"
 
-#: lib/crop/cropwidget.cpp:195
+#: lib/crop/cropwidget.cpp:194
 #, kde-format
 msgid "Square"
 msgstr "사각형"
 
-#: lib/crop/cropwidget.cpp:198
+#: lib/crop/cropwidget.cpp:197
 #, kde-format
 msgid "This Screen"
 msgstr "이 화면"
 
-#: lib/crop/cropwidget.cpp:200
+#: lib/crop/cropwidget.cpp:199
 #, kde-format
 msgid "Landscape"
 msgstr "가로"
 
-#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
+#: lib/crop/cropwidget.cpp:204 lib/crop/cropwidget.cpp:211
 #, kde-format
 msgid "ISO (A4, A3...)"
 msgstr "ISO (A4, A3...)"
 
-#: lib/crop/cropwidget.cpp:206 lib/crop/cropwidget.cpp:213
+#: lib/crop/cropwidget.cpp:205 lib/crop/cropwidget.cpp:212
 #, kde-format
 msgid "US Letter"
 msgstr "미국 레터"
 
-#: lib/crop/cropwidget.cpp:207
+#: lib/crop/cropwidget.cpp:206
 #, kde-format
 msgid "Portrait"
 msgstr "세로"
 
-#: lib/crop/cropwidget.cpp:291
+#: lib/crop/cropwidget.cpp:290
 #, kde-format
 msgctxt "@option:check"
 msgid "Advanced settings"
 msgstr "고급 설정"
 
-#: lib/crop/cropwidget.cpp:300
+#: lib/crop/cropwidget.cpp:299
 #, kde-format
 msgctxt "@label:listbox"
 msgid "Aspect ratio:"
 msgstr "종횡 비율:"
 
-#: lib/crop/cropwidget.cpp:313
+#: lib/crop/cropwidget.cpp:312
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Size:"
 msgstr "크기:"
 
-#: lib/crop/cropwidget.cpp:335
+#: lib/crop/cropwidget.cpp:334
 #, kde-format
 msgctxt "@label:spinbox"
 msgid "Position:"
 msgstr "위치:"
 
-#: lib/crop/cropwidget.cpp:357
+#: lib/crop/cropwidget.cpp:356
 #, kde-format
 msgctxt "@option:check"
 msgid "Show Gridlines"
 msgstr "격자선 표시"
 
-#: lib/crop/cropwidget.cpp:365
+#: lib/crop/cropwidget.cpp:364
 #, kde-format
 msgctxt "@option:check"
 msgid "Preserve aspect ratio"
@@ -2255,19 +2255,19 @@ msgid ""
 "in <filename>%1</filename>."
 msgstr "파일에 덮어쓸 수 없습니다. <filename>%1</filename>에 충분한 권한을  가지고 있는지 확인하십시오."
 
-#: lib/documentview/documentview.cpp:214
+#: lib/documentview/documentview.cpp:212
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "휴지통으로 이동"
 
-#: lib/documentview/documentview.cpp:215
+#: lib/documentview/documentview.cpp:213
 #, kde-format
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "선택 해제"
 
-#: lib/documentview/documentview.cpp:260 lib/imagemetainfomodel.cpp:440
+#: lib/documentview/documentview.cpp:258 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:416
 #: lib/thumbnailview/previewitemdelegate.cpp:838
 #, kde-format
@@ -2275,18 +2275,18 @@ msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: lib/documentview/documentview.cpp:265 lib/zoomcombobox/zoomcombobox.cpp:317
+#: lib/documentview/documentview.cpp:263 lib/zoomcombobox/zoomcombobox.cpp:317
 #, kde-format
 msgctxt "Percent value"
 msgid "%1%"
 msgstr "%1%"
 
-#: lib/documentview/documentview.cpp:544
+#: lib/documentview/documentview.cpp:542
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "Gwenview는 이 문서를 어떻게 표시할지 모릅니다."
 
-#: lib/documentview/documentview.cpp:650
+#: lib/documentview/documentview.cpp:648
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "<filename>%1</filename>을(를) 불러오는 데 실패했습니다"
@@ -2626,7 +2626,7 @@ msgctxt "@info"
 msgid "No data to store."
 msgstr "저장할 데이터가 없습니다."
 
-#: lib/print/printhelper.cpp:124
+#: lib/print/printhelper.cpp:123
 #, kde-format
 msgid "Print Image"
 msgstr "그림 인쇄하기"
