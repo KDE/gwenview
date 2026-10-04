@@ -26,6 +26,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // KF
 #include <KActionCollection>
+#include <KFileWidget>
 #include <KIO/FileCopyJob>
 #include <KIO/JobUiDelegate>
 #include <KIO/StoredTransferJob>
@@ -33,6 +34,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <KLocalizedString>
 #include <KPluginFactory>
 #include <KPropertiesDialog>
+#include <KRecentDirs>
 #include <KStandardAction>
 
 // Local
@@ -129,10 +131,18 @@ void GVPart::showContextMenu()
 
 void GVPart::saveAs()
 {
-    const QUrl srcUrl = url();
-    const QUrl dstUrl = QFileDialog::getSaveFileUrl(widget(), QString(), srcUrl);
+    // Remove information which may be present in remote URLs
+    const QUrl srcUrl = url().adjusted(QUrl::RemoveUserInfo | QUrl::RemoveQuery | QUrl::RemoveFragment);
+
+    QString recentDirClass;
+    const QUrl saveDst = KFileWidget::getStartUrl(QUrl("kfiledialog:///gvpartsave/" + srcUrl.fileName()), recentDirClass);
+    const QUrl dstUrl = QFileDialog::getSaveFileUrl(widget(), QString(), saveDst);
     if (!dstUrl.isValid()) {
         return;
+    }
+
+    if (!recentDirClass.isEmpty() && dstUrl.isLocalFile()) {
+        KRecentDirs::add(recentDirClass, dstUrl.adjusted(QUrl::RemoveFilename).path());
     }
 
     KIO::Job *job;
