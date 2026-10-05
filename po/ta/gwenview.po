@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-30 00:43+0000\n"
-"PO-Revision-Date: 2026-09-20 18:03+0200\n"
+"POT-Creation-Date: 2026-10-05 00:43+0000\n"
+"PO-Revision-Date: 2026-10-04 11:21+0200\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-l10n-ta@kde.org>\n"
 "Language: ta\n"
@@ -2124,10 +2124,9 @@ msgid "Listing content of:"
 msgstr "இதன் உள்ளடக்கம் காட்டப்படுகிறது:"
 
 #: lib/about.cpp:38
-#, fuzzy, kde-format
-#| msgid "Copyright 2000-2022 Gwenview authors"
+#, kde-format
 msgid "Copyright 2000–%1 Gwenview authors"
-msgstr "பதிப்புரிமை 2000–2022, குவென்வியூவை இயற்றியவர்கள்"
+msgstr "பதிப்புரிமை 2000–%1, குவென்வியூவை இயற்றியவர்கள்"
 
 #: lib/about.cpp:40
 #, kde-format
@@ -2822,42 +2821,36 @@ msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"
 msgstr "வரிசையில்லாது"
 
+# Toggle = invert? Or is it simply a select/deselect button?
 #: lib/thumbnailview/previewitemdelegate.cpp:616
-#, fuzzy, kde-format
-#| msgctxt "@title:menu"
-#| msgid "Collections"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle selection"
-msgstr "தொகுப்புகள்"
+msgstr "தேர்வை நிலைமாற்று"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:621
-#, fuzzy, kde-format
-#| msgctxt "@action"
-#| msgid "Exit Full Screen"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Full screen"
-msgstr "முழுத்திரையிலிருந்து வெளியேறு"
+msgstr "முழுத்திரை"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:626
-#, fuzzy, kde-format
-#| msgid "Rotate Left"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate left"
 msgstr "இடதுபுறமாக திருப்பு"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:631
-#, fuzzy, kde-format
-#| msgid "Rotate Right"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Rotate right"
 msgstr "வலதுபுறமாக திருப்பு"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:645
-#, fuzzy, kde-format
-#| msgid "Save All"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Save"
-msgstr "அனைத்தையும் சேமி"
+msgstr "சேமி"
 
 #: lib/transformimageoperation.cpp:58
 #, kde-format
@@ -2899,7 +2892,7 @@ msgstr ""
 "உருமாற்றியது\n"
 "உருமாற்றியதை"
 
-#: part/gvpart.cpp:69
+#: part/gvpart.cpp:71
 #, kde-format
 msgctxt "@action"
 msgid "Properties"

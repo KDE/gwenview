@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics/gwenview.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-30 00:43+0000\n"
+"POT-Creation-Date: 2026-10-05 00:43+0000\n"
 "PO-Revision-Date: 2007-09-30 16:51-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -2869,7 +2869,7 @@ msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "Trasfhoirmigh"
 
-#: part/gvpart.cpp:69
+#: part/gvpart.cpp:71
 #, kde-format
 msgctxt "@action"
 msgid "Properties"

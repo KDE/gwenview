@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-09-30 00:43+0000\n"
+"POT-Creation-Date: 2026-10-05 00:43+0000\n"
 "PO-Revision-Date: 2026-09-23 08:43+0200\n"
 "Last-Translator: Alexander Yavorskiy <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -78,8 +78,8 @@ msgid ""
 "Squash colors that don't fit within the active color profile's color gamut, "
 "leaving other colors untouched"
 msgstr ""
-"Удаление цветов, не соответствующих цветовой гамме активного цветового "
-"профиля, без затрагивания остальных цветов"
+"Сжатие цветов, не попадающих в цветовую гамму активного цветового профиля, "
+"без изменения остальных цветов"
 
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: app/advancedconfigpage.ui:102
@@ -99,7 +99,7 @@ msgstr "Относительная колориметрическая"
 #, kde-format
 msgctxt "@option:Perceptual rendering intent"
 msgid "Perceptual"
-msgstr "Воспринимаемая"
+msgstr "Перцепционная"
 
 #. i18n: ectx: property (text), widget (QLabel, perceptualHelpLabel)
 #: app/advancedconfigpage.ui:172
@@ -250,7 +250,7 @@ msgstr "Оценка"
 #, kde-format
 msgctxt "@action:inmenu View"
 msgid "Show Hidden Files"
-msgstr "Показать скрытые файлы"
+msgstr "Показывать скрытые файлы"
 
 #: app/browsemainpage.cpp:209 app/fileopscontextmanageritem.cpp:133
 #: app/mainwindow.cpp:374
@@ -308,7 +308,7 @@ msgstr "Добавить фильтр"
 #: app/configdialog.cpp:69
 #, kde-format
 msgid "General"
-msgstr "Главное"
+msgstr "Общие"
 
 #: app/configdialog.cpp:122
 #, kde-format
@@ -399,7 +399,7 @@ msgstr "Копировать сюда"
 #: app/fileoperations.cpp:196
 #, kde-format
 msgid "Link Here"
-msgstr "Создать ссылку"
+msgstr "Создать ссылку здесь"
 
 #: app/fileoperations.cpp:198
 #, kde-format
@@ -422,25 +422,25 @@ msgstr "Изменить"
 #, kde-format
 msgctxt "Verb"
 msgid "Copy To..."
-msgstr "Копировать…"
+msgstr "Копировать в…"
 
 #: app/fileopscontextmanageritem.cpp:146
 #, kde-format
 msgctxt "Verb"
 msgid "Move To..."
-msgstr "Переместить…"
+msgstr "Переместить в…"
 
 #: app/fileopscontextmanageritem.cpp:151
 #, kde-format
 msgctxt "Verb: create link to the file where user wants"
 msgid "Link To..."
-msgstr "Создать ссылку..."
+msgstr "Создать ссылку в…"
 
 #: app/fileopscontextmanageritem.cpp:156
 #, kde-format
 msgctxt "Verb"
 msgid "Rename..."
-msgstr "Переименовать..."
+msgstr "Переименовать…"
 
 #: app/fileopscontextmanageritem.cpp:161
 #, kde-format
@@ -461,7 +461,7 @@ msgstr "Свойства"
 #: app/fileopscontextmanageritem.cpp:177
 #, kde-format
 msgid "Create Folder..."
-msgstr "Создать папку..."
+msgstr "Создать папку…"
 
 #: app/fileopscontextmanageritem.cpp:181
 #, kde-format
@@ -472,17 +472,17 @@ msgstr "Открыть в новом окне"
 #: app/fileopscontextmanageritem.cpp:186
 #, kde-format
 msgid "Open With"
-msgstr "Открыть в"
+msgstr "Открыть с помощью"
 
 #: app/fileopscontextmanageritem.cpp:194
 #, kde-format
 msgid "Open Containing Folder"
-msgstr "Открыть содержащую папку"
+msgstr "Открыть папку с файлом"
 
 #: app/fileopscontextmanageritem.cpp:384
 #, kde-format
 msgid "Other Application..."
-msgstr "Внешнее приложение..."
+msgstr "Внешнее приложение…"
 
 #: app/filtercontroller.cpp:59
 #, kde-format
@@ -629,7 +629,7 @@ msgstr "Информация об изображении"
 #: app/fullscreenconfigwidget.ui:101
 #, kde-format
 msgid "Select Image Information to Display..."
-msgstr "Выбрать сведения для показа..."
+msgstr "Выбрать показываемые сведения…"
 
 #. i18n: ectx: property (title), widget (QGroupBox, mThumbnailGroupBox)
 #: app/fullscreenconfigwidget.ui:111
@@ -740,7 +740,7 @@ msgstr "Начать заново"
 #: app/generalconfigpage.ui:118
 #, kde-format
 msgid "Fullscreen background:"
-msgstr "Фон в полноэкранном режиме"
+msgstr "Фон в полноэкранном режиме:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, fullscreenBackgroundImageRadioButton)
 #: app/generalconfigpage.ui:128
@@ -758,7 +758,7 @@ msgstr "Чёрный"
 #: app/generalconfigpage.ui:158
 #, kde-format
 msgid "Lossy image save quality:"
-msgstr "Качество для сохранения с потерей данных:"
+msgstr "Качество сохранения с потерями:"
 
 #. i18n: ectx: property (suffix), widget (QSpinBox, jpegQualitySpinner)
 #: app/generalconfigpage.ui:198
@@ -775,7 +775,7 @@ msgid ""
 msgstr ""
 "Уровень качества при сохранении в форматы, использующие алгоритмы сжатия с "
 "потерей качества, такие как JPEG, WEBP, AVIF, HEIF и HEIC. Более высокий "
-"уровень качества приводит увеличению размера файла."
+"уровень качества приводит к увеличению размера файла."
 
 #. i18n: ectx: property (text), widget (QLabel, label_5)
 #: app/generalconfigpage.ui:252
@@ -842,7 +842,7 @@ msgid ""
 "<emphasis strong='true'>Saving <filename>%1</filename> failed:</"
 "emphasis><nl />%2"
 msgstr ""
-"<emphasis strong='true'>Ошибка сохранения <filename>«%1»</filename>:</"
+"<emphasis strong='true'>Ошибка сохранения <filename>%1</filename>:</"
 "emphasis><nl />%2"
 
 #: app/gvcore.cpp:519
@@ -865,7 +865,7 @@ msgstr "&Оценка"
 #: app/gwenviewui.rc:87
 #, kde-format
 msgid "Settings"
-msgstr "Параметры"
+msgstr "Настройка"
 
 #. i18n: ectx: ToolBar (mainToolBar)
 #: app/gwenviewui.rc:93 part/gvpart.rc:16
@@ -968,7 +968,7 @@ msgstr "Операции с изображением"
 #: app/imageviewconfigpage.ui:17
 #, kde-format
 msgid "Show transparency with:"
-msgstr "Способ отображения прозрачности:"
+msgstr "Способ показа прозрачности:"
 
 #. i18n: ectx: property (text), widget (QRadioButton, surroundingRadioButton)
 #: app/imageviewconfigpage.ui:38
@@ -1098,7 +1098,7 @@ msgstr "Вертикально"
 #: app/imageviewconfigpage.ui:588
 #, kde-format
 msgid "Row count:"
-msgstr "Количество рядов:"
+msgstr "Количество строк:"
 
 #: app/infocontextmanageritem.cpp:150
 #, kde-format
@@ -1111,7 +1111,7 @@ msgstr "%1:"
 #, kde-format
 msgctxt "@action show more image meta info"
 msgid "Show more details..."
-msgstr "Показать дополнительные сведения..."
+msgstr "Показать дополнительные сведения…"
 
 #: app/infocontextmanageritem.cpp:241
 #, kde-format
@@ -1125,8 +1125,8 @@ msgctxt "@label"
 msgid "%1 file selected"
 msgid_plural "%1 files selected"
 msgstr[0] "Выбран %1 файл"
-msgstr[1] "Выбран %1 файла"
-msgstr[2] "Выбран %1 файлов"
+msgstr[1] "Выбрано %1 файла"
+msgstr[2] "Выбрано %1 файлов"
 msgstr[3] "Выбран %1 файл"
 
 #: app/infocontextmanageritem.cpp:332
@@ -1171,7 +1171,7 @@ msgstr "Gwenview"
 #: app/main.cpp:213
 #, kde-format
 msgid "An Image Viewer"
-msgstr "Программа просмотра изображений"
+msgstr "Приложение для просмотра изображений"
 
 #: app/main.cpp:223
 #, kde-format
@@ -1192,7 +1192,7 @@ msgstr "Запустить в детальном режиме."
 #: app/main.cpp:226
 #, kde-format
 msgid "A starting file or folders"
-msgstr "Начальный файл или адреса URL."
+msgstr "Начальный файл или папки."
 
 #: app/mainwindow.cpp:384
 #, kde-format
@@ -1338,7 +1338,7 @@ msgid ""
 "clipboard."
 msgstr ""
 "Ссылка на опубликованное изображение (<a href=\"%1\">%1</a>) скопирована в "
-"буфер обмена. "
+"буфер обмена."
 
 #: app/mainwindow.cpp:586
 #, kde-format
@@ -1504,7 +1504,7 @@ msgstr "Переименование"
 #, kde-format
 msgctxt "@info:progress saving all image changes"
 msgid "Saving..."
-msgstr "Сохранение..."
+msgstr "Сохранение…"
 
 #: app/saveallhelper.cpp:55
 #, kde-format
@@ -1558,7 +1558,7 @@ msgstr "Следующее изменённое изображение"
 msgid "One image modified"
 msgid_plural "%1 images modified"
 msgstr[0] "%1 изображение изменено"
-msgstr[1] "%1 изображения изменено"
+msgstr[1] "%1 изображения изменены"
 msgstr[2] "%1 изображений изменено"
 msgstr[3] "%1 изображение изменено"
 
@@ -1670,7 +1670,7 @@ msgstr "Убрать все папки"
 #, kde-format
 msgctxt "@action Recent Files view"
 msgid "Add Containing Folder to Places"
-msgstr "Добавить папку объекта в «Точки входа»"
+msgstr "Добавить папку файла в «Точки входа»"
 
 #: app/startmainpage.cpp:295
 #, kde-format
@@ -1688,7 +1688,7 @@ msgstr "Убрать все файлы"
 #: app/startmainpage.ui:49
 #, kde-format
 msgid "History has been disabled."
-msgstr "Журнал был отключён"
+msgstr "Журнал отключён."
 
 #. i18n: ectx: attribute (title), widget (QWidget, mRecentFoldersTab)
 #: app/startmainpage.ui:66
@@ -1750,13 +1750,13 @@ msgstr ""
 "заменено текущее просматриваемое изображение.</para><para>Выберите несколько "
 "изображений для их параллельного просмотра.</para><para>Панель может быть "
 "перемещена в правую часть экрана и содержать несколько рядов миниатюр; <link "
-"url='%1'>эти параметры устанавливаются в разделе настройки</link>.</para>"
+"url='%1'>эти параметры задаются в параметрах приложения</link>.</para>"
 
 #: app/viewmainpage.cpp:571
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
-msgstr "Режим выбора цвета фона:"
+msgstr "Режим выбора цвета фона"
 
 #: app/viewmainpage.cpp:763
 #, kde-format
@@ -1775,12 +1775,12 @@ msgstr ""
 #: importer/dialogpage.cpp:52
 #, kde-format
 msgid "Show failed files..."
-msgstr "Показать файлы с ошибками..."
+msgstr "Показать файлы с ошибками…"
 
 #: importer/dialogpage.cpp:57
 #, kde-format
 msgid "Show failed subfolders..."
-msgstr "Показать вложенные папки с ошибками..."
+msgstr "Показать вложенные папки с ошибками…"
 
 #: importer/dialogpage.cpp:71
 #, kde-format
@@ -1996,7 +1996,7 @@ msgstr "Автоматически переименовывать файлы"
 #: importer/importerconfigdialog.ui:39
 #, kde-format
 msgid "Rename Format:"
-msgstr "Переименовать формат:"
+msgstr "Формат имени:"
 
 #. i18n: ectx: property (text), widget (QLabel, label_2)
 #: importer/importerconfigdialog.ui:59
@@ -2009,12 +2009,12 @@ msgstr "Предварительный просмотр:"
 #, kde-format
 msgid "<i>Type text or click the items below to customize the format</i>"
 msgstr ""
-"<i>Введите текст или щёлкните под элементом, чтобы настроить формат</i>"
+"<i>Введите текст или щёлкните по элементам ниже, чтобы настроить формат</i>"
 
 #: importer/main.cpp:42
 #, kde-format
 msgid "Gwenview Importer"
-msgstr "Программа импорта в Gwenview"
+msgstr "Средство импорта Gwenview"
 
 #: importer/main.cpp:44
 #, kde-format
@@ -2058,13 +2058,13 @@ msgstr "Некорректная исходная папка."
 #: importer/progresspage.ui:30
 #, kde-format
 msgid "Importing documents..."
-msgstr "Импортирование файлов..."
+msgstr "Импортирование файлов…"
 
 #: importer/thumbnailpage.cpp:230
 #, kde-format
 msgctxt "@info above install button when Kamera is not installed"
 msgid "Support for your camera is not installed."
-msgstr "Не установлен модуль поддержки этой камеры "
+msgstr "Не установлен модуль поддержки этой камеры."
 
 #: importer/thumbnailpage.cpp:232
 #, kde-format
@@ -2084,7 +2084,7 @@ msgctxt "@info:usagetip above install button"
 msgid ""
 "After finishing the installation process, restart this Importer to continue."
 msgstr ""
-"По завершении процесса установки перезапустите эту программу импорта для "
+"По завершении процесса установки перезапустите это средство импорта для "
 "продолжения работы."
 
 #: importer/thumbnailpage.cpp:253
@@ -2092,13 +2092,13 @@ msgstr ""
 msgctxt "@info:tooltip for a button, %1 protocol name"
 msgid "Launch Discover to install the protocol support library for \"%1\""
 msgstr ""
-"Запустите Discover, чтобы установить библиотеку поддержки протокола для «%1»"
+"Запустить Discover, чтобы установить библиотеку поддержки протокола для «%1»"
 
 #: importer/thumbnailpage.cpp:255
 #, kde-format
 msgctxt "@action:button"
 msgid "Install Support for this Camera…"
-msgstr "Установить модель поддержки для этой камеры…"
+msgstr "Установить модуль поддержки для этой камеры…"
 
 #: importer/thumbnailpage.cpp:256
 #, kde-format
@@ -2195,7 +2195,7 @@ msgstr "Выберите импортируемые файлы"
 #: importer/thumbnailpage.ui:185
 #, kde-format
 msgid "Settings..."
-msgstr "Параметры..."
+msgstr "Настроить…"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: importer/thumbnailpage.ui:201
@@ -2425,7 +2425,7 @@ msgstr "Вместить"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Fit image into the viewing area"
-msgstr "&Вместить изображение в область просмотра"
+msgstr "Вместить изображение в область просмотра"
 
 #. i18n: "a previous zoom value" is worded in such an unclear way because it can either be the zoom value for the image viewed previously or the
 #. zoom value that was used the last time this same image was viewed. Being more clear about this isn't really necessary here so I kept it short
@@ -2448,17 +2448,16 @@ msgid ""
 "settings</link>.</para>"
 msgstr ""
 "<para>Вмещает изображение в доступную область просмотра:<list> "
-"<item>Изображения, которые больше области просмотра, отображаются в "
+"<item>Изображения, которые больше области просмотра, показываются в "
 "уменьшенном размере.</item> <item>Изображения, которые меньше области "
-"просмотра, отображаются в обычном размере. Если же такие изображения должны "
+"просмотра, показываются в обычном размере. Если же такие изображения должны "
 "занимать всю доступную область просмотра, включите параметр "
-"<emphasis>Увеличивать маленькие изображения</emphasis> <link url='%2'></"
-"link>.</item> </list></para> <para>Если активация «%1» уже выполнена, "
-"отключите эту опцию повторным нажатием; изображение будет отображаться в "
-"обычном размере.</para> <para>«%1» — стандартный режим масштабирования "
-"изображений. Если же при отображении изображений должно использоваться "
-"предыдущее значение масштаба, выполните соответствующую <link "
-"url='%2'>настройку</link>.</para>"
+"<emphasis>Увеличивать маленькие изображения</emphasis> <link url='%2'>в "
+"параметрах</link>.</item> </list></para> <para>Если режим «%1» уже включён, "
+"повторное нажатие отключит его, и изображение будет показано в обычном "
+"размере.</para> <para>«%1» — стандартный режим масштабирования изображений. "
+"Чтобы изображения показывались с предыдущим значением масштаба, измените это "
+"<link url='%2'>в параметрах</link>.</para>"
 
 #: lib/documentview/documentviewcontroller.cpp:84
 #, kde-format
@@ -2591,10 +2590,11 @@ msgstr ""
 "Определяет метод цветопередачи в случае, когда для экрана\n"
 "            выбран цветовой ICC-профиль, а изображение содержит цвета,\n"
 "            которые невозможно отобразить с цветовой гаммой профиля.\n"
-"            «Воспринимаемая» цветопередача масштабирует цвета всего \n"
+"            «Перцепционная» цветопередача масштабирует цвета всего \n"
 "            изображения таким образом, чтобы они соответствовали             "
 "возможностям экрана.\n"
-"            «Относительная колориметрическая» уберёт те цвета, которые\n"
+"            «Относительная колориметрическая» сожмёт только те цвета, "
+"которые\n"
 "            не могут быть отображены, и оставит без изменений все остальные."
 
 #. i18n: ectx: label, entry (random), group (slide show)
@@ -2619,7 +2619,7 @@ msgstr "Циклический переход по изображениям"
 #: lib/gwenviewconfig.kcfg:352
 #, kde-format
 msgid "Stop at last image of folder"
-msgstr "Остановить на последнем изображении в папке"
+msgstr "Останавливаться на последнем изображении в папке"
 
 #. i18n: ectx: label, entry (interval), group (slide show)
 #: lib/gwenviewconfig.kcfg:356
@@ -2665,7 +2665,7 @@ msgstr ""
 #: lib/historymodel.cpp:146
 #, kde-format
 msgid "Last visited: %1"
-msgstr "Последние посещённые: %1"
+msgstr "Последнее посещение: %1"
 
 #: lib/hud/hudwidget.cpp:104
 #, kde-format
@@ -2737,7 +2737,7 @@ msgstr "Основное"
 #, kde-format
 msgctxt "@item:intable %1 is number of millions of pixels in image"
 msgid "(%1MP)"
-msgstr "(%1MP)"
+msgstr "(%1 Мп)"
 
 #: lib/imagemetainfomodel.cpp:597
 #, kde-format
@@ -2802,14 +2802,14 @@ msgstr "&Вместить изображение на страницу"
 #: lib/print/printoptionspage.ui:123
 #, kde-format
 msgid "&Scale to:"
-msgstr "&Увеличивать до:"
+msgstr "&Масштабировать до:"
 
 #. i18n: ectx: property (text), widget (QLabel, textLabel2)
 #: lib/print/printoptionspage.ui:158
 #, kde-format
 msgctxt "Dimension separator, as in: '15 x 10 centimeters'"
 msgid "x"
-msgstr "x"
+msgstr "×"
 
 #. i18n: ectx: property (text), item, widget (QComboBox, kcfg_PrintUnit)
 #: lib/print/printoptionspage.ui:185
@@ -2857,9 +2857,9 @@ msgid ""
 "Assuming that the image format won't be changed and\n"
 "for lossy images using the value set in 'Lossy image save quality'."
 msgstr ""
-"Предполагая, что формат изображения не будет изменён, и\n"
-"для изображений с потерями используйте значение параметра «Качество для "
-"сохранения с потерей данных»."
+"При условии, что формат изображения не изменится;\n"
+"для форматов с потерями используется значение параметра «Качество сохранения "
+"с потерями»."
 
 #: lib/resize/resizeimagedialog.cpp:219
 #, kde-format
@@ -2943,13 +2943,13 @@ msgstr "Повторять бесконечно"
 #, kde-format
 msgctxt "@item:inmenu toggle random order in slideshow"
 msgid "Random"
-msgstr "Случайно"
+msgstr "В случайном порядке"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:616
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle selection"
-msgstr "Переключить выбранное"
+msgstr "Выбрать / снять выбор"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:621
 #, kde-format
@@ -3005,7 +3005,7 @@ msgctxt "(qtundo-format)"
 msgid "Transform"
 msgstr "преобразование"
 
-#: part/gvpart.cpp:69
+#: part/gvpart.cpp:71
 #, kde-format
 msgctxt "@action"
 msgid "Properties"
