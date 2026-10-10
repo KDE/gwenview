@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-05-15 00:42+0000\n"
-"PO-Revision-Date: 2026-10-05 12:49+0200\n"
+"PO-Revision-Date: 2026-10-09 16:00+0200\n"
 "Last-Translator: Nemanja Hiršl <nemhirsl@gmail.com>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
 "Language: sr@ijekavian\n"
@@ -2341,7 +2341,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
-msgstr "Не могу да отворим фајл %1."
+msgstr "Не могу да отворим фајл %1"
 
 #: lib/document/loadingdocumentimpl.cpp:494
 #, kde-format
