@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2026-10-05 00:43+0000\n"
-"PO-Revision-Date: 2026-09-23 08:08+0200\n"
+"PO-Revision-Date: 2026-10-13 14:47+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -416,7 +416,7 @@ msgstr "სახელის გადარქმევა..."
 #, kde-format
 msgctxt "Verb"
 msgid "Trash"
-msgstr "ნაგავი"
+msgstr "ნაგვის ყუთში გადატანა"
 
 #: app/fileopscontextmanageritem.cpp:168
 #, kde-format
@@ -2302,7 +2302,7 @@ msgstr ""
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
-msgstr "ნაგავი"
+msgstr "ნაგვის ყუთი"
 
 #: lib/documentview/documentview.cpp:213
 #, kde-format
