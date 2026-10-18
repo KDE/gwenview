@@ -31,6 +31,7 @@ private Q_SLOTS:
     void testAddUrl();
     void testGarbageCollect();
     void testRemoveRows();
+    void testRemoveMissingFolder();
 };
 
 #endif /* HISTORYMODELTEST_H */
