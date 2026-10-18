@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KJobWidgets>
 #include <KMountPoint>
 #include <KProtocolManager>
+#include <kio_version.h>
 
 // Local
 #include <archiveutils.h>
@@ -56,8 +57,12 @@ bool urlIsFastLocalFile(const QUrl &url)
 
     if (currentFolder != lastFolder) {
         lastFolder = currentFolder;
+#if KIO_VERSION >= QT_VERSION_CHECK(6, 30, 0)
+        lastMountPoint = KMountPoint::currentMountPointForPath(fileName);
+#else
         KMountPoint::List list = KMountPoint::currentMountPoints();
         lastMountPoint = list.findByPath(url.toLocalFile());
+#endif
     }
 
     if (!lastMountPoint) {
