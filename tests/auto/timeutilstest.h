@@ -31,6 +31,8 @@ private Q_SLOTS:
     void testBasic();
     void testBasic_data();
     void testCache();
+    void testOffsetFromUtc_data();
+    void testOffsetFromUtc();
 };
 
 #endif /* TIMEUTILSTEST_H */
