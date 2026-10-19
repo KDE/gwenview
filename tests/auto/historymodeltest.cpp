@@ -116,4 +116,29 @@ void HistoryModelTest::testRemoveRows()
     QCOMPARE(qDir.entryList(QDir::Files | QDir::NoDotAndDotDot).count(), 1);
 }
 
+void HistoryModelTest::testRemoveMissingFolder()
+{
+    QTemporaryDir storageDir;
+    QTemporaryDir folders;
+    const QString keptPath = folders.path() + QStringLiteral("/kept");
+    const QString removedPath = folders.path() + QStringLiteral("/removed");
+    QVERIFY(QDir().mkpath(keptPath));
+    QVERIFY(QDir().mkpath(removedPath));
+    const QUrl kept = QUrl::fromLocalFile(keptPath + QLatin1Char('/'));
+    const QUrl removed = QUrl::fromLocalFile(removedPath + QLatin1Char('/'));
+    {
+        HistoryModel model(nullptr, storageDir.path());
+        model.addUrl(kept, QDateTime::fromString("2008-02-03T12:34:56", Qt::ISODate));
+        model.addUrl(removed, QDateTime::fromString("2009-01-29T23:01:47", Qt::ISODate));
+    }
+    QVERIFY(QDir(removedPath).removeRecursively());
+
+    // The entry of the removed folder is shown until the background check finds it missing.
+    HistoryModel model(nullptr, storageDir.path());
+    QCOMPARE(model.rowCount(), 2);
+    QTRY_COMPARE(model.rowCount(), 1);
+    QCOMPARE(model.data(model.index(0, 0), KFilePlacesModel::UrlRole).toUrl(), kept);
+    QCOMPARE(QDir(storageDir.path()).entryList(QDir::Files | QDir::NoDotAndDotDot).count(), 1);
+}
+
 #include "moc_historymodeltest.cpp"

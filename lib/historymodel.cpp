@@ -24,10 +24,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QDir>
 #include <QFile>
+#include <QFileInfo>
+#include <QFutureWatcher>
 #include <QMimeDatabase>
 #include <QRegularExpression>
+#include <QSet>
 #include <QTemporaryFile>
 #include <QUrl>
+#include <QtConcurrentRun>
 
 // KF
 #include <KConfig>
@@ -37,10 +41,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <KFilePlacesModel>
 #include <KFormat>
 #include <KLocalizedString>
+#include <KMountPoint>
+#include <kio_version.h>
 
 // Local
 #include "gwenview_lib_debug.h"
-#include <lib/urlutils.h>
 
 namespace Gwenview
 {
@@ -133,8 +138,10 @@ private:
 #endif
         setText(text);
 
+        // History entries are folders, so a local url gets the folder mime type without a stat.
         QMimeDatabase db;
-        const QString iconName = db.mimeTypeForUrl(mUrl).iconName();
+        const QMimeType mimeType = mUrl.isLocalFile() ? db.mimeTypeForName(QStringLiteral("inode/directory")) : db.mimeTypeForUrl(mUrl);
+        const QString iconName = mimeType.iconName();
         setIcon(QIcon::fromTheme(iconName));
 
         setData(mUrl, KFilePlacesModel::UrlRole);
@@ -152,12 +159,36 @@ private:
     }
 };
 
+// Returns the local folders of urls that no longer exist. A folder on a slow mount is never
+// returned, because its stat can fail while the server does not answer.
+static QList<QUrl> missingLocalFolders(const QList<QUrl> &urls)
+{
+    QList<QUrl> missing;
+    for (const QUrl &url : urls) {
+        const QString path = url.toLocalFile();
+#if KIO_VERSION >= QT_VERSION_CHECK(6, 30, 0)
+        const KMountPoint::Ptr mountPoint = KMountPoint::currentMountPointForPath(path);
+#else
+        const KMountPoint::Ptr mountPoint = KMountPoint::currentMountPoints().findByPath(path);
+#endif
+        if (mountPoint && mountPoint->probablySlow()) {
+            continue;
+        }
+        if (!QFileInfo::exists(path)) {
+            missing << url;
+        }
+    }
+    return missing;
+}
+
 struct HistoryModelPrivate {
     HistoryModel *q = nullptr;
     QString mStorageDir;
     int mMaxCount;
 
     QMap<QUrl, HistoryItem *> mHistoryItemForUrl;
+    // Local folders waiting for the existence check started by load().
+    QSet<QUrl> mUrlsToCheck;
 
     void load()
     {
@@ -172,16 +203,6 @@ struct HistoryModelPrivate {
                 continue;
             }
 
-            const QUrl itemUrl = item->url();
-            if (UrlUtils::urlIsFastLocalFile(itemUrl)) {
-                if (!QFile::exists(itemUrl.path())) {
-                    qCDebug(GWENVIEW_LIB_LOG) << "Removing" << itemUrl.path() << "from recent folders. It does not exist anymore";
-                    item->unlink();
-                    delete item;
-                    continue;
-                }
-            }
-
             HistoryItem *existingItem = mHistoryItemForUrl.value(item->url());
             if (existingItem) {
                 // We already know this url(!) update existing item dateTime
@@ -194,9 +215,40 @@ struct HistoryModelPrivate {
             } else {
                 mHistoryItemForUrl.insert(item->url(), item);
                 q->appendRow(item);
+                if (item->url().isLocalFile()) {
+                    mUrlsToCheck.insert(item->url());
+                }
             }
         }
         q->sort(0);
+        removeMissingFolders();
+    }
+
+    // A stat of a folder on a slow filesystem can take seconds, so the check runs in a thread.
+    void removeMissingFolders()
+    {
+        if (mUrlsToCheck.isEmpty()) {
+            return;
+        }
+        auto watcher = new QFutureWatcher<QList<QUrl>>(q);
+        QObject::connect(watcher, &QFutureWatcher<QList<QUrl>>::finished, q, [this, watcher]() {
+            const QList<QUrl> missing = watcher->result();
+            watcher->deleteLater();
+            for (const QUrl &url : missing) {
+                // A folder visited since the check started exists again.
+                if (!mUrlsToCheck.contains(url)) {
+                    continue;
+                }
+                HistoryItem *item = mHistoryItemForUrl.value(url);
+                if (!item) {
+                    continue;
+                }
+                qCDebug(GWENVIEW_LIB_LOG) << "Removing" << url.toLocalFile() << "from recent folders. It does not exist anymore";
+                q->removeRow(item->row());
+            }
+            mUrlsToCheck.clear();
+        });
+        watcher->setFuture(QtConcurrent::run(missingLocalFolders, mUrlsToCheck.values()));
     }
 
     void garbageCollect()
@@ -228,6 +280,7 @@ HistoryModel::~HistoryModel()
 void HistoryModel::addUrl(const QUrl &url, const QDateTime &_dateTime)
 {
     const QDateTime dateTime = _dateTime.isValid() ? _dateTime : QDateTime::currentDateTime();
+    d->mUrlsToCheck.remove(url);
     HistoryItem *historyItem = d->mHistoryItemForUrl.value(url);
     if (historyItem) {
         historyItem->setDateTime(dateTime);
