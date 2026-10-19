@@ -23,9 +23,12 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // STL
 #include <memory>
+#include <sstream>
+#include <vector>
 
 // Qt
 #include <QDateTime>
+#include <QTimeZone>
 
 // KF
 #include <KFileItem>
@@ -42,20 +45,35 @@ namespace Gwenview
 {
 namespace TimeUtils
 {
-static Exiv2::ExifData::const_iterator findDateTimeKey(const Exiv2::ExifData &exifData)
-{
-    // Ordered list of keys to try
-    static QList<Exiv2::ExifKey> lst = QList<Exiv2::ExifKey>() << Exiv2::ExifKey("Exif.Photo.DateTimeOriginal") << Exiv2::ExifKey("Exif.Image.DateTimeOriginal")
-                                                               << Exiv2::ExifKey("Exif.Photo.DateTimeDigitized") << Exiv2::ExifKey("Exif.Image.DateTime");
+// The date found in the exif data, and the key of the offset from UTC that goes with that date
+struct DateTimeEntry {
+    Exiv2::ExifData::const_iterator dateTime;
+    Exiv2::ExifKey offset;
+};
 
-    Exiv2::ExifData::const_iterator it, end = exifData.end();
-    for (const Exiv2::ExifKey &key : qAsConst(lst)) {
-        it = exifData.findKey(key);
-        if (it != end) {
-            return it;
+static DateTimeEntry findDateTimeKey(const Exiv2::ExifData &exifData)
+{
+    // Ordered list of keys to try, each with its offset key
+    static const std::vector<std::pair<Exiv2::ExifKey, Exiv2::ExifKey>> keys = {
+        {Exiv2::ExifKey("Exif.Photo.DateTimeOriginal"), Exiv2::ExifKey("Exif.Photo.OffsetTimeOriginal")},
+        {Exiv2::ExifKey("Exif.Image.DateTimeOriginal"), Exiv2::ExifKey("Exif.Photo.OffsetTimeOriginal")},
+        {Exiv2::ExifKey("Exif.Photo.DateTimeDigitized"), Exiv2::ExifKey("Exif.Photo.OffsetTimeDigitized")},
+        {Exiv2::ExifKey("Exif.Image.DateTime"), Exiv2::ExifKey("Exif.Photo.OffsetTime")},
+    };
+
+    for (const auto &[dateTimeKey, offsetKey] : keys) {
+        if (auto it = exifData.findKey(dateTimeKey); it != exifData.end()) {
+            return {it, offsetKey};
         }
     }
-    return end;
+    return {exifData.end(), keys.front().second};
+}
+
+static QString exifValue(const Exiv2::Exifdatum &datum)
+{
+    std::ostringstream stream;
+    stream << datum;
+    return QString::fromLocal8Bit(stream.str().c_str());
 }
 
 struct CacheItem {
@@ -93,20 +111,28 @@ struct CacheItem {
             if (exifData.empty()) {
                 return false;
             }
-            auto it = findDateTimeKey(exifData);
-            if (it == exifData.end()) {
+            const DateTimeEntry entry = findDateTimeKey(exifData);
+            if (entry.dateTime == exifData.end()) {
                 qCWarning(GWENVIEW_LIB_LOG) << "No date in exif header of" << path;
                 return false;
             }
 
-            std::ostringstream stream;
-            stream << *it;
-            const QString value = QString::fromLocal8Bit(stream.str().c_str());
-
-            const QDateTime dt = QDateTime::fromString(value, QStringLiteral("yyyy:MM:dd hh:mm:ss"));
+            QDateTime dt = QDateTime::fromString(exifValue(*entry.dateTime), QStringLiteral("yyyy:MM:dd hh:mm:ss"));
             if (!dt.isValid()) {
                 qCWarning(GWENVIEW_LIB_LOG) << "Invalid date in exif header of" << path;
                 return false;
+            }
+
+            // The date is the time of the clock of the camera. With its offset from UTC, for example
+            // "+02:00", it is a point in time that compares with the time of a file. Without it, the
+            // date is read in the time zone of this computer.
+            if (auto it = exifData.findKey(entry.offset); it != exifData.end()) {
+                const QDateTime offset = QDateTime::fromString(exifValue(*it).trimmed(), QStringLiteral("ttt"));
+                if (offset.isValid()) {
+                    dt.setTimeZone(offset.timeZone());
+                } else {
+                    qCWarning(GWENVIEW_LIB_LOG) << "Invalid offset from UTC in exif header of" << path;
+                }
             }
 
             realTime = dt;

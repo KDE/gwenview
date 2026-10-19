@@ -12,6 +12,7 @@ endmacro(gv_add_unit_test)
 kde_source_files_enable_exceptions(
     documenttest.cpp
     imagemetainfomodeltest.cpp
+    timeutilstest.cpp
 )
 
 include_directories(

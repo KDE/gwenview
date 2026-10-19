@@ -24,8 +24,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #include <utime.h>
 
 // Qt
+#include <QTemporaryDir>
 #include <QTemporaryFile>
 #include <QTest>
+#include <QTimeZone>
+
+// Exiv2
+#include <exiv2/exiv2.hpp>
 
 // KF
 #include <KFileItem>
@@ -91,6 +96,42 @@ void TimeUtilsTest::testCache()
     QVERIFY(dateTime1 != dateTime2);
 
     QCOMPARE(dateTime2, item2.time(KFileItem::ModificationTime));
+}
+
+void TimeUtilsTest::testOffsetFromUtc_data()
+{
+    QTest::addColumn<QString>("offset");
+    QTest::addColumn<QDateTime>("expectedDateTime");
+
+    const QDate date(2003, 3, 10);
+    const QTime time(17, 45, 21);
+    QTest::newRow("ahead of UTC") << QStringLiteral("+05:00") << QDateTime(date, time, QTimeZone(5 * 3600));
+    QTest::newRow("behind UTC") << QStringLiteral("-03:30") << QDateTime(date, time, QTimeZone(-(3 * 3600 + 30 * 60)));
+    QTest::newRow("unreadable") << QStringLiteral("soon") << QDateTime(date, time);
+}
+
+void TimeUtilsTest::testOffsetFromUtc()
+{
+    // The date of a photo with an offset from UTC is the time of the camera clock in that offset,
+    // so it compares with the time of a file whatever the time zone of this computer.
+    QFETCH(QString, offset);
+    QFETCH(QDateTime, expectedDateTime);
+
+    QTemporaryDir dir;
+    QVERIFY(dir.isValid());
+    const QString path = dir.filePath(QStringLiteral("offset.jpg"));
+    QVERIFY(QFile::copy(urlForTestFile(QStringLiteral("date/exif-datetimeoriginal.jpg")).toLocalFile(), path));
+    QVERIFY(QFile::setPermissions(path, QFile::ReadOwner | QFile::WriteOwner));
+    {
+        auto image = Exiv2::ImageFactory::open(QFile::encodeName(path).toStdString());
+        image->readMetadata();
+        image->exifData()["Exif.Photo.OffsetTimeOriginal"] = offset.toStdString();
+        image->writeMetadata();
+    }
+
+    const QDateTime dateTime = TimeUtils::dateTimeForFileItem(KFileItem(QUrl::fromLocalFile(path)), TimeUtils::SkipCache);
+    QCOMPARE(dateTime, expectedDateTime);
+    QCOMPARE(dateTime.offsetFromUtc(), expectedDateTime.offsetFromUtc());
 }
 
 #include "moc_timeutilstest.cpp"
