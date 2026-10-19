@@ -27,6 +27,7 @@ Gwenview: an image viewer
 
 // STL
 #include <cmath>
+#include <limits>
 
 FITSData::FITSData()
 {
@@ -142,7 +143,7 @@ bool FITSData::loadFITS(QIODevice &buffer)
 
     stats.width = naxes[0];
     stats.height = naxes[1];
-    stats.samples_per_channel = stats.width * stats.height;
+    stats.samples_per_channel = static_cast<uint32_t>(stats.width) * stats.height;
 
     clearImageBuffers();
 
@@ -156,9 +157,16 @@ bool FITSData::loadFITS(QIODevice &buffer)
         return false;
     }
 
-    imageBuffer = new uint8_t[stats.samples_per_channel * channels * stats.bytesPerPixel];
+    const uint64_t imageBufferSize = static_cast<uint64_t>(stats.samples_per_channel) * channels * stats.bytesPerPixel;
+    if (imageBufferSize > std::numeric_limits<uint32_t>::max()) {
+        errMessage = QStringLiteral("Image dimensions are too large. If get this error with a a valid image, please report a bug.");
+        buffer.seek(oldPos);
+        return false;
+    }
 
-    long nelements = stats.samples_per_channel * channels;
+    imageBuffer = new uint8_t[static_cast<size_t>(imageBufferSize)];
+
+    const long long nelements = static_cast<long long>(stats.samples_per_channel) * channels;
 
     if (fits_read_img(fptr, data_type, 1, nelements, nullptr, imageBuffer, &anynull, &status)) {
         char errmsg[512];
