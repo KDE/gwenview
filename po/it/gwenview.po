@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-05-15 00:42+0000\n"
+"POT-Creation-Date: 2026-10-20 03:12+0000\n"
 "PO-Revision-Date: 2026-05-15 15:46+0200\n"
 "Last-Translator: Luigi Toscano <luigi.toscano@tiscali.it>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -2592,7 +2592,7 @@ msgstr ""
 "Ultima altezza usata delle proporzioni di ritaglio quando le impostazioni "
 "avanzate sono abilitate"
 
-#: lib/historymodel.cpp:146
+#: lib/historymodel.cpp:153
 #, kde-format
 msgid "Last visited: %1"
 msgstr "Ultima visita: %1"
