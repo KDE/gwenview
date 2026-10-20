@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-05 00:43+0000\n"
+"POT-Creation-Date: 2026-10-20 00:50+0000\n"
 "PO-Revision-Date: 2026-09-23 17:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -2644,7 +2644,7 @@ msgstr ""
 "الاحتفاظ بوضع ظهور خطوط الشبكة عند آخر استخدام عندما تكون الإعدادات المتقدمة "
 "مفعَّلة"
 
-#: lib/historymodel.cpp:146
+#: lib/historymodel.cpp:153
 #, kde-format
 msgid "Last visited: %1"
 msgstr "أخر زيارة: %1"

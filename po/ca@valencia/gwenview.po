@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-05 00:43+0000\n"
+"POT-Creation-Date: 2026-10-20 00:50+0000\n"
 "PO-Revision-Date: 2026-09-23 13:04+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -2605,7 +2605,7 @@ msgstr ""
 "Última visibilitat utilitzada de les línies de quadrícula quan la "
 "configuració avançada estava activa"
 
-#: lib/historymodel.cpp:146
+#: lib/historymodel.cpp:153
 #, kde-format
 msgid "Last visited: %1"
 msgstr "Última visita: %1"

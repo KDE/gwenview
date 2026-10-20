@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-05 00:43+0000\n"
+"POT-Creation-Date: 2026-10-20 00:50+0000\n"
 "PO-Revision-Date: 2014-10-28 15:32+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -2628,7 +2628,7 @@ msgstr ""
 msgid "Last used gridlines visibility when Advanced Settings enabled"
 msgstr ""
 
-#: lib/historymodel.cpp:146
+#: lib/historymodel.cpp:153
 #, kde-format
 msgid "Last visited: %1"
 msgstr "शेवटी भेट दिलेली : %1"

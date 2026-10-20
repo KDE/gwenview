@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-05 00:43+0000\n"
+"POT-Creation-Date: 2026-10-20 00:50+0000\n"
 "PO-Revision-Date: 2024-12-25 19:45+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -2568,7 +2568,7 @@ msgstr "अन्तिमप्रयुक्तं सस्यानुप�
 msgid "Last used gridlines visibility when Advanced Settings enabled"
 msgstr "अन्तिमप्रयुक्तं सस्यानुपातविस्तारः यदा उन्नतसेटिंग्स् सक्षमः अभवत्"
 
-#: lib/historymodel.cpp:146
+#: lib/historymodel.cpp:153
 #, kde-format
 msgid "Last visited: %1"
 msgstr "अन्तिमवारं भ्रमणं कृतम्: %1"

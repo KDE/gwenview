@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdegraphics/gwenview.po\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-05 00:43+0000\n"
+"POT-Creation-Date: 2026-10-20 00:50+0000\n"
 "PO-Revision-Date: 2007-09-30 16:51-0500\n"
 "Last-Translator: Kevin Scannell <kscanne@gmail.com>\n"
 "Language-Team: Irish <gaeilge-gnulinux@lists.sourceforge.net>\n"
@@ -2528,7 +2528,7 @@ msgstr ""
 msgid "Last used gridlines visibility when Advanced Settings enabled"
 msgstr ""
 
-#: lib/historymodel.cpp:146
+#: lib/historymodel.cpp:153
 #, kde-format
 msgid "Last visited: %1"
 msgstr ""

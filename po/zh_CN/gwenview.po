@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-10-05 00:43+0000\n"
+"POT-Creation-Date: 2026-10-20 00:50+0000\n"
 "PO-Revision-Date: 2024-04-22 15:59\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -2507,7 +2507,7 @@ msgstr "高级控制选项启用时，上次使用的裁剪宽高比高度"
 msgid "Last used gridlines visibility when Advanced Settings enabled"
 msgstr "高级控制选项启用时，上次使用的网格线显示/隐藏状态"
 
-#: lib/historymodel.cpp:146
+#: lib/historymodel.cpp:153
 #, kde-format
 msgid "Last visited: %1"
 msgstr "上次访问：%1"
