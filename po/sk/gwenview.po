@@ -2167,10 +2167,9 @@ msgid "Listing content of:"
 msgstr "Vypisujem obsah:"
 
 #: lib/about.cpp:38
-#, fuzzy, kde-format
-#| msgid "Copyright 2000-2022 Gwenview authors"
+#, kde-format
 msgid "Copyright 2000–%1 Gwenview authors"
-msgstr "Copyright 2000-2022 Autori Gwenview"
+msgstr "Copyright 2000–%1 Autori Gwenview"
 
 #: lib/about.cpp:40
 #, kde-format
