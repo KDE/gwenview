@@ -23,6 +23,7 @@ Gwenview: an image viewer
 #include "fitsdata.h"
 
 // Qt
+#include <QDebug>
 #include <QImage>
 
 // STL
@@ -462,9 +463,6 @@ bool FITSData::debayer_8bit()
 {
     dc1394error_t error_code;
 
-    int rgb_size = stats.samples_per_channel * 3 * stats.bytesPerPixel;
-    uint8_t *destinationBuffer = new uint8_t[rgb_size];
-
     int ds1394_height = stats.height;
     uint8_t *dc1394_source = bayerBuffer;
 
@@ -476,6 +474,14 @@ bool FITSData::debayer_8bit()
     if (debayerParams.offsetX == 1) {
         dc1394_source++;
     }
+
+    if (ds1394_height <= 0) {
+        qWarning() << "FITS debayer 8-bit: invalid decoder dimensions" << stats.width << 'x' << ds1394_height;
+        return false;
+    }
+
+    const int rgb_size = stats.samples_per_channel * 3 * stats.bytesPerPixel;
+    uint8_t *destinationBuffer = new uint8_t[rgb_size];
 
     error_code = dc1394_bayer_decoding_8bit(dc1394_source, destinationBuffer, stats.width, ds1394_height, debayerParams.filter, debayerParams.method);
 
@@ -513,12 +519,7 @@ bool FITSData::debayer_16bit()
 {
     dc1394error_t error_code;
 
-    int rgb_size = stats.samples_per_channel * 3 * stats.bytesPerPixel;
-    uint8_t *destinationBuffer = new uint8_t[rgb_size];
-
     uint16_t *buffer = reinterpret_cast<uint16_t *>(bayerBuffer);
-    uint16_t *dstBuffer = reinterpret_cast<uint16_t *>(destinationBuffer);
-
     int ds1394_height = stats.height;
     uint16_t *dc1394_source = buffer;
 
@@ -530,6 +531,15 @@ bool FITSData::debayer_16bit()
     if (debayerParams.offsetX == 1) {
         dc1394_source++;
     }
+
+    if (ds1394_height <= 0) {
+        qWarning() << "FITS debayer 16-bit: invalid decoder dimensions" << stats.width << 'x' << ds1394_height;
+        return false;
+    }
+
+    const int rgb_size = stats.samples_per_channel * 3 * stats.bytesPerPixel;
+    uint8_t *destinationBuffer = new uint8_t[rgb_size];
+    uint16_t *dstBuffer = reinterpret_cast<uint16_t *>(destinationBuffer);
 
     error_code = dc1394_bayer_decoding_16bit(dc1394_source, dstBuffer, stats.width, ds1394_height, debayerParams.filter, debayerParams.method, 16);
 
