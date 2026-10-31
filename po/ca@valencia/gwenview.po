@@ -2333,7 +2333,7 @@ msgstr "%1x%2"
 #, kde-format
 msgctxt "Percent value"
 msgid "%1%"
-msgstr "%1%"
+msgstr "%1 %"
 
 #: lib/documentview/documentview.cpp:544
 #, kde-format
@@ -2412,7 +2412,7 @@ msgstr "Òmpliga"
 #, kde-format
 msgctxt "Original image size percent value"
 msgid "100%"
-msgstr "100%"
+msgstr "100 %"
 
 #: lib/documentview/documentviewcontroller.cpp:99
 #, kde-format
