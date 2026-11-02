@@ -25,6 +25,8 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 #include <memory>
 
 // Qt
+#include <QColorSpace>
+#include <QImage>
 #include <QPainter>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
@@ -41,6 +43,26 @@ namespace Gwenview
 {
 struct PrintHelperPrivate {
     QWidget *mParent = nullptr;
+    QImage mPrintableImage;
+
+    /**
+     * Document images hold the pixels as stored in the file; the print engine
+     * emits untagged DeviceRGB, so convert to sRGB. Cached because print
+     * preview re-enters print() on every layout change.
+     */
+    QImage printableImage(const Document::Ptr &doc)
+    {
+        if (mPrintableImage.isNull()) {
+            mPrintableImage = doc->image();
+            if (mPrintableImage.colorSpace().isValid() && mPrintableImage.colorSpace() != QColorSpace::SRgb) {
+                const QImage converted = mPrintableImage.convertedToColorSpace(QColorSpace::SRgb);
+                if (!converted.isNull()) {
+                    mPrintableImage = converted;
+                }
+            }
+        }
+        return mPrintableImage;
+    }
 
     QSize adjustSize(PrintOptionsPage *optionsPage, Document::Ptr doc, int printerResolution, const QSize &viewportSize)
     {
@@ -138,7 +160,7 @@ struct PrintHelperPrivate {
             delete optionsPage;
         }
 
-        const QImage image = doc->image();
+        const QImage image = printableImage(doc);
         painter.setWindow(image.rect());
         painter.drawImage(0, 0, image);
     }
