@@ -52,6 +52,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 // Local
 #include "animateddocumentloadedimpl.h"
+#include "cms/cmsformats.h"
 #include "cms/cmsprofile.h"
 #include "document.h"
 #include "documentloadedimpl.h"
@@ -325,16 +326,16 @@ struct LoadingDocumentImplPrivate {
             LOG("QImageReader::read() failed");
             return;
         }
-        // Color space conversion logic
-        if (!mImage.isNull() && mImage.colorSpace().isValid()) {
-            // Convert to sRGB if not already sRGB
-            if (mImage.colorSpace() != QColorSpace::SRgb) {
-                LOG("Converting color space from" << mImage.colorSpace().description() << "to sRGB");
-                QImage convertedImage = mImage.convertedToColorSpace(QColorSpace::SRgb);
-                if (!convertedImage.isNull()) {
-                    mImage = std::move(convertedImage);
-                    LOG("Color space conversion completed");
-                }
+        // RasterImageItem applies cmsProfile() when painting, so converting
+        // here as well would apply the embedded profile twice.
+        if (!mImage.isNull() && mImage.colorSpace().isValid() && mImage.colorSpace() != QColorSpace::SRgb
+            && Cms::transformableFormat(mImage) == QImage::Format_Invalid) {
+            LOG("Converting color space from" << mImage.colorSpace().description() << "to sRGB");
+            QImage convertedImage = mImage.convertedToColorSpace(QColorSpace::SRgb);
+            if (!convertedImage.isNull()) {
+                mImage = std::move(convertedImage);
+                mCmsProfile = Cms::Profile::getSRgbProfile();
+                LOG("Color space conversion completed");
             }
         }
         if (reader.supportsAnimation() && reader.nextImageDelay() > 0 // Assume delay == 0 <=> only one frame
@@ -523,6 +524,9 @@ void LoadingDocumentImpl::slotImageLoaded()
         switchToImpl(new EmptyDocumentImpl(document()));
         return;
     }
+
+    // loadImageData() may have replaced the profile along with the pixels.
+    setDocumentCmsProfile(d->mCmsProfile);
 
     if (d->mAnimated) {
         if (d->mImage.size() == d->mImageSize) {

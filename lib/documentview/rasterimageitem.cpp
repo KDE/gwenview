@@ -27,6 +27,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 #include <QPainter>
 
 #include "gvdebug.h"
+#include "lib/cms/cmsformats.h"
 #include "lib/cms/cmsprofile.h"
 #include "rasterimageview.h"
 
@@ -116,26 +117,7 @@ void RasterImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * 
         image = mSixthScaledImage.copy(sourceRect);
     }
 
-    const bool isIndexedColor = image.colorCount() > 0;
-
-    QImage::Format outputImageFormat = image.format();
-    if (isIndexedColor) {
-        outputImageFormat = image.hasAlphaChannel() ? QImage::Format_ARGB32 : QImage::Format_RGB32;
-    } else {
-        switch (outputImageFormat) {
-        case QImage::Format_ARGB32_Premultiplied:
-            outputImageFormat = QImage::Format_ARGB32;
-            break;
-        case QImage::Format_RGBA8888_Premultiplied:
-            outputImageFormat = QImage::Format_RGBA8888;
-            break;
-        case QImage::Format_RGBA64_Premultiplied:
-            outputImageFormat = QImage::Format_RGBA64;
-            break;
-        // TODO convert formats not supported by LittleCMS?
-        default:;
-        }
-    }
+    const QImage::Format outputImageFormat = Cms::transformableFormat(image);
 
     // We want nearest neighbour at high zoom since that provides the most
     // accurate representation of pixels, but at low zoom or when zooming out it
@@ -148,12 +130,15 @@ void RasterImageItem::paint(QPainter *painter, const QStyleOptionGraphicsItem * 
 
     // We may load an image in indexed color or premultiplied alpha, or scaling may produce premultiplied alpha.
     // These are not supported by the color correction engine, so convert to a standard format.
-    if (image.format() != outputImageFormat) {
-        image.convertTo(outputImageFormat);
-    }
+    // Skip formats it cannot handle: updateDisplayTransform() would reject them and stay disabled for later images.
+    if (outputImageFormat != QImage::Format_Invalid) {
+        if (image.format() != outputImageFormat) {
+            image.convertTo(outputImageFormat);
+        }
 
-    // Perform color correction on the visible image.
-    applyDisplayTransform(image);
+        // Perform color correction on the visible image.
+        applyDisplayTransform(image);
+    }
 
     const auto destinationRect = QRectF{QPointF{std::ceil(imageRect.left() * (zoom / dpr)), std::ceil(imageRect.top() * (zoom / dpr))},
                                         QSizeF{image.size().width() / dpr, image.size().height() / dpr}};
@@ -201,33 +186,8 @@ void RasterImageItem::updateDisplayTransform(QImage::Format format)
         return;
     }
 
-    cmsUInt32Number cmsFormat = 0;
-    switch (format) {
-    case QImage::Format_RGB32:
-    case QImage::Format_ARGB32:
-        cmsFormat = TYPE_BGRA_8;
-        break;
-    case QImage::Format_Grayscale8:
-        cmsFormat = TYPE_GRAY_8;
-        break;
-    case QImage::Format_RGB888:
-        cmsFormat = TYPE_RGB_8;
-        break;
-    case QImage::Format_RGBX8888:
-    case QImage::Format_RGBA8888:
-        cmsFormat = TYPE_RGBA_8;
-        break;
-    case QImage::Format_Grayscale16:
-        cmsFormat = TYPE_GRAY_16;
-        break;
-    case QImage::Format_RGBA64:
-    case QImage::Format_RGBX64:
-        cmsFormat = TYPE_RGBA_16;
-        break;
-    case QImage::Format_BGR888:
-        cmsFormat = TYPE_BGR_8;
-        break;
-    default:
+    const cmsUInt32Number cmsFormat = Cms::pixelFormat(format);
+    if (cmsFormat == 0) {
         qCWarning(GWENVIEW_LIB_LOG) << "Gwenview cannot apply color profile on" << format << "images";
         return;
     }

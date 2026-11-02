@@ -150,6 +150,11 @@ void DocumentTest::testLoad_data()
     testLoad_newRow("png-with-jpeg-extension.jpg", "png");
     testLoad_newRow("jpg-with-gif-extension.gif", "jpeg");
 
+    // An embedded color profile must not change the pixels we load.
+    testLoad_newRow("cms/Lower_Left.jpg", "jpeg");
+    testLoad_newRow("cms/Lower_Right.jpg", "jpeg");
+    testLoad_newRow("cms/colourTestFakeBRG.png", "png");
+
     // RAW preview
     testLoad_newRow("CANON-EOS350D-02.CR2", "cr2", MimeTypeUtils::KIND_RASTER_IMAGE, false);
     testLoad_newRow("dsc_0093.nef", "nef", MimeTypeUtils::KIND_RASTER_IMAGE, false);

@@ -46,6 +46,7 @@ set(gwenviewlib_SRCS
     bcg/bcgwidget.cpp
     bcg/imageutils.cpp
     cms/iccjpeg.c
+    cms/cmsformats.cpp
     cms/cmsprofile.cpp
     cms/cmsprofile_png.cpp
     contextmanager.cpp
