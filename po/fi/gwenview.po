@@ -1418,8 +1418,7 @@ msgstr "Jos lopetat nyt, menetät muutokset."
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
-"Tämä piilottaa valikkorivin näkyvistä. Sen saa uudellen näkyviin näppäimellä "
-"%1.Tämä piilottaa valikkorivin näkyvistä. Sen saa uudellen näkyviin "
+"Tämä piilottaa valikkorivin näkyvistä. Sen saa uudelleen näkyviin "
 "näppäimellä %1."
 
 #: app/mainwindow.cpp:1917
