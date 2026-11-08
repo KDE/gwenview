@@ -2878,7 +2878,7 @@ msgstr "Vilkårleg"
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Toggle selection"
-msgstr "Slå utvalet av/på"
+msgstr "Slå utvalet på/av"
 
 #: lib/thumbnailview/previewitemdelegate.cpp:621
 #, kde-format
