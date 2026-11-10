@@ -196,13 +196,13 @@
             "sources": [
                 {
                     "type": "archive",
-                    "url": "https://git.openldap.org/openldap/openldap/-/archive/LMDB_1.0.1/openldap-LMDB_1.0.1.tar.bz2",
-                    "sha256": "1ae17f11ebdeb0d69e53416bb6e0a7479a7d3d5b5ca443a474bff5b5f886a348",
+                    "url": "https://ftp2.osuosl.org/pub/blfs/conglomeration/LMDB/openldap-LMDB_1.0.3.tar.bz2",
+                    "sha256": "015f482ba647e926fbddc9cea49ed59281229c12896cd18675484c36712b98bd",
                     "x-checker-data": {
                         "type": "anitya",
                         "project-id": 6974,
                         "stable-only": true,
-                        "url-template": "https://git.openldap.org/openldap/openldap/-/archive/LMDB_$version/openldap-LMDB_$version.tar.bz2"
+                        "url-template": "https://ftp2.osuosl.org/pub/blfs/conglomeration/LMDB/openldap-LMDB_$version.tar.bz2"
                     }
                 }
             ]
