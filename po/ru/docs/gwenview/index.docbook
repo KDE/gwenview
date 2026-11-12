@@ -397,19 +397,19 @@
 >, <guibutton
 >Заполнить</guibutton
 > и <guibutton
->100%</guibutton
+>100 %</guibutton
 >. Кнопка <guibutton
 >Вместить</guibutton
 > регулирует размер изображения так, чтобы оно совпадало с размером окна; кнопка <guibutton
 >Заполнить</guibutton
 > регулирует размер изображения так, чтобы оно полностью заполнило окно по ширине или высоте; кнопка <guibutton
->100%</guibutton
+>100 %</guibutton
 > масштабирует изображение до фактического размера в пикселях. Клавиша <keycap
 >F</keycap
 > переключает режимы между <guibutton
 >Вместить</guibutton
 > и <guibutton
->100%</guibutton
+>100 %</guibutton
 >, а комбинация клавиш <keycombo action="simul"
 >&Shift;<keycap
 >F</keycap
