@@ -436,14 +436,16 @@ struct MainWindow::Private {
 
         mGoToPreviousAction = view->addAction(QStringLiteral("go_previous"), q, &MainWindow::goToPrevious);
         mGoToPreviousAction->setPriority(QAction::LowPriority);
-        mGoToPreviousAction->setIcon(QIcon::fromTheme(QGuiApplication::layoutDirection() == Qt::LeftToRight ? "go-previous" : "go-previous-symbolic-rtl"));
+        mGoToPreviousAction->setIcon(QIcon::fromTheme(QGuiApplication::layoutDirection() == Qt::LeftToRight ? QStringLiteral("go-previous")
+                                                                                                            : QStringLiteral("go-previous-symbolic-rtl")));
         mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
         mGoToPreviousAction->setToolTip(i18nc("@info:tooltip", "Go to previous image"));
         installDisabledActionShortcutMonitor(mGoToPreviousAction, SLOT(showFirstDocumentReached()));
 
         mGoToNextAction = view->addAction(QStringLiteral("go_next"), q, &MainWindow::goToNext);
         mGoToNextAction->setPriority(QAction::LowPriority);
-        mGoToNextAction->setIcon(QIcon::fromTheme(QGuiApplication::layoutDirection() == Qt::LeftToRight ? "go-next" : "go-next-symbolic-rtl"));
+        mGoToNextAction->setIcon(
+            QIcon::fromTheme(QGuiApplication::layoutDirection() == Qt::LeftToRight ? QStringLiteral("go-next") : QStringLiteral("go-next-symbolic-rtl")));
         mGoToNextAction->setText(i18nc("@action Go to next image", "Next"));
         mGoToNextAction->setToolTip(i18nc("@info:tooltip", "Go to next image"));
         installDisabledActionShortcutMonitor(mGoToNextAction, SLOT(showLastDocumentReached()));
@@ -1436,8 +1438,8 @@ void MainWindow::toggleSideBar(bool visible)
     d->saveSideBarVisibility(visible);
     d->mSideBar->setVisible(visible);
 
-    const QString iconName = QApplication::isRightToLeft() ? (visible ? "sidebar-collapse-right" : "sidebar-expand-right")
-                                                           : (visible ? "sidebar-collapse-left" : "sidebar-expand-left");
+    const QString iconName = QApplication::isRightToLeft() ? (visible ? QStringLiteral("sidebar-collapse-right") : QStringLiteral("sidebar-expand-right"))
+                                                           : (visible ? QStringLiteral("sidebar-collapse-left") : QStringLiteral("sidebar-expand-left"));
     const QString toolTip = visible ? i18nc("@info:tooltip", "Hide sidebar") : i18nc("@info:tooltip", "Show sidebar");
 
     const QList<QToolButton *> buttonList{d->mBrowseMainPage->toggleSideBarButton(), d->mViewMainPage->toggleSideBarButton()};
@@ -1865,8 +1867,8 @@ bool MainWindow::queryClose()
         return true;
     }
 
-    KGuiItem yes(i18n("Save All Changes"), "document-save-all");
-    KGuiItem no(i18n("Discard Changes"), "delete");
+    KGuiItem yes(i18n("Save All Changes"), QStringLiteral("document-save-all"));
+    KGuiItem no(i18n("Discard Changes"), QStringLiteral("delete"));
     QString msg =
         i18np("One image has been modified.", "%1 images have been modified.", list.size()) + '\n' + i18n("If you quit now, your changes will be lost.");
     int answer = KMessageBox::warningTwoActionsCancel(this, msg, QString() /* caption */, yes, no);

@@ -248,7 +248,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
         // Button
         // Check if Discover is installed
         q->mDiscoverAvailable = !QStandardPaths::findExecutable("plasma-discover").isEmpty();
-        QIcon buttonIcon(q->mDiscoverAvailable ? QIcon::fromTheme("plasmadiscover") : QIcon::fromTheme("install"));
+        QIcon buttonIcon(q->mDiscoverAvailable ? QIcon::fromTheme(QStringLiteral("plasmadiscover")) : QIcon::fromTheme(QStringLiteral("install")));
         QString buttonText, whatsThisText;
         QString tooltipText(i18nc("@info:tooltip for a button, %1 protocol name", "Launch Discover to install the protocol support library for \"%1\"", scheme));
         if (scheme == QLatin1String("camera")) {
@@ -260,7 +260,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
                 whatsThisText = i18nc("@info:whatsthis for a button, %1 protocol name", "Click here to launch Discover to install the missing protocol support library to enable the protocol support for \"%1:/\" on your system.", scheme);
             } else {
                 // If Discover is not found on the system, guide the user to search the web.
-                buttonIcon = QIcon::fromTheme("internet-web-browser");
+                buttonIcon = QIcon::fromTheme(QStringLiteral("internet-web-browser"));
                 buttonText = i18nc("@action:button %1 protocol name", "Search the Web for How to Install Protocol Support for \"%1\"…", truncatedScheme);
                 tooltipText.clear();
             }
