@@ -1929,7 +1929,7 @@ void MainWindow::loadConfig()
     d->mDirModel->adjustKindFilter(MimeTypeUtils::KIND_VIDEO, GwenviewConfig::listVideos());
 
     if (GwenviewConfig::historyEnabled()) {
-        d->mFileOpenRecentAction->loadEntries(KConfigGroup(KSharedConfig::openConfig(), "Recent Files"));
+        d->mFileOpenRecentAction->loadEntries(KConfigGroup(KSharedConfig::openConfig(), QStringLiteral("Recent Files")));
         const auto mFileOpenRecentActionUrls = d->mFileOpenRecentAction->urls();
         for (const QUrl &url : mFileOpenRecentActionUrls) {
             d->mGvCore->addUrlToRecentFiles(url);
@@ -1950,7 +1950,7 @@ void MainWindow::loadConfig()
 
 void MainWindow::saveConfig()
 {
-    d->mFileOpenRecentAction->saveEntries(KConfigGroup(KSharedConfig::openConfig(), "Recent Files"));
+    d->mFileOpenRecentAction->saveEntries(KConfigGroup(KSharedConfig::openConfig(), QStringLiteral("Recent Files")));
     d->mViewMainPage->saveConfig();
     d->mBrowseMainPage->saveConfig();
     d->mContextManager->saveConfig();

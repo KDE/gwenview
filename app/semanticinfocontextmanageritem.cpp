@@ -83,7 +83,7 @@ struct SemanticInfoDialog : public QDialog, public Ui_SemanticInfoDialog {
     KConfigGroup configGroup() const
     {
         KSharedConfigPtr config = KSharedConfig::openConfig();
-        return KConfigGroup(config, "SemanticInfoDialog");
+        return KConfigGroup(config, QStringLiteral("SemanticInfoDialog"));
     }
 };
 

@@ -53,7 +53,7 @@ struct HistoryItem : public QStandardItem {
     void save() const
     {
         KConfig config(mConfigPath, KConfig::SimpleConfig);
-        KConfigGroup group(&config, "general");
+        KConfigGroup group(&config, QStringLiteral("general"));
         group.writeEntry("url", mUrl.toString());
         group.writeEntry("dateTime", mDateTime.toString(Qt::ISODate));
         config.sync();
@@ -80,7 +80,7 @@ struct HistoryItem : public QStandardItem {
     static HistoryItem *load(const QString &fileName)
     {
         KConfig config(fileName, KConfig::SimpleConfig);
-        KConfigGroup group(&config, "general");
+        KConfigGroup group(&config, QStringLiteral("general"));
 
         const QUrl url(group.readEntry("url"));
         if (!url.isValid()) {
