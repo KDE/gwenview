@@ -1,0 +1,1513 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.5-Based Variant V1.1//EN"
+"dtd/kdedbx45.dtd" [
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % Arabic "INCLUDE"
+><!-- change language only here -->
+]>
+
+<book id="gwenview" lang="&language;">
+<title
+>دليل مستخدم جونفيو</title>
+
+<bookinfo>
+<authorgroup>
+<author
+><firstname
+>Aurélien</firstname
+> <surname
+>Gâteau</surname
+> <affiliation
+><address
+><email
+>agateau@kde.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Christopher</firstname
+><surname
+>Martin</surname
+> <affiliation
+><address
+><email
+>chrsmrtn@debian.org</email
+></address
+></affiliation>
+</author>
+<author
+><firstname
+>Henry</firstname
+> <surname
+>de Valence</surname
+> <affiliation
+><address
+><email
+>hdevalence@gmail.com</email
+></address
+></affiliation>
+</author>
+<othercredit role="translator"
+><firstname
+>زايد</firstname
+><surname
+>السعيدي</surname
+><affiliation
+><address
+><email
+>zayed.alsaidi@gmail.com</email
+></address
+></affiliation
+><contrib
+>التّرجمة العربيّة</contrib
+></othercredit
+> 
+</authorgroup>
+<copyright>
+<year
+>2005</year>
+<holder
+>Aurélien Gâteau</holder>
+</copyright>
+<copyright>
+<year
+>2008</year>
+<holder
+>Henry de Valence</holder>
+</copyright>
+<legalnotice
+>&FDLNotice;</legalnotice>
+
+<date
+>2021-06-04</date>
+<releaseinfo
+>ترس كيدي 21.08</releaseinfo>
+<abstract>
+<para
+>جونفيو هو عارض صور وفيديو.</para>
+</abstract>
+<keywordset>
+<keyword
+>كيدي</keyword>
+<keyword
+>صورة</keyword>
+<keyword
+>عارض</keyword>
+<keyword
+>فنان</keyword>
+<keyword
+>صورة فوتوغرافية</keyword>
+<keyword
+>رسمة</keyword>
+</keywordset>
+</bookinfo>
+<!--FIXME Read devels blog on http://agateau.com/
+-->
+<chapter id="introduction">
+<title
+>مقدمة</title>
+
+<sect1 id="what-is-gwenview">
+<title
+>ما هو جونفيو؟</title>
+
+<para
+>جونفيو عارض صور وفيديو سريع وسهل الاستخدام. </para>
+
+ <para
+>يتميز جونفيو بوضعين رئيسيين: التصفح والعرض. يمكن استخدام كلا الوضعين في نافذة تطبيق عادية أو في وضع ملء الشاشة. يتيح لك وضع التصفح التنقل عبر حاسوبك وعرض مصغرات لصورك، بينما يتيح لك وضع العرض عرض الصور واحدة تلو الأخرى، ويسمح لك وضع ملء الشاشة بإنشاء عروض شرائح سريعة. توجد أيضًا شاشة بدء تعرض قائمة بالمجلدات والروابط المفتوحة حديثًا بالإضافة إلى الأماكن والوسوم. </para>
+
+<para
+>تُعالَج عملية تحميل الصور بواسطة مكتبة &Qt;، لذا يدعم جونفيو جميع تنسيقات الصور التي يدعمها تثبيت &Qt; لديك. يعرض جونفيو الصور ذات قناة ألفا (الشفافية) بالإضافة إلى التحريكات بشكل صحيح.</para>
+
+<para
+>يدعم جونفيو عرض وتحرير تعليقات EXIF في صور JPEG. كما تُدعم تحويلات JPEG غير القابلة للضياع مثل التدوير والانعكاس.</para>
+
+<para
+>يمكن لجونفيو قراءة تشكيلات الألوان المضمنة من ملفات PNG و JPEG. كما يمكنه استخدام تشكيلة ألوان الصورة مع تشكيلة ألوان العرض لإخراج ألوان صحيحة على الشاشة.</para>
+</sect1>
+
+</chapter>
+
+<chapter id="interface">
+<title
+>الواجهة</title>
+
+<sect1 id='start_page'
+><title
+>صفحة البداية</title>
+<para
+>تعرض صفحة البدء المجلدات والروابط المفتوحة حديثًا في الجانب الأيسر، وأماكنك ووسومك في الجانب الأيمن.</para>
+
+<screenshot>
+  <screeninfo
+>لقطة شاشة لصفحة البداية</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="start-page.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</sect1>
+
+<sect1 id='image_operations'
+><title
+>عمليات الصورة</title>
+<para
+>يمتلك جونفيو بعض الميزات المتوفرة في أوضاع التصفح، والعرض، وملء الشاشة. يمتلك جونفيو القدرة على إجراء تعديلات أساسية على صورك.</para>
+<itemizedlist>
+<listitem
+><para
+>التدوير: ستؤدي عملية التدوير إلى تدوير الصورة إما لليسار أو لليمين، اعتمادًا على ما إذا كنت تختار <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>تحرير</guimenu
+> <guimenuitem
+>دوّر يمينًا</guimenuitem
+> </menuchoice
+> أو <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>تحرير</guimenu
+> <guimenuitem
+>دوّر يسارًا</guimenuitem
+> </menuchoice
+> </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>حرر</guimenu
+> <guimenuitem
+>اعكس</guimenuitem
+> </menuchoice
+>: ستعكس هذه العملية الصورة على طول المحور العمودي، كما لو كنت تراها في مرآة.</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>تحرير</guimenu
+> <guimenuitem
+>اقلب</guimenuitem
+> </menuchoice
+>: ستعكس هذه العملية الصورة رأسًا على عقب (انعكاس على طول المحور الأفقي)</para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>R</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>تحرير</guimenu
+> <guimenuitem
+>غيّر الحجم</guimenuitem
+> </menuchoice
+>: ستسمح لك هذه العملية بتقليص أو توسيع الصورة. لاحظ أن زيادة حجم الصورة قد يجعلها تبدو ضبابية أو منقطة.</para
+></listitem>
+ <!-- Crop + Red Eye Reduction are discussed in View mode sect-->
+</itemizedlist>
+
+<para
+>هذه الإجراءات متوفرة أيضًا في لسان تبويب <guilabel
+>العمليات</guilabel
+> في الشريط الجانبي.</para>
+
+<para
+>إذا حُررت صورة واحدة أو أكثر، سيُعرض شريط بإجراءات إضافية في الجزء العلوي من الصورة. يمكنك التراجع عن تغييراتك أو إعادتها، أو الانتقال إلى الصورة المعدلة السابقة أو التالية، وتوجد ثلاثة خيارات لحفظ الصور المتغيرة. </para>
+
+<screenshot>
+  <screeninfo
+>شريط الإجراءات للصور المعدلة</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="modified-bar.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<!--FIXME all actions also available context menus, where to add that info -->
+
+</sect1>
+
+<sect1 id='browse_mode'
+><title
+>وضع التصفح</title>
+
+<para
+>عندما تكون في وضع التصفح، يمكنك التنقل بسهولة عبر ملفاتك ومجلداتك. تعرض نافذة المعاينة مصغرات للصور الموجودة في المجلد الحالي، وكذلك المجلدات الفرعية. </para>
+
+<screenshot>
+  <screeninfo
+>لقطة شاشة لوضع التصفح</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="browse_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>يؤدي تحريك الفأرة فوق صورة إلى إظهار أزرار لتحديد الصورة أو تدويرها بالإضافة إلى زر للدخول في وضع ملء الشاشة. يُشار إلى الصور المعدلة بأيقونة في أسفل اليمين، انقر فوقها لحفظ الصورة المتغيرة. يؤدي النقر على صورة إلى نقلك لوضع العرض. يمكنك تحديد عدة صور والتبديل لوضع العرض لمشاهدتها جنبًا إلى جنب.</para>
+
+<para
+>يسمح لك المنزلق الموجود في أسفل اليمين بتغيير حجم الصور. يمكنك أيضًا ترشيح الصور حسب اسم الملف أو التاريخ أو الوسم أو التقييم باستخدام المربع الموجود في أسفل اليسار. يظهر شريط الأدوات في كل من وضع التصفح ووضع العرض ويحتوي على الإجراءات الأكثر استخدامًا. </para>
+<itemizedlist>
+<listitem
+><para
+><guiicon
+>صفحة البداية</guiicon
+>: يفتح صفحة البداية.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>تصفح</guiicon
+>: ينتقل إلى وضع التصفح.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>اعرض</guiicon
+>: ينتقل إلى وضع العرض.</para
+></listitem>
+<listitem
+><para
+><guiicon
+>السابق</guiicon
+>: يؤدي النقر فوق هذه الأيقونة إلى الانتقال للصورة السابقة في المجلد.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>التالي</guiicon
+>: يؤدي النقر فوق هذا الزر إلى الانتقال للصورة التالية في المجلد.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>أظهر أدوات التحرير</guiicon
+>: يؤدي النقر فوق هذا الزر إلى تبديل حالة <link linkend="sidebar"
+>لسان تبويب العمليات في الشريط الجانبي</link
+>.</para
+></listitem>
+
+<listitem
+><para
+><guiicon
+>ملء الشاشة</guiicon
+>: ينتقل إلى وضع ملء الشاشة.</para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='view_mode'
+><title
+>وضع العرض</title>
+<para
+>يعرض وضع العرض الصور بحجمها الكامل. يُعرض <link linkend="sidebar"
+>الشريط الجانبي</link
+> نفسه المتوفر في وضع التصفح على اليسار. يوجد في الأسفل شريط المصغرات، والذي يسمح لك بالتمرير عبر الصور في المجلد الحالي. يمكن بسط شريط المصغرات عن طريق النقر فوق زر <guibutton
+>أظهر المصغرات</guibutton
+>. وسيؤدي النقر مرة أخرى لطيّه. لتغيير حجم المصغرات، حرّك الفاصل بزر الفأرة الأيسر.</para>
+
+<para
+>يدعم وضع العرض عرض عدة صور جنبًا إلى جنب. يمكنك تحديد صور متعددة في وضع التصفح قبل التبديل لوضع العرض، أو يمكنك النقر فوق الزر <guibutton
+>+</guibutton
+> الذي يظهر عند التحويم فوق الصور في شريط المصغرات لإضافة لوحة تعرض تلك الصورة. سيظهر الزر <guibutton
+>-</guibutton
+> حينها ليسمح لك بإزالة لوحتها.</para>
+
+<para
+>عند عرض عدة صور، يظهر شريط أدوات صغير أسفل كل صورة يسمح لك بحذف الصورة أو إزالة لوحتها. يمكنك إجراء عمليات التقريب بشكل مستقل لكل صورة، أو مزامنتها. بدّل هذا الخيار بتحديد <guilabel
+>زامن</guilabel
+> الموجود على يسار منزلق التقريب أو بالضغط على <keycombo action="simul"
+>&Ctrl;<keycap
+>Y</keycap
+></keycombo
+>. يمكنك التبديل بين الصور بالنقر فوق لوحتها، أو باستخدام لوحة المفاتيح. للتبديل للصورة الموجودة على اليمين، اضغط <keycombo action="simul"
+>&Tab;</keycombo
+>. للتبديل للصورة الموجودة على اليسار، اضغط <keycombo action="simul"
+>&Shift;&Tab;</keycombo
+>.</para>
+
+<screenshot>
+  <screeninfo
+>لقطة شاشة لوضع العرض</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="view_mode.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>يتحكم المنزلق الموجود في أسفل اليمين في تقريب الصورة. الأزرار <guibutton
+>لائم</guibutton
+>، و <guibutton
+>املأ</guibutton
+>، و <guibutton
+>100%</guibutton
+> موجودة بجانب منزلق التقريب وهي ثلاثة مستويات تقريب مسبقة التعيين. يقوم زر <guibutton
+>لائم</guibutton
+> بتقريب الصورة الحالية لتلائم حجم النافذة، بينما يقوم زر <guibutton
+>املأ</guibutton
+> بتقريب الصورة لتملأ النافذة من خلال ملاءمة العرض أو الارتفاع، ويقوم زر <guibutton
+>100%</guibutton
+> بتقريب الصورة لحجم بكسلاتها الفعلي. يبدل الاختصار <keycap
+>F</keycap
+> بين وضع <guibutton
+>لائم</guibutton
+> و <guibutton
+>100%</guibutton
+>، بينما سيؤدي الضغط على <keycombo action="simul"
+>&Shift;<keycap
+>F</keycap
+></keycombo
+> لتبديل وضع <guibutton
+>املأ</guibutton
+> بالتوالي.</para>
+
+<para
+>عندما تكون الصورة في وضع التقريب للملاءمة، يمكنك الانتقال للصورة السابقة والتالية باستخدام مفاتيح الأسهم. عند التقريب، تُستخدم مفاتيح الأسهم لتمرير الصورة. هذا السلوك مشابه جدًا لما توفره الهواتف أو الكاميرات الرقمية.</para>
+
+<para
+>عند تقريب الصورة، يظهر عرض عين الطائر الذي يتيح لك تمرير الصورة باستخدام الفأرة ومفاتيح الأسهم. يختفي عرض عين الطائر آليًا بعد تأخير قصير، ولا يظهر إلا أثناء التقريب أو التمرير. يمكن تعطيل عرض عين الطائر من قائمة السياق للنقر الأيمن أو من <menuchoice
+><guimenu
+>عرض</guimenu
+><guimenuitem
+>أظهر عرض عين الطائر عند التقريب</guimenuitem
+></menuchoice
+></para>
+
+<para
+>يمكنك تحديد ما يحدث عند الانتقال للصورة ب بعد تقريب منطقة في الصورة أ باستخدام الخيارات الموجودة في مجموعة <guilabel
+>وضع التقريب</guilabel
+> في صفحة <guimenuitem
+>عرض الصورة</guimenuitem
+> في نافذة ضبط جونفيو التي يمكن الوصول إليها عبر <menuchoice
+><guimenu
+>الإعدادات</guimenu
+><guimenuitem
+>اضبط جونفيو...</guimenuitem
+></menuchoice
+>.</para>
+
+<itemizedlist>
+    <listitem
+><para
+>إذا ضُبط على <guilabel
+>لائم كل صورة آليًا</guilabel
+>، سيُبعّد التقريب في الصورة ب لتلائم الشاشة.</para
+></listitem>
+    <listitem
+><para
+>إذا ضُبط على <guilabel
+>أبقِ نفس التقريب والموضع</guilabel
+>، ستشترك جميع الصور في نفس التقريب والموضع: ستُضبط الصورة ب على نفس معاملات تقريب الصورة أ (وإذا غُيرت هذه المعاملات، فستُعرض الصورة أ بالتقريب والموضع المحدثين).</para
+></listitem>
+    <listitem
+><para
+>إذا ضُبط على <guilabel
+>تقريب وموضع لكل صورة</guilabel
+>، ستتذكر جميع الصور تقريبها وموضعها الخاص: ستُضبط الصورة ب مبدئيًا على نفس معاملات تقريب الصورة أ، لكنها ستتذكر لاحقًا تقريبها وموضعها الخاصين (وإذا غُيرت هذه المعاملات، <emphasis
+>لن</emphasis
+> تُعرض الصورة أ بالتقريب والموضع المحدثين).</para
+></listitem>
+</itemizedlist>
+
+<tip
+><para
+>يمكنك البدء مباشرة في وضع العرض عن طريق تشغيل جونفيو من قائمة سياق مثل <guimenuitem
+>افتح باستخدام</guimenuitem
+> في برنامج آخر أو عن طريق تشغيله من سطر الأوامر مع صورة كمعامل.</para
+> </tip>
+
+<para
+>عمليات الصور الإضافية التالية متوفرة فقط في وضع العرض:</para>
+
+<itemizedlist>
+<listitem
+><para
+><menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Shift;<keycap
+>C</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>تحرير</guimenu
+> <guimenuitem
+>قُص</guimenuitem
+> </menuchoice
+>: تسمح لك هذه العملية باستبعاد أجزاء من الصورة لا تريدها. </para>
+<para
+>يمكنك الوصول إلى معاملات القص المتقدمة عن طريق تحديد مربع الخيار <guilabel
+>إعدادات متقدمة</guilabel
+> في لوحة المنبثقة السفلية. استخدم الحقول المقابلة لضبط عملية القص. </para>
+<para
+>من الممكن أيضًا ضبط المنطقة المقتطعة عن طريق سحب مقابض المربعات الرمادية على حدود الصورة. يمكنك تحريك المنطقة المقتطعة بالنقر مع الاستمرار على زر الفأرة الأيسر وسحبها بمؤشر الفأرة. </para>
+<para
+>اضغط على زر <guibutton
+>قُص</guibutton
+> لرؤية النتائج عندما تكون جاهزًا. استخدم اللوحة المنبثقة العلوية لحفظ النتائج أو التراجع عن/إعادة العملية. </para
+></listitem>
+
+<listitem
+><para
+><menuchoice
+> <guimenu
+>تحرير</guimenu
+> <guimenuitem
+>قلل العين الحمراء</guimenuitem
+> </menuchoice
+>: تقلل هذه العملية من تأثير "العين الحمراء" الموجود عادةً في الصور الفوتوغرافية الملتقطة بكاميرا فلاش. </para
+></listitem>
+</itemizedlist>
+
+</sect1>
+
+<sect1 id='fullscreen_mode'>
+<title
+>أوضاع ملء الشاشة</title>
+
+<para
+>يمكن الوصول لملء الشاشة بالضغط على زر <guiicon
+>ملء الشاشة</guiicon
+> في شريط الأدوات، أو عبر <menuchoice
+> <shortcut
+> <keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>F</keycap
+></keycombo
+> </shortcut
+> <guimenu
+>عرض</guimenu
+> <guimenuitem
+>وضع ملء الشاشة</guimenuitem
+> </menuchoice
+>. </para>
+<para
+>لمغادرة هذا الوضع اضغط مفتاح &Esc;.</para>
+
+<sect2>
+<title
+>وضع التصفح بملء الشاشة</title>
+
+<para
+>في وضع التصفح، يمكنك التبديل لملء الشاشة أيضًا عن طريق النقر على الزر الذي يظهر عند تحريك الفأرة فوق المصغرات. </para>
+<screenshot>
+  <screeninfo
+>لقطة شاشة لوضع العرض بملء الشاشة</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-browse.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>يمنحك الانتقال لملء الشاشة أثناء التصفح تجربة أكثر غمارًا بينما تتنقل عبر صورك. إنها ميزة رائعة على حاسوبك العادي، ولكنها تصبح أكثر فائدة عند توصيل حاسوبك المحمول بالتلفاز الكبير في غرفة المعيشة لعرض الصور على ضيوفك. </para>
+</sect2>
+
+<sect2 id="fullscreen">
+<title
+>وضع العرض بملء الشاشة</title>
+<para
+>يعرض وضع العرض بملء الشاشة عرض شرائح لصورك. صِل لوضع ملء الشاشة بالنقر فوق الزر الذي يظهر عند تحريك الفأرة فوق المصغرات في وضع التصفح، بالضغط على زر <guiicon
+>ملء الشاشة</guiicon
+> في شريط المهام. <screenshot>
+  <screeninfo
+>لقطة شاشة لوضع التصفح بملء الشاشة</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="fullscreen-view.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+</para>
+
+<para
+>سيختفي الشريط العلوي آليًا؛ ولإظهاره ما عليك سوى تحريك الفأرة إلى أعلى الشاشة. إذا كان مؤشر الفأرة فوق الشريط العلوي، فإنه لن يختفي آليًا. معظم الأزرار الموجودة على الشريط هي نفسها الموجودة في شريط الأدوات في وضعي التصفح أو العرض، باستثناء زر <guiicon
+>اخرج من وضع ملء الشاشة</guiicon
+> الذي يعيدك إلى نافذة جونفيو، وزر <guiicon
+>أوقف/استأنف عرض الشرائح</guiicon
+>، وزر <guiicon
+>اضبط وضع ملء الشاشة</guiicon
+> الذي يعرض حوار إعدادات صغيرًا يسمح لك بضبط عرض الشرائح بسهولة وسرعة. عناصر التحكم في عرض الشرائح هناك هي: </para>
+
+<itemizedlist>
+    <listitem
+><para
+>يتحكم منزلق <guilabel
+>المدة الزمنية</guilabel
+> في المدة التي سيعرض فيها جونفيو صورة قبل الانتقال للصورة التالية.</para
+></listitem>
+    <listitem
+><para
+>إذا حُدد مربع خيار <guilabel
+>حلقة تكرار</guilabel
+>، فعند الوصول لنهاية عرض الشرائح، فإنه سيستمر من البداية بدلًا من التوقف. </para
+></listitem>
+    <listitem
+><para
+>إذا حُدد مربع خيار <guilabel
+>عشوائي</guilabel
+>، فستُعرض الصور بترتيب عشوائي بدلًا من التقدم عبر المجلد أبجديًا.</para
+></listitem>
+    <listitem
+><para
+>يسمح لك <guibutton
+>اختر معلومات الصورة لعرضها</guibutton
+> بتحديد البيانات الوصفية التي تُعرض أسفل الأزرار في شريط الأدوات. </para
+></listitem>
+    <listitem
+><para
+>إذا حُدد مربع خيار <guilabel
+>أظهر المصغرات</guilabel
+>، فستُعرض مصغرات لجميع الصور الموجودة في المجلد الحالي على يمين شريط الأدوات.</para
+></listitem>
+    <listitem
+><para
+>يغير منزلق <guilabel
+>الارتفاع</guilabel
+> حجم المصغرات المعروضة.</para
+></listitem>
+</itemizedlist>
+
+<para
+>إذا فُعل، فستُعرض مساحة توضح لك الصور الأخرى في المجلد الحالي في الشريط العلوي. النقر على إحداها سيعرضها.</para>
+</sect2>
+</sect1>
+
+<sect1 id="sidebar">
+<title
+>الشريط الجانبي</title>
+
+ <para
+>يتوفر الشريط الجانبي على اليسار في وضعي التصفح والعرض، لكنه لا يظهر مبدئيًا في وضع التصفح. يمكن تبديل ظهوره باستخدام <menuchoice
+> <shortcut
+> <keycap
+>F4</keycap
+> </shortcut
+> <guimenu
+>عرض</guimenu
+> <guimenuitem
+>الشريط الجانبي</guimenuitem
+> </menuchoice
+> أو باستخدام الزر <guiicon
+>▮←</guiicon
+> / <guiicon
+>▮→</guiicon
+> في الجانب الأيسر من شريط الحالة. عند النقر عليه، فإنه يطوي أو يبسط الشريط الجانبي. يحتوي الشريط الجانبي على عدة ألسنة تبويب:</para>
+
+<variablelist>
+
+<varlistentry>
+<term
+><guilabel
+>المجلّدات</guilabel
+></term>
+<listitem
+><para
+>يعرض قائمة بجميع المجلدات في نظامك مما يسمح لك بالتبديل بينها. في وضع التصفح، ستُعرض مصغرات من المجلد، بينما في وضع العرض، ستظهر الصورة الأولى في المجلد، والتي يمكنك من خلالها التصفح عبر المجلد باستخدام زر <guibutton
+>السابق</guibutton
+> و <guibutton
+>التالي</guibutton
+> أو الاختصارات. يؤدي النقر فوق مجلد عدة مرات إلى التبديل بين وضع العرض ووضع التصفح.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>المعلومات</guilabel
+></term>
+<listitem
+><para
+>يعرض <guilabel
+>معلومات وسمية</guilabel
+> مثل اسم الملف وحجمه. يسمح لك رابط <guilabel
+>المزيد...</guilabel
+> بعرض جميع البيانات الوصفية المتاحة واختيار البيانات التي تظهر في الشريط الجانبي.</para
+></listitem>
+</varlistentry>
+
+<varlistentry>
+<term
+><guilabel
+>العمليات</guilabel
+></term>
+<listitem
+><para
+>يسمح لك هذا بإجراء <link linkend="image_operations"
+>عمليات الصور العالمية الموضحة سابقًا</link
+> بالإضافة إلى العمليات الخاصة بوضع العرض. كما يسمح بعمليات الملفات الشائعة مثل النسخ، وإعادة التسمية، والحذف، وإنشاء مجلدات جديدة.</para
+></listitem>
+</varlistentry>
+
+</variablelist>
+</sect1>
+
+</chapter>
+<chapter id="importer">
+<title
+>مستورد جونفيو</title>
+
+<sect1>
+<title
+>مقدمة</title>
+<para
+>يسمح لك مستورد جونفيو باستيراد الصور من كاميرا رقمية أو وسائط قابلة للإزالة. لتشغيله، اختر <guilabel
+>نزّل الصور باستخدام جونفيو</guilabel
+> في منبه أجهزة كيدي بعد توصيل جهاز مدعوم.</para>
+
+<para
+>عندما تصل جهازًا، يقوم مستورد جونفيو بإدراج جميع الصور والفيديوهات تكراريًا. </para>
+<para
+>ليس هذا ما تتوقعه دائمًا، فمثلًا عند وصل هاتف ذكي لا تريد إدراج جميع وسائط الجهاز؛ بل فقط الصور التي التقطتها، والتي تكون عادةً في مجلد فرعي خاص. </para>
+
+<screenshot>
+  <screeninfo
+>اختيار المجلد الجذر</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer-picking-root-folder.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+<para
+>من الممكن اختيار المجلد الجذر لإدراجه، وسيتذكر مستورد جونفيو آخر مجلد جذر لكل جهاز. وبهذه الطريقة، في المرة القادمة التي تصل فيها جهازًا، يجب أن تُدرج فقط الصور والفيديوهات ذات الصلة. </para>
+
+<sect2>
+<title
+>استيراد الصور</title>
+
+<screenshot>
+  <screeninfo
+>لقطة شاشة لمستورد جونفيو</screeninfo>
+  <mediaobject>
+    <imageobject>
+      <imagedata fileref="importer.png" format="PNG"/>
+    </imageobject>
+  </mediaobject>
+</screenshot>
+
+<para
+>إذا رغبت في ذلك، يمكنك اختيار الصور التي تريد استيرادها تحت <guilabel
+>اختر المستندات لاستيرادها</guilabel
+> عن طريق الضغط على زر <guiicon
+>+</guiicon
+> الذي يظهر عند التحويم فوق الصورة. يمكنك أيضًا اختيار المجلد الذي تُستورد الصور إليه في مربع النص الموجود في أسفل النافذة. عند الانتهاء، انقر فوق زر <guibutton
+>استورد المحدد</guibutton
+> لاستيراد الصور التي اخترتها فقط، أو انقر فوق <guibutton
+>استورد الكل</guibutton
+> لاستيراد جميع الصور الموجودة في الجهاز.</para>
+</sect2>
+
+<sect2>
+<title
+>إعادة التسمية الآلية</title>
+<para
+>يمكن لمستورد جونفيو إعادة تسمية ملفاتك وفقًا لنمط محدد. لضبط هذا الخيار، اختر <guibutton
+>الإعدادات</guibutton
+> في الزاوية السفلية اليسرى. يمكنك تشغيل هذه الميزة أو إيقافها باستخدام مربع الخيار الموجود في الأعلى. يدعم <guilabel
+>تنسيق إعادة التسمية</guilabel
+> عدة معاملات خاصة، والتي سيُستبدل بها بيانات وصفية مثل تاريخ إنشاء الصورة أو اسم ملفها. وهي مدرجة أسفل مربع النص. يمكنك إما النقر فوق اسم المعامل لإدخاله في مربع النص أو كتابة واحد يدويًا.</para>
+</sect2>
+</sect1>
+
+</chapter>
+<chapter id="tips">
+<title
+>نصائح</title>
+<sect1 id='mouse'
+><title
+>استخدام الفأرة</title>
+
+<sect2 id='mouse_panning'
+><title
+>التحريك بالفأرة</title>
+<itemizedlist>
+  <listitem
+><para
+>يسمح لك الضغط المستمر على زر الفأرة الأيسر على صورة بتمرير الصورة.</para
+></listitem>
+  <listitem
+><para
+>ستقوم عجلة الفأرة بتمرير الصورة لأعلى ولأسفل.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_zooming'
+><title
+>التقريب بالفأرة</title>
+<itemizedlist>
+  <listitem
+><para
+>يؤدي النقر فوق زر الفأرة الأوسط إلى تبديل زر التقريب <guibutton
+>لائم</guibutton
+>. اضغط باستمرار على مفتاح &Shift; وانقر بالأوسط لتبديل زر التقريب <guibutton
+>املأ</guibutton
+>.</para
+></listitem>
+  <listitem
+><para
+>اضغط باستمرار على مفتاح &Ctrl;، ثم استخدم إما عجلة الفأرة للتقريب والتبعيد أو انقر باليسار للتقريب وباليمين للتبعيد.</para
+></listitem>
+
+  <listitem
+><para
+>ستقوم عجلة الفأرة، عند استخدامها مع الضغط المستمر على مفتاح &Alt;، بتمرير الصورة أفقيًا.</para
+></listitem>
+</itemizedlist>
+</sect2>
+
+
+<sect2 id='mouse_browsing'
+><title
+>التصفح بالفأرة</title>
+<itemizedlist>
+  <listitem
+><para
+>عندما تكون في وضع التصفح، يؤدي النقر فوق صورة إلى التبديل لوضع العرض وعرض تلك الصورة.</para
+></listitem>
+  <listitem
+><para
+>عندما تكون في وضع التصفح، سيقوم تدوير عجلة الفأرة بالتمرير لأعلى أو لأسفل في منطقة عرض المصغرات.</para
+></listitem>
+  <listitem
+><para
+>إذا ضُبط خيار <guilabel
+>سلوك عجلة الفأرة</guilabel
+> في <menuchoice
+><guimenu
+>الإعدادات</guimenu
+><guimenuitem
+>اضبط جونفيو</guimenuitem
+></menuchoice
+> على تصفح، فإن تدوير عجلة الفأرة أثناء وجودك في وضع العرض سينقلك عبر الصور الموجودة في المجلد.</para
+></listitem>
+</itemizedlist>
+</sect2>
+</sect1>
+
+<sect1 id="keybindings"
+> <title
+>ارتباطات المفاتيح</title>
+
+<para
+>يأتي جونفيو مع مجموعة من اختصارات لوحة المفاتيح، والتي يمكن عرضها جميعًا وإعادة تعيينها عن طريق اختيار <menuchoice
+><guimenu
+>الإعدادات</guimenu
+><guimenuitem
+>اضبط الاختصارات...</guimenuitem
+></menuchoice
+>. لاحظ أنه في نوافذ الملفات والمجلدات، تعمل جميع اختصارات بلازما العادية، ما لم يُعد تعيينها.</para>
+
+<para
+>فيما يلي بعض الارتباطات المبدئية الأكثر فائدة:</para>
+
+<itemizedlist>
+<listitem
+><para
+><keycap
+>المسافة</keycap
+>: يعرض الصورة التالية في المجلد.</para
+></listitem>
+
+<listitem
+><para
+>&Backspace;: يعرض الصورة السابقة في المجلد.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Alt;<keycap
+>Up</keycap
+></keycombo
+>: ينتقل إلى المجلد الأب للمجلد الحالي.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>F</keycap
+></keycombo
+>: ينتقل إلى وضع ملء الشاشة.</para
+></listitem>
+
+<listitem
+><para
+>&Esc;: يعود إلى وضع التصفح. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>M</keycap
+></keycombo
+>: يظهر أو يخفي شريط القوائم.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>B</keycap
+></keycombo
+>: يظهر أو يخفي شريط المصغرات.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F4</keycap
+>: يظهر أو يخفي الشريط الجانبي.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F6</keycap
+>: يجعل شريط المسار قابلًا للتحرير بحيث يمكنك كتابة مسار ملف مباشرة. يمكنك العودة إلى شريط المسار القياسي عن طريق الضغط على السهم الموجود على اليمين.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>R</keycap
+></keycombo
+>: يدوّر الصورة الحالية لليمين.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;&Shift;<keycap
+>R</keycap
+></keycombo
+>: يدوّر الصورة الحالية لليسار.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>R</keycap
+></keycombo
+>: يغير حجم الصورة الحالية.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>C</keycap
+></keycombo
+>: يقص الصورة الحالية.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>Y</keycap
+></keycombo
+>: عندما تُعرض عدة صور في وضع العرض، يقوم هذا بمزامنة عرضها. </para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>S</keycap
+></keycombo
+>: يحفظ أي تغييرات أُجريت على الصورة.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Del</keycap
+>: ينقل الصورة الحالية إلى المهملات.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>Del</keycap
+></keycombo
+>: يحذف الصورة نهائيًا من القرص. لاحظ أن هذه العملية غير قابلة للعكس ولا يمكن التراجع عنها.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>P</keycap
+></keycombo
+>: يطبع الصورة الحالية.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>O</keycap
+></keycombo
+>: يفتح صورة باستخدام حوار اختيار الملفات القياسي.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F</keycap
+>: يؤدي الضغط على هذا الاختصار إلى تبديل حالة التقريب للملاءمة تشغيلًا وإيقافًا.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>P</keycap
+>: عند عرض فيديو، يقوم هذا الاختصار بتبديل التشغيل تشغيلًا وإيقافًا.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Ctrl;<keycap
+>T</keycap
+></keycombo
+>: يحرر الوسوم.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>F2</keycap
+>: يعيد تسمية صورة في السطر.</para
+></listitem>
+
+<listitem
+><para
+><keycap
+>Del</keycap
+>: ينقل صورة إلى المهملات.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+>&Shift;<keycap
+>Del</keycap
+></keycombo
+>: يحذف صورة.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F7</keycap
+></keycombo
+>: ينسخ صورة.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F8</keycap
+></keycombo
+>: ينقل صورة.</para
+></listitem>
+
+<listitem
+><para
+><keycombo action="simul"
+><keycap
+>F9</keycap
+></keycombo
+>: يربط صورة.</para
+></listitem>
+
+</itemizedlist>
+
+</sect1>
+</chapter>
+
+<chapter id="configure">
+    <title
+>ضبط جونفيو</title>
+    <sect1 id="configindex">
+        <title
+>نظرة عامة على الضبط</title>
+        <para
+>يمكنك ضبط جونفيو عن طريق اختيار <menuchoice
+><guimenu
+>الإعدادات</guimenu
+> <guimenuitem
+>اضبط جونفيو...</guimenuitem
+></menuchoice
+>. يُقسّم حوار الضبط إلى ثلاثة أقسام. يصف هذا الفصل الخيارات المتاحة بالتفصيل. </para>
+        <itemizedlist>
+            <listitem>
+                <para
+><link linkend="configgeneral"
+>عام</link
+></para>
+            </listitem>
+            <listitem>
+                <para
+><link linkend="configview"
+>عرض الصورة</link
+></para>
+            </listitem>
+            <listitem>
+                <para
+><link linkend="configadvanced"
+>متقدم</link
+></para>
+            </listitem>
+        </itemizedlist>
+    </sect1>
+    <sect1 id="configgeneral">
+        <title
+>عام</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>الفيديوهات</guilabel
+></term>
+                <listitem>
+                    <para
+>حدد مربع خيار <guilabel
+>أظهر الفيديوهات</guilabel
+> للسماح لجونفيو بعرض الفيديوهات من بين الصور.</para>
+                    <para
+>ألغِ تحديد مربع خيار <guilabel
+>شغل آليًا</guilabel
+> لتعطيل التشغيل الآلي للفيديوهات. يمنع هذا الفيديو من البدء آليًا عند التصفح.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>نبه عند الوصول لأخر صورة</guilabel
+></term>
+                <listitem>
+                    <para
+>اختر عنصر <guilabel
+>أبدًا</guilabel
+> للسماح لجونفيو بتكرار قائمة الصور دون إشعارات إضافية.</para>
+                    <para
+>اختر عنصر <guilabel
+>فقط أثناء عروض الشرائح</guilabel
+> إذا كان يجب إظهار الإشعارات حول الوصول لنهاية القائمة فقط في <link linkend="fullscreen"
+>وضع عرض الشرائح</link
+>.</para>
+                    <para
+>اختر عنصر <guilabel
+>دائمًا</guilabel
+> إذا كنت تريد تلقي الإشعارات دون شروط.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>لون الخلفية</guilabel
+></term>
+                <listitem>
+                    <para
+>حرك المنزلق لتغيير لون الخلفية الرمادية في وضعي التصفح والعرض من الأسود (أقصى اليسار) إلى الأبيض (أقصى اليمين).</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>خلفية ملء الشاشة</guilabel
+></term>
+                <listitem>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>أسود</guilabel
+> &mdash; يضبط لون الخلفية في وضع ملء الشاشة للأسود.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>نسيج رمادي غامق</guilabel
+> &mdash; يضبط الخلفية في وضع ملء الشاشة لنسيج رمادي غامق.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>جودة حفظ الصور القابلة للضياع</guilabel
+></term>
+                <listitem>
+                    <para
+>إعداد جودة الحفظ/الضغط لتنسيقات الصور القابلة للضياع مثل JPEG و WEBP و AVIF و HEIF و HEIC، والتي يمكن تجاوزها مؤقتًا في حوار <guilabel
+>احفظ باسم</guilabel
+> عند حفظ ملف بتنسيق صورة قابل للضياع. عند حفظ صورة موجودة قابلة للضياع باسم جديد أو بعد إجراء تعديل غير قابل للضياع (مثل التدوير، الذي يغير وسم تدوير EXIF فقط)، فإن مظهر الملف لا يتغير لأنه لم يُجرَ أي تلاعب فعلي بالصورة.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>إجراءات المصغرات</guilabel
+></term>
+                <listitem>
+                    <para
+>ما إذا كان يجب إظهار أزرار إجراءات المصغرات كطبقات فوق مصغرات الصور.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>كل الأزرار</guilabel
+> &mdash; يظهر جميع الأزرار</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>أظهر زر التحديد فقط</guilabel
+> &mdash; يظهر زر التحديد/إلغاء التحديد فقط</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>بلا</guilabel
+> &mdash; لا يظهر أي زر للمصغرات</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configview">
+        <title
+>عرض الصورة</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>أظهر الشفافية بـ</guilabel
+></term>
+                <listitem>
+                    <para
+>اختر كيفية تصيير خلفية الصور النقطية الشفافة أو صور <abbrev
+>SVG</abbrev
+>.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>الخلفية المحيطة</guilabel
+> &mdash; يستخدم لون الخلفية من <link linkend="configgeneral"
+>الصفحة العامة</link
+>.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>خلفية لوحة الشطرنج</guilabel
+> &mdash; يستخدم خلفية لوحة الشطرنج التقليدية.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>خلفية لونية صلبة</guilabel
+> &mdash; يستخدم لونًا يمكن اختياره باستخدام <ulink url="help:/fundamentals/colors.html"
+>منتقي الألوان</ulink
+>.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>سلوك عجلة الفأرة</guilabel
+></term>
+                <listitem>
+                    <para
+>اختر كيفية سلوك التمرير فوق صورة في وضع العرض.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>مرر</guilabel
+> &mdash; عند التقريب، يحرر الصورة عموديًا. وإلا، فلن يحدث شيء.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>تصفح</guilabel
+> &mdash; ينتقل للصورة التالية أو السابقة.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>قرب</guilabel
+> &mdash; يستخدم عجلة الفأرة لتقريب/تبعيد الصورة الحالية.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>وضع التقريب</guilabel
+></term>
+                <listitem>
+                    <para
+>يسمح باختيار كيفية عمل التقريب في وضع العرض.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>لائم كل صورة آليًا</guilabel
+> &mdash; يغير حجم الصور آليًا لتناسب لوحة العرض.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>أبقِ نفس التقريب والموضع</guilabel
+> &mdash; يستخدم نفس مستوى التقريب لجميع الصور.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>تقريب وموضع لكل صورة</guilabel
+> &mdash; يستخدم مستويات تقريب فردية لكل صورة.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>كبر الصور الصغيرة</guilabel
+> &mdash; حدد هذا العنصر لجعل جونفيو يكبر الصور الصغيرة في وضع العرض.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>التّحريكات</guilabel
+></term>
+                <listitem>
+                    <para
+>يسمح باختيار كيفية إجراء التلاشي بين الصور في وضع العرض.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>OpenGL</guilabel
+> &mdash; يستخدم تحريكات معجلة عتاديًا.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>برمجيًا</guilabel
+> &mdash; لا يستخدم التحريكات المعجلة عتاديًا. اختر هذا الخيار إذا كان <guilabel
+>OpenGL</guilabel
+> لا يعمل بشكل مرضٍ، لكنك لا تزال تريد التلاشي بين الصور.</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>بلا</guilabel
+> &mdash; لا يستخدم التحريكات عند التبديل بين الصور.</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>شريط المصغرات</guilabel
+></term>
+                <listitem>
+                    <para
+>يسمح بضبط شريط المصغرات.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>الاتّجاه</guilabel
+></para>
+                            <itemizedlist>
+                                <listitem>
+                                    <para
+><guilabel
+>أفقي</guilabel
+> &mdash; يظهر شريط مصغرات أفقي أسفل الصورة.</para>
+                                </listitem>
+                                <listitem>
+                                    <para
+><guilabel
+>عمودي</guilabel
+> &mdash; يظهر شريط مصغرات عمودي على يمين الصورة.</para>
+                                </listitem>
+                            </itemizedlist>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>عدد الصفوف</guilabel
+> &mdash; استخدم المربع الدوار لتغيير عدد الصفوف في شريط المصغرات</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+        <sect1 id="configadvanced">
+        <title
+>متقدم</title>
+        <variablelist>
+            <varlistentry>
+                <term
+><guilabel
+>المصغّرات</guilabel
+></term>
+                <listitem>
+                    <para
+>فعل خيار <guilabel
+>وضع استخدام الموارد المنخفض</guilabel
+> إذا لم يكن لديك مساحة كبيرة على القرص. سيتجنب هذا تخزين المصغرات على القرص وسيفضل المصغرات المضمنة ذات الجودة المنخفضة والتي تكون أسرع في التحميل، إذا كانت متوفرة.</para>
+                    <para
+>كن حذرًا: سيؤدي هذا إلى حذف المجلد المسمى <filename
+>thumbnails</filename
+> في مجلد <filename
+>.cache</filename
+> الخاص بك، مما يؤدي لإزالة جميع المصغرات التي وُلدت سابقًا بواسطة جونفيو والتطبيقات الأخرى.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>التاريخ</guilabel
+></term>
+                <listitem>
+                    <para
+>حدد <guilabel
+>تذكر المجلدات والروابط</guilabel
+> لجعل جونفيو يتذكر المجلدات والروابط التي زُيرت ويعرضها في لوحة <guilabel
+>المجلدات الحديثة</guilabel
+>.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>هدف التصيير</guilabel
+></term>
+                <listitem>
+                    <para
+>يسمح باختيار <ulink url="https://en.wikipedia.org/wiki/Color_management#Rendering_intent"
+>هدف التصيير</ulink
+> لعرض الصور.</para>
+                    <itemizedlist>
+                        <listitem>
+                            <para
+><guilabel
+>إدراكي</guilabel
+> &mdash; يقيس جميع الألوان بالتساوي لتناسب تدرج ألوان تشكيلة الألوان النشطة</para>
+                        </listitem>
+                        <listitem>
+                            <para
+><guilabel
+>لون نسبي</guilabel
+> &mdash; يضغط الألوان التي لا تناسب تدرج ألوان تشكيلة الألوان النشطة، ويترك الألوان الأخرى كما هي</para>
+                        </listitem>
+                    </itemizedlist>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term
+><guilabel
+>تشكيلة اللون</guilabel
+></term>
+                <listitem>
+                    <para
+>يسمح باختيار ما إذا كنت تريد تطبيق <ulink url="https://en.wikipedia.org/wiki/ICC_profile"
+>تشكيلة ألوان</ulink
+> النظام بالإضافة لتشكيلة الألوان من ملف الصورة.</para>
+                    <para
+>إذا حُدد عنصر <guilabel
+>طبق فقط التشكيلة المضمنة في ملف الصورة</guilabel
+> فإن جونفيو يفترض أن تصحيح الألوان على مستوى النظام يطبق بالفعل تشكيلة الشاشة.</para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </sect1>
+    <sect1 id="hidden-configuration">
+    <title
+>خيارات الضبط المخفية</title>
+    <para
+>يمكن العثور على بعض الملاحظات حول خيارات جونفيو المخفية في <ulink url="http://userbase.kde.org/Special:myLanguage/Gwenview/Hidden_Configuration_Options"
+>هذه الصفحة</ulink
+>. </para>
+    <important>
+        <para
+>قد تساعدك الخيارات الموضحة في الصفحة المذكورة أعلاه في دوزنة جونفيو لاحتياجات محددة، ولكن يرجى تذكر أنه لا يوجد ضمان لاستمرار عملها من إصدار لآخر. </para>
+    </important>
+    </sect1>
+</chapter>
+
+<chapter id="credits">
+<title
+>الاعتمادات وحقوق النسخ</title>
+
+<para
+>جونفيو يصونه حاليًا Aurélien Gâteau</para>
+
+<para
+>كتب هذا المستند Christopher Martin</para>
+
+<para
+>حدث هذا المستند لكيدي 4 بواسطة Henry de Valence</para>
+
+<para
+>الترجمة: زايد السعيدي <email
+>zayed.alsaidi@gmail.com</email
+></para
+> &underFDL; &underGPL; </chapter>
+
+</book>
