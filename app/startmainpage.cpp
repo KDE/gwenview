@@ -217,7 +217,7 @@ void StartMainPage::slotTagViewClicked(const QModelIndex &index)
     }
     // FIXME: Check label encoding
     const QString tag = index.data().toString();
-    Q_EMIT urlSelected(QUrl("tags:/" + tag));
+    Q_EMIT urlSelected(QUrl(QLatin1String("tags:/") + tag));
 #endif
 }
 

@@ -103,7 +103,7 @@ public:
                     + i18np("One of them has been renamed because another document with the same name had already been imported.",
                             "%1 of them have been renamed because other documents with the same name had already been imported.",
                             mImporter->renamedCount())
-                    + "</small>";
+                    + QLatin1String("</small>");
         }
 
         message << QString();

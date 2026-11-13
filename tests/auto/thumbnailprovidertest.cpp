@@ -45,7 +45,7 @@ using namespace Gwenview;
 QTEST_MAIN(ThumbnailProviderTest)
 
 SandBox::SandBox()
-    : mPath(QDir::currentPath() + "/sandbox")
+    : mPath(QDir::currentPath() + QLatin1String("/sandbox"))
 {
 }
 
@@ -54,7 +54,7 @@ void SandBox::initDir()
     KIO::Job *job;
     QDir dir(mPath);
     if (dir.exists()) {
-        QUrl sandBoxUrl("file://" + mPath);
+        QUrl sandBoxUrl(QLatin1String("file://") + mPath);
         job = KIO::del(sandBoxUrl);
         QVERIFY2(job->exec(), "Couldn't delete sandbox");
     }
@@ -75,7 +75,7 @@ void SandBox::fill()
 void SandBox::copyTestImage(const QString &testFileName, int width, int height)
 {
     QUrl testPath = urlForTestFile(testFileName);
-    QUrl testDest = QUrl("file://" + mPath + '/' + testFileName);
+    QUrl testDest = QUrl(QLatin1String("file://") + mPath + '/' + testFileName);
     KIO::Job *job = KIO::copy(testPath, testDest);
     QVERIFY2(job->exec(), "Couldn't copy test image");
     mSizeHash.insert(testFileName, QSize(width, height));
@@ -103,7 +103,7 @@ void ThumbnailProviderTest::initTestCase()
 
 void ThumbnailProviderTest::init()
 {
-    ThumbnailProvider::setThumbnailBaseDir(mSandBox.mPath + "/thumbnails/");
+    ThumbnailProvider::setThumbnailBaseDir(mSandBox.mPath + QLatin1String("/thumbnails/"));
     mSandBox.fill();
 }
 
@@ -122,7 +122,7 @@ void ThumbnailProviderTest::testLoadLocal()
     KFileItemList list;
     const auto entryInfoList = dir.entryInfoList(QDir::Files);
     for (const QFileInfo &info : entryInfoList) {
-        QUrl url("file://" + info.absoluteFilePath());
+        QUrl url(QLatin1String("file://") + info.absoluteFilePath());
         KFileItem item(url);
         list << item;
     }
@@ -197,7 +197,7 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
     sandBox.copyTestImage("embedded-thumbnail.jpg", 256, 128);
 
     KFileItemList list;
-    QUrl url("file://" + QDir(sandBox.mPath).absoluteFilePath("embedded-thumbnail.jpg"));
+    QUrl url(QLatin1String("file://") + QDir(sandBox.mPath).absoluteFilePath("embedded-thumbnail.jpg"));
     list << KFileItem(url);
 
     // Loading a normal thumbnail should bring the white one
@@ -241,7 +241,7 @@ void ThumbnailProviderTest::testLoadRemote()
         QSKIP("Not running this test: failed to setup remote test dir.");
     }
     url = url.adjusted(QUrl::StripTrailingSlash);
-    url.setPath(url.path() + '/' + "test.png");
+    url.setPath(url.path() + QLatin1String("/test.png"));
 
     KFileItemList list;
     KFileItem item(url);
@@ -268,7 +268,7 @@ void ThumbnailProviderTest::testRemoveItemsWhileGenerating()
     KFileItemList list;
     const auto entryInfoList = dir.entryInfoList(QDir::Files);
     for (const QFileInfo &info : entryInfoList) {
-        QUrl url("file://" + info.absoluteFilePath());
+        QUrl url(QLatin1String("file://") + info.absoluteFilePath());
         KFileItem item(url);
         list << item;
     }

@@ -76,7 +76,7 @@ void ImporterTest::testContentsAreIdentical()
 
 void ImporterTest::testSuccessfulImport()
 {
-    QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");
+    QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + QLatin1String("/foo"));
 
     Importer importer(nullptr);
     QSignalSpy maximumChangedSpy(&importer, SIGNAL(maximumChanged(int)));
@@ -140,7 +140,7 @@ void ImporterTest::testSuccessfulImportRemote()
     }
 
     // Secondly test import from remote back to local
-    QUrl localUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");
+    QUrl localUrl = QUrl::fromLocalFile(mTempDir->path() + QLatin1String("/foo"));
 
     importer.start(list, localUrl);
     loop.exec();
@@ -163,7 +163,7 @@ void ImporterTest::testSuccessfulImportRemote()
 
 void ImporterTest::testSkippedUrlList()
 {
-    QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");
+    QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + QLatin1String("/foo"));
 
     Importer importer(nullptr);
 
@@ -191,7 +191,7 @@ void ImporterTest::testSkippedUrlList()
 
 void ImporterTest::testRenamedCount()
 {
-    QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");
+    QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + QLatin1String("/foo"));
 
     Importer importer(nullptr);
 
@@ -232,7 +232,7 @@ void ImporterTest::testFileNameFormater()
     QFETCH(QString, format);
     QFETCH(QString, expected);
 
-    QUrl url = QUrl("file://foo/bar/" + fileName);
+    QUrl url = QUrl(QLatin1String("file://foo/bar/") + fileName);
     FileNameFormater fileNameFormater(format);
     QCOMPARE(fileNameFormater.format(url, QDateTime::fromString(dateTime, Qt::ISODate)), expected);
 }
@@ -267,7 +267,7 @@ void ImporterTest::testAutoRenameFormat()
     QCOMPARE(dates.count(), mDocumentList.count());
     QCOMPARE(dates2.count(), mDocumentList.count());
 
-    QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");
+    QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + QLatin1String("/foo"));
 
     Importer importer(nullptr);
     importer.setAutoRenameFormat("{date}_{time}.{ext}");
@@ -284,7 +284,7 @@ void ImporterTest::testAutoRenameFormat()
     for (int pos = 0; pos < dates.count(); ++pos) {
         QUrl src = list[pos];
         QUrl dst = destUrl;
-        dst.setPath(dst.path() + '/' + dates[pos] + ".jpg");
+        dst.setPath(dst.path() + '/' + dates[pos] + QLatin1String(".jpg"));
         QVERIFY(FileUtils::contentsAreIdentical(src, dst));
     }
 
@@ -299,14 +299,14 @@ void ImporterTest::testAutoRenameFormat()
     for (int pos = 0; pos < dates2.count(); ++pos) {
         QUrl src = list[pos];
         QUrl dst = destUrl;
-        dst.setPath(dst.path() + '/' + dates2[pos] + ".jpg");
+        dst.setPath(dst.path() + '/' + dates2[pos] + QLatin1String(".jpg"));
         QVERIFY(FileUtils::contentsAreIdentical(src, dst));
     }
 }
 
 void ImporterTest::testReadOnlyDestination()
 {
-    QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + "/foo");
+    QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + QLatin1String("/foo"));
     chmod(QFile::encodeName(mTempDir->path()), 0555);
 
     Importer importer(nullptr);

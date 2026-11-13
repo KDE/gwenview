@@ -83,7 +83,7 @@ struct ImporterPrivate {
         // otherwise the retrieved date will not be correct: see implementation
         // of TimeUtils::dateTimeForFileItem
         if (UrlUtils::urlIsFastLocalFile(url)) {
-            QString tempDirPath = url.toLocalFile() + "/.gwenview_importer-XXXXXX";
+            QString tempDirPath = url.toLocalFile() + QLatin1String("/.gwenview_importer-XXXXXX");
             mTempImportDir = new QTemporaryDir(tempDirPath);
         } else {
             mTempImportDir = new QTemporaryDir();

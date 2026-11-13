@@ -88,7 +88,7 @@ void PlaceTreeModelTest::initTestCase()
               << "zzz"
               << "bbb";
     for (const QString &dirName : qAsConst(mUrl1Dirs)) {
-        dir.mkdir("url1/" + dirName);
+        dir.mkdir(QLatin1String("url1/") + dirName);
     }
 
 #ifdef KEEP_TEMP_DIR
@@ -105,7 +105,7 @@ void PlaceTreeModelTest::init()
 
     const QString confDir = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
     QDir().mkpath(confDir);
-    QFile bookmark(confDir + "/user-places.xbel");
+    QFile bookmark(confDir + QLatin1String("/user-places.xbel"));
     const bool bookmarkOpened = bookmark.open(QIODevice::WriteOnly);
     Q_ASSERT(bookmarkOpened);
     Q_UNUSED(bookmarkOpened);

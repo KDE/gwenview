@@ -40,7 +40,7 @@ QUrl setUpRemoteTestDir(const QString &testFile)
 
     QUrl baseUrl(QString::fromLocal8Bit(qgetenv("GV_REMOTE_TESTS_BASE_URL")));
     baseUrl = baseUrl.adjusted(QUrl::StripTrailingSlash);
-    baseUrl.setPath(baseUrl.path() + "/gwenview-remote-tests");
+    baseUrl.setPath(baseUrl.path() + QLatin1String("/gwenview-remote-tests"));
 
     auto statJob = KIO::stat(baseUrl, KIO::StatJob::DestinationSide, KIO::StatNoDetails);
     KJobWidgets::setWindow(statJob, authWindow);
@@ -150,7 +150,7 @@ bool imageCompare(const QImage &img1, const QImage &img2)
 }
 
 SandBoxDir::SandBoxDir()
-    : mTempDir(QDir::currentPath() + "/sandbox-")
+    : mTempDir(QDir::currentPath() + QLatin1String("/sandbox-"))
 {
     setPath(mTempDir.path());
 }

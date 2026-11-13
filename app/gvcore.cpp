@@ -349,8 +349,8 @@ GvCore::~GvCore()
 QAbstractItemModel *GvCore::recentFoldersModel() const
 {
     if (!d->mRecentFoldersModel) {
-        d->mRecentFoldersModel =
-            new HistoryModel(const_cast<GvCore *>(this), QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + "/recentfolders/");
+        d->mRecentFoldersModel = new HistoryModel(const_cast<GvCore *>(this),
+                                                  QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + QLatin1String("/recentfolders/"));
     }
     return d->mRecentFoldersModel;
 }

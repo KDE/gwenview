@@ -40,7 +40,7 @@ void UrlUtilsTest::testFixUserEnteredUrl()
     QCOMPARE(out.url(), expected.url());
 }
 
-#define NEW_ROW(in, expected) QTest::newRow(QString(in).toLocal8Bit().data()) << QUrl(in) << QUrl(expected)
+#define NEW_ROW(in, expected) QTest::newRow(in.toLocal8Bit().data()) << QUrl(in) << QUrl(expected)
 void UrlUtilsTest::testFixUserEnteredUrl_data()
 {
     QTest::addColumn<QUrl>("in");
@@ -48,12 +48,12 @@ void UrlUtilsTest::testFixUserEnteredUrl_data()
 
     QString pwd = QDir::currentPath();
 
-    NEW_ROW("http://example.com", "http://example.com");
-    NEW_ROW("file://" + pwd + "/example.zip", "zip:" + pwd + "/example.zip");
-    NEW_ROW("file://" + pwd + "/example.cbz", "zip:" + pwd + "/example.cbz");
-    NEW_ROW("file://" + pwd + "/example.jpg", "file://" + pwd + "/example.jpg");
+    NEW_ROW(QStringLiteral("http://example.com"), QStringLiteral("http://example.com"));
+    NEW_ROW(QString(QLatin1String("file://") + pwd + QLatin1String("/example.zip")), QLatin1String("zip:") + pwd + QLatin1String("/example.zip"));
+    NEW_ROW(QString(QLatin1String("file://") + pwd + QLatin1String("/example.cbz")), QLatin1String("zip:") + pwd + QLatin1String("/example.cbz"));
+    NEW_ROW(QString(QLatin1String("file://") + pwd + QLatin1String("/example.jpg")), QLatin1String("file://") + pwd + QLatin1String("/example.jpg"));
     // Check it does not get turned into gzip://...
-    NEW_ROW("file://" + pwd + "/example.svgz", "file://" + pwd + "/example.svgz");
+    NEW_ROW(QString(QLatin1String("file://") + pwd + QLatin1String("/example.svgz")), QLatin1String("file://") + pwd + QLatin1String("/example.svgz"));
 }
 
 #include "moc_urlutilstest.cpp"

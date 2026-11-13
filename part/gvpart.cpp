@@ -135,7 +135,7 @@ void GVPart::saveAs()
     const QUrl srcUrl = url().adjusted(QUrl::RemoveUserInfo | QUrl::RemoveQuery | QUrl::RemoveFragment);
 
     QString recentDirClass;
-    const QUrl saveDst = KFileWidget::getStartUrl(QUrl("kfiledialog:///gvpartsave/" + srcUrl.fileName()), recentDirClass);
+    const QUrl saveDst = KFileWidget::getStartUrl(QUrl(QLatin1String("kfiledialog:///gvpartsave/") + srcUrl.fileName()), recentDirClass);
     const QUrl dstUrl = QFileDialog::getSaveFileUrl(widget(), QString(), saveDst);
     if (!dstUrl.isValid()) {
         return;
