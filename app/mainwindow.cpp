@@ -383,7 +383,7 @@ struct MainWindow::Private {
         if (clearAction) {
             clearAction->setText(i18nc("@action Open Recent menu", "Clear List"));
         }
-        file->addAction("file_open_recent", mFileOpenRecentAction);
+        file->addAction(QStringLiteral("file_open_recent"), mFileOpenRecentAction);
         file->addAction(KStandardActions::Print, q, &MainWindow::print);
         file->addAction(KStandardActions::PrintPreview, q, &MainWindow::printPreview);
         file->addAction(KStandardActions::Quit, qApp, &QApplication::closeAllWindows);
@@ -425,7 +425,7 @@ struct MainWindow::Private {
 
         connect(mViewMainPage, &ViewMainPage::toggleFullScreenRequested, mFullScreenAction, &QAction::trigger);
 
-        QAction *leaveFullScreenAction = view->addAction("leave_fullscreen", q, &MainWindow::leaveFullScreen);
+        QAction *leaveFullScreenAction = view->addAction(QStringLiteral("leave_fullscreen"), q, &MainWindow::leaveFullScreen);
         leaveFullScreenAction->setIcon(QIcon::fromTheme(QStringLiteral("view-restore")));
         leaveFullScreenAction->setText(i18nc("@action", "Exit Full Screen"));
 
@@ -434,7 +434,7 @@ struct MainWindow::Private {
         mSpotlightModeAction->setText(i18nc("@action", "Spotlight Mode"));
         mSpotlightModeAction->setIcon(QIcon::fromTheme(QStringLiteral("image-navigator-symbolic")));
 
-        mGoToPreviousAction = view->addAction("go_previous", q, &MainWindow::goToPrevious);
+        mGoToPreviousAction = view->addAction(QStringLiteral("go_previous"), q, &MainWindow::goToPrevious);
         mGoToPreviousAction->setPriority(QAction::LowPriority);
         mGoToPreviousAction->setIcon(QIcon::fromTheme(QGuiApplication::layoutDirection() == Qt::LeftToRight ? "go-previous" : "go-previous-symbolic-rtl"));
         mGoToPreviousAction->setText(i18nc("@action Go to previous image", "Previous"));
@@ -466,7 +466,7 @@ struct MainWindow::Private {
 
         mGoUpAction = view->addAction(KStandardActions::Up, q, &MainWindow::goUp);
 
-        action = view->addAction("go_start_page", q, &MainWindow::showStartMainPage);
+        action = view->addAction(QStringLiteral("go_start_page"), q, &MainWindow::showStartMainPage);
         action->setPriority(QAction::LowPriority);
         action->setIcon(QIcon::fromTheme(QStringLiteral("go-home")));
         action->setText(i18nc("@action", "Start Page"));
@@ -546,7 +546,7 @@ struct MainWindow::Private {
 
         auto alignWithSideBarWidgetAction = new AlignWithSideBarWidgetAction(q);
         alignWithSideBarWidgetAction->setSideBar(mSideBar);
-        actionCollection->addAction("align_with_sidebar", alignWithSideBarWidgetAction);
+        actionCollection->addAction(QStringLiteral("align_with_sidebar"), alignWithSideBarWidgetAction);
 
         mHamburgerMenu = KStandardAction::hamburgerMenu(nullptr, nullptr, actionCollection);
         mHamburgerMenu->setShowMenuBarAction(mShowMenuBarAction);
@@ -769,7 +769,7 @@ struct MainWindow::Private {
         connect(mContextManager, &ContextManager::selectionChanged, mFullScreenContent, &FullScreenContent::updateDocumentCountLabel);
     }
 
-    inline void setActionEnabled(const char *name, bool enabled)
+    inline void setActionEnabled(const QString &name, bool enabled)
     {
         QAction *action = q->actionCollection()->action(name);
         if (action) {
@@ -789,10 +789,10 @@ struct MainWindow::Private {
         mFullScreenAction->setEnabled(enabled);
         mToggleSlideShowAction->setEnabled(enabled);
 
-        setActionEnabled("reload", enabled);
-        setActionEnabled("go_start_page", enabled);
-        setActionEnabled("add_folder_to_places", enabled);
-        setActionEnabled("view_toggle_spotlightmode", enabled);
+        setActionEnabled(QStringLiteral("reload"), enabled);
+        setActionEnabled(QStringLiteral("go_start_page"), enabled);
+        setActionEnabled(QStringLiteral("add_folder_to_places"), enabled);
+        setActionEnabled(QStringLiteral("view_toggle_spotlightmode"), enabled);
     }
 
     void updateActions()

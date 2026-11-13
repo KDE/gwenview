@@ -42,17 +42,6 @@ struct ThumbnailViewHelperPrivate {
     KActionCollection *mActionCollection = nullptr;
     QUrl mCurrentDirUrl;
 
-    void addActionToMenu(QMenu &popup, const char *name)
-    {
-        QAction *action = mActionCollection->action(name);
-        if (!action) {
-            qCWarning(GWENVIEW_APP_LOG) << "Unknown action" << name;
-            return;
-        }
-        if (action->isEnabled()) {
-            popup.addAction(action);
-        }
-    }
     void addActionToMenu(QMenu &popup, const QString &name)
     {
         QAction *action = mActionCollection->action(name);
@@ -87,30 +76,30 @@ void ThumbnailViewHelper::showContextMenu(QWidget *parent)
 {
     QMenu popup(parent);
     if (d->mCurrentDirUrl.scheme() == QLatin1String("trash")) {
-        d->addActionToMenu(popup, "file_restore");
-        d->addActionToMenu(popup, "deletefile");
+        d->addActionToMenu(popup, QStringLiteral("file_restore"));
+        d->addActionToMenu(popup, QStringLiteral("deletefile"));
         popup.addSeparator();
-        d->addActionToMenu(popup, "file_show_properties");
+        d->addActionToMenu(popup, QStringLiteral("file_show_properties"));
     } else {
-        d->addActionToMenu(popup, "file_create_folder");
+        d->addActionToMenu(popup, QStringLiteral("file_create_folder"));
         popup.addSeparator();
-        d->addActionToMenu(popup, "file_rename");
-        d->addActionToMenu(popup, "file_trash");
-        d->addActionToMenu(popup, "deletefile");
+        d->addActionToMenu(popup, QStringLiteral("file_rename"));
+        d->addActionToMenu(popup, QStringLiteral("file_trash"));
+        d->addActionToMenu(popup, QStringLiteral("deletefile"));
         popup.addSeparator();
         d->addActionToMenu(popup, KStandardAction::name(KStandardAction::Copy));
-        d->addActionToMenu(popup, "file_copy_to");
-        d->addActionToMenu(popup, "file_move_to");
-        d->addActionToMenu(popup, "file_link_to");
+        d->addActionToMenu(popup, QStringLiteral("file_copy_to"));
+        d->addActionToMenu(popup, QStringLiteral("file_move_to"));
+        d->addActionToMenu(popup, QStringLiteral("file_link_to"));
         popup.addSeparator();
-        d->addActionToMenu(popup, "file_open_in_new_window");
-        d->addActionToMenu(popup, "file_open_with");
-        d->addActionToMenu(popup, "file_open_containing_folder");
+        d->addActionToMenu(popup, QStringLiteral("file_open_in_new_window"));
+        d->addActionToMenu(popup, QStringLiteral("file_open_with"));
+        d->addActionToMenu(popup, QStringLiteral("file_open_containing_folder"));
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-        d->addActionToMenu(popup, "edit_tags");
+        d->addActionToMenu(popup, QStringLiteral("edit_tags"));
 #endif
         popup.addSeparator();
-        d->addActionToMenu(popup, "file_show_properties");
+        d->addActionToMenu(popup, QStringLiteral("file_show_properties"));
     }
     popup.exec(QCursor::pos());
 }

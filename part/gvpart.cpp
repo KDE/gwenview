@@ -107,7 +107,7 @@ bool GVPart::openUrl(const QUrl &url)
     return true;
 }
 
-inline void addActionToMenu(QMenu *menu, KActionCollection *actionCollection, const char *name)
+inline void addActionToMenu(QMenu *menu, KActionCollection *actionCollection, const QString &name)
 {
     QAction *action = actionCollection->action(name);
     if (action) {
@@ -118,14 +118,14 @@ inline void addActionToMenu(QMenu *menu, KActionCollection *actionCollection, co
 void GVPart::showContextMenu()
 {
     QMenu menu(widget());
-    addActionToMenu(&menu, actionCollection(), "file_save_as");
+    addActionToMenu(&menu, actionCollection(), QStringLiteral("file_save_as"));
     menu.addSeparator();
-    addActionToMenu(&menu, actionCollection(), "view_actual_size");
-    addActionToMenu(&menu, actionCollection(), "view_zoom_to_fit");
-    addActionToMenu(&menu, actionCollection(), "view_zoom_in");
-    addActionToMenu(&menu, actionCollection(), "view_zoom_out");
+    addActionToMenu(&menu, actionCollection(), QStringLiteral("view_actual_size"));
+    addActionToMenu(&menu, actionCollection(), QStringLiteral("view_zoom_to_fit"));
+    addActionToMenu(&menu, actionCollection(), QStringLiteral("view_zoom_in"));
+    addActionToMenu(&menu, actionCollection(), QStringLiteral("view_zoom_out"));
     menu.addSeparator();
-    addActionToMenu(&menu, actionCollection(), "file_show_properties");
+    addActionToMenu(&menu, actionCollection(), QStringLiteral("file_show_properties"));
     menu.exec(QCursor::pos());
 }
 

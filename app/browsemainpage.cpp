@@ -149,11 +149,11 @@ struct BrowseMainPagePrivate : public Ui_BrowseMainPage {
     void setupActions(KActionCollection *actionCollection)
     {
         auto view = new KActionCategory(i18nc("@title actions category - means actions changing smth in interface", "View"), actionCollection);
-        QAction *action = view->addAction("edit_location", q, &BrowseMainPage::editLocation);
+        QAction *action = view->addAction(QStringLiteral("edit_location"), q, &BrowseMainPage::editLocation);
         action->setText(i18nc("@action:inmenu Navigation Bar", "Edit Location"));
         actionCollection->setDefaultShortcut(action, Qt::Key_F6);
 
-        auto sortActionMenu = view->add<KActionMenu>("sort_by");
+        auto sortActionMenu = view->add<KActionMenu>(QStringLiteral("sort_by"));
         sortActionMenu->setText(i18nc("@action:inmenu", "Sort By"));
         sortActionMenu->setIcon(QIcon::fromTheme(QStringLiteral("view-sort")));
         sortActionMenu->setPopupMode(QToolButton::InstantPopup);

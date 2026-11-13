@@ -536,14 +536,6 @@ ThumbnailBarView *ViewMainPage::thumbnailBar() const
     return d->mThumbnailBar;
 }
 
-inline void addActionToMenu(QMenu *menu, KActionCollection *actionCollection, const char *name)
-{
-    QAction *action = actionCollection->action(name);
-    if (action) {
-        menu->addAction(action);
-    }
-}
-
 inline void addActionToMenu(QMenu *menu, KActionCollection *actionCollection, const QString &name)
 {
     QAction *action = actionCollection->action(name);
@@ -555,40 +547,40 @@ inline void addActionToMenu(QMenu *menu, KActionCollection *actionCollection, co
 void ViewMainPage::showContextMenu()
 {
     QMenu menu(this);
-    addActionToMenu(&menu, d->mActionCollection, "fullscreen");
+    addActionToMenu(&menu, d->mActionCollection, QStringLiteral("fullscreen"));
     menu.addSeparator();
-    addActionToMenu(&menu, d->mActionCollection, "go_previous");
-    addActionToMenu(&menu, d->mActionCollection, "go_next");
+    addActionToMenu(&menu, d->mActionCollection, QStringLiteral("go_previous"));
+    addActionToMenu(&menu, d->mActionCollection, QStringLiteral("go_next"));
     if (d->currentView()->canZoom()) {
         menu.addSeparator();
-        addActionToMenu(&menu, d->mActionCollection, "view_actual_size");
-        addActionToMenu(&menu, d->mActionCollection, "view_zoom_to_fit");
-        addActionToMenu(&menu, d->mActionCollection, "view_zoom_in");
-        addActionToMenu(&menu, d->mActionCollection, "view_zoom_out");
-        addActionToMenu(&menu, d->mActionCollection, "view_toggle_birdeyeview");
+        addActionToMenu(&menu, d->mActionCollection, QStringLiteral("view_actual_size"));
+        addActionToMenu(&menu, d->mActionCollection, QStringLiteral("view_zoom_to_fit"));
+        addActionToMenu(&menu, d->mActionCollection, QStringLiteral("view_zoom_in"));
+        addActionToMenu(&menu, d->mActionCollection, QStringLiteral("view_zoom_out"));
+        addActionToMenu(&menu, d->mActionCollection, QStringLiteral("view_toggle_birdeyeview"));
     }
     menu.addSeparator();
     QMenu backgroundColorModeMenu(i18nc("@item:inmenu", "Background Color Mode"), this);
-    addActionToMenu(&backgroundColorModeMenu, d->mActionCollection, "view_background_colormode_auto");
-    addActionToMenu(&backgroundColorModeMenu, d->mActionCollection, "view_background_colormode_light");
-    addActionToMenu(&backgroundColorModeMenu, d->mActionCollection, "view_background_colormode_neutral");
-    addActionToMenu(&backgroundColorModeMenu, d->mActionCollection, "view_background_colormode_dark");
+    addActionToMenu(&backgroundColorModeMenu, d->mActionCollection, QStringLiteral("view_background_colormode_auto"));
+    addActionToMenu(&backgroundColorModeMenu, d->mActionCollection, QStringLiteral("view_background_colormode_light"));
+    addActionToMenu(&backgroundColorModeMenu, d->mActionCollection, QStringLiteral("view_background_colormode_neutral"));
+    addActionToMenu(&backgroundColorModeMenu, d->mActionCollection, QStringLiteral("view_background_colormode_dark"));
     backgroundColorModeMenu.setIcon(backgroundColorModeMenu.actions().at(0)->icon());
     menu.addMenu(&backgroundColorModeMenu);
     if (d->mCompareMode) {
         menu.addSeparator();
-        addActionToMenu(&menu, d->mActionCollection, "synchronize_views");
+        addActionToMenu(&menu, d->mActionCollection, QStringLiteral("synchronize_views"));
     }
 
     menu.addSeparator();
     addActionToMenu(&menu, d->mActionCollection, KStandardAction::name(KStandardAction::Copy));
-    addActionToMenu(&menu, d->mActionCollection, "file_copy_to");
-    addActionToMenu(&menu, d->mActionCollection, "file_move_to");
-    addActionToMenu(&menu, d->mActionCollection, "file_link_to");
+    addActionToMenu(&menu, d->mActionCollection, QStringLiteral("file_copy_to"));
+    addActionToMenu(&menu, d->mActionCollection, QStringLiteral("file_move_to"));
+    addActionToMenu(&menu, d->mActionCollection, QStringLiteral("file_link_to"));
     menu.addSeparator();
-    addActionToMenu(&menu, d->mActionCollection, "file_open_in_new_window");
-    addActionToMenu(&menu, d->mActionCollection, "file_open_with");
-    addActionToMenu(&menu, d->mActionCollection, "file_open_containing_folder");
+    addActionToMenu(&menu, d->mActionCollection, QStringLiteral("file_open_in_new_window"));
+    addActionToMenu(&menu, d->mActionCollection, QStringLiteral("file_open_with"));
+    addActionToMenu(&menu, d->mActionCollection, QStringLiteral("file_open_containing_folder"));
 
     menu.exec(QCursor::pos());
 }
