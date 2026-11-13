@@ -74,7 +74,7 @@ QString FileNameFormater::format(const QUrl &url, const QDateTime &dateTime)
             }
             if (d->mFormat[pos + 1] == QLatin1Char('{')) {
                 // This is an escaped '{', skip one
-                name += '{';
+                name += QLatin1Char('{');
                 ++pos;
                 continue;
             }

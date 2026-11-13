@@ -192,7 +192,7 @@ ImportDialog::ImportDialog()
     if (!url.isValid()) {
         url = QUrl::fromLocalFile(QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
         const int year = QDate::currentDate().year();
-        url.setPath(url.path() + '/' + QString::number(year));
+        url.setPath(url.path() + QLatin1Char('/') + QString::number(year));
     }
     d->mThumbnailPage->setDestinationUrl(url);
 

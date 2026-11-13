@@ -247,7 +247,7 @@ struct SemanticInfoContextManagerItemPrivate : public Ui_SemanticInfoSideBarItem
             QString label = backEnd->labelForTag(tag);
             if (!it.value()) {
                 // Tag is not present for all urls
-                label += '*';
+                label += QLatin1Char('*');
             }
             labelMap[label.toLower()] = label;
         }

@@ -100,7 +100,7 @@ void ImporterTest::testSuccessfulImport()
 
     for (const QUrl &src : qAsConst(list)) {
         QUrl dst = destUrl;
-        dst.setPath(dst.path() + '/' + src.fileName());
+        dst.setPath(dst.path() + QLatin1Char('/') + src.fileName());
         QVERIFY(FileUtils::contentsAreIdentical(src, dst));
     }
 }
@@ -135,7 +135,7 @@ void ImporterTest::testSuccessfulImportRemote()
 
     for (const QUrl &src : qAsConst(list)) {
         QUrl dst = remoteUrl;
-        dst.setPath(dst.path() + '/' + src.fileName());
+        dst.setPath(dst.path() + QLatin1Char('/') + src.fileName());
         QVERIFY(FileUtils::contentsAreIdentical(src, dst));
     }
 
@@ -156,7 +156,7 @@ void ImporterTest::testSuccessfulImportRemote()
 
     for (const QUrl &src : qAsConst(list)) {
         QUrl dst = localUrl;
-        dst.setPath(dst.path() + '/' + src.fileName());
+        dst.setPath(dst.path() + QLatin1Char('/') + src.fileName());
         QVERIFY(FileUtils::contentsAreIdentical(src, dst));
     }
 }
@@ -209,7 +209,7 @@ void ImporterTest::testRenamedCount()
     // Modify imported document so that next import does not skip it
     {
         QUrl url = destUrl;
-        url.setPath(url.path() + '/' + mDocumentList.first().fileName());
+        url.setPath(url.path() + QLatin1Char('/') + mDocumentList.first().fileName());
         QFile file(url.toLocalFile());
         QVERIFY(file.open(QIODevice::Append));
         file.write("foo");
@@ -284,7 +284,7 @@ void ImporterTest::testAutoRenameFormat()
     for (int pos = 0; pos < dates.count(); ++pos) {
         QUrl src = list[pos];
         QUrl dst = destUrl;
-        dst.setPath(dst.path() + '/' + dates[pos] + QLatin1String(".jpg"));
+        dst.setPath(dst.path() + QLatin1Char('/') + dates[pos] + QLatin1String(".jpg"));
         QVERIFY(FileUtils::contentsAreIdentical(src, dst));
     }
 
@@ -299,7 +299,7 @@ void ImporterTest::testAutoRenameFormat()
     for (int pos = 0; pos < dates2.count(); ++pos) {
         QUrl src = list[pos];
         QUrl dst = destUrl;
-        dst.setPath(dst.path() + '/' + dates2[pos] + QLatin1String(".jpg"));
+        dst.setPath(dst.path() + QLatin1Char('/') + dates2[pos] + QLatin1String(".jpg"));
         QVERIFY(FileUtils::contentsAreIdentical(src, dst));
     }
 }

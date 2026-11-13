@@ -380,7 +380,7 @@ void ThumbnailPage::setSourceUrl(const QUrl &srcBaseUrl, const QString &iconName
 
     d->mSrcBaseUrl = srcBaseUrl;
     if (!d->mSrcBaseUrl.path().endsWith('/')) {
-        d->mSrcBaseUrl.setPath(d->mSrcBaseUrl.path() + '/');
+        d->mSrcBaseUrl.setPath(d->mSrcBaseUrl.path() + QLatin1Char('/'));
     }
     QUrl url = d->urlForBaseUrl();
 

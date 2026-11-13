@@ -384,7 +384,7 @@ void GvCore::addUrlToRecentFolders(QUrl url)
 
     // For "sftp://localhost", "/" is a different path than "" (bug #312060)
     if (!url.path().isEmpty() && !url.path().endsWith('/')) {
-        url.setPath(url.path() + '/');
+        url.setPath(url.path() + QLatin1Char('/'));
     }
 
     recentFoldersModel();

@@ -61,7 +61,7 @@ QUrl setUpRemoteTestDir(const QString &testFile)
     if (!testFile.isEmpty()) {
         QUrl dstUrl = baseUrl;
         dstUrl = dstUrl.adjusted(QUrl::StripTrailingSlash);
-        dstUrl.setPath(dstUrl.path() + '/' + testFile);
+        dstUrl.setPath(dstUrl.path() + QLatin1Char('/') + testFile);
         KIO::FileCopyJob *copyJob = KIO::file_copy(urlForTestFile(testFile), dstUrl);
         KJobWidgets::setWindow(copyJob, authWindow);
         if (!copyJob->exec()) {

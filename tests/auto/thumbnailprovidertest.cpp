@@ -75,7 +75,7 @@ void SandBox::fill()
 void SandBox::copyTestImage(const QString &testFileName, int width, int height)
 {
     QUrl testPath = urlForTestFile(testFileName);
-    QUrl testDest = QUrl(QLatin1String("file://") + mPath + '/' + testFileName);
+    QUrl testDest = QUrl(QLatin1String("file://") + mPath + QLatin1Char('/') + testFileName);
     KIO::Job *job = KIO::copy(testPath, testDest);
     QVERIFY2(job->exec(), "Couldn't copy test image");
     mSizeHash.insert(testFileName, QSize(width, height));
@@ -92,7 +92,7 @@ static QImage createColoredImage(int width, int height, const QColor &color)
 void SandBox::createTestImage(const QString &name, int width, int height, const QColor &color)
 {
     QImage image = createColoredImage(width, height, color);
-    image.save(mPath + '/' + name, "png");
+    image.save(mPath + QLatin1Char('/') + name, "png");
     mSizeHash.insert(name, QSize(width, height));
 }
 
