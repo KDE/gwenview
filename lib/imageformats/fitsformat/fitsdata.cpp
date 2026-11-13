@@ -412,13 +412,13 @@ bool FITSData::checkDebayer()
     QString pattern(bayerPattern);
     pattern = pattern.remove('\'').trimmed();
 
-    if (pattern == "RGGB") {
+    if (pattern == QLatin1String("RGGB")) {
         debayerParams.filter = DC1394_COLOR_FILTER_RGGB;
-    } else if (pattern == "GBRG") {
+    } else if (pattern == QLatin1String("GBRG")) {
         debayerParams.filter = DC1394_COLOR_FILTER_GBRG;
-    } else if (pattern == "GRBG") {
+    } else if (pattern == QLatin1String("GRBG")) {
         debayerParams.filter = DC1394_COLOR_FILTER_GRBG;
-    } else if (pattern == "BGGR") {
+    } else if (pattern == QLatin1String("BGGR")) {
         debayerParams.filter = DC1394_COLOR_FILTER_BGGR;
         // We return unless we find a valid pattern
     } else {

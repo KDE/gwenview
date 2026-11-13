@@ -1396,24 +1396,24 @@ void MainWindow::syncSortOrder(const QUrl &url)
             int sortRole = -1;
             Qt::SortOrder order = orderName == QStringLiteral("descending") ? Qt::DescendingOrder : Qt::AscendingOrder;
 
-            if (columnName == "text") {
+            if (columnName == QLatin1String("text")) {
                 column = KDirModel::Name;
                 sortRole = Qt::DisplayRole;
                 qCDebug(GWENVIEW_APP_LOG) << "Sorting according to file manager: text";
-            } else if (columnName == "modificationtime") {
+            } else if (columnName == QLatin1String("modificationtime")) {
                 column = KDirModel::ModifiedTime;
                 sortRole = Qt::DisplayRole;
                 qCDebug(GWENVIEW_APP_LOG) << "Sorting according to file manager: modtime";
-            } else if (columnName == "size") {
+            } else if (columnName == QLatin1String("size")) {
                 column = KDirModel::Size;
                 sortRole = Qt::DisplayRole;
                 qCDebug(GWENVIEW_APP_LOG) << "Sorting according to file manager: size";
-            } else if (columnName == "type") {
+            } else if (columnName == QLatin1String("type")) {
                 column = KDirModel::Type;
                 sortRole = Qt::DisplayRole;
                 qCDebug(GWENVIEW_APP_LOG) << "Sorting according to file manager: type";
 #ifndef GWENVIEW_SEMANTICINFO_BACKEND_NONE
-            } else if (columnName == "rating") {
+            } else if (columnName == QLatin1String("rating")) {
                 column = KDirModel::Name;
                 sortRole = SemanticInfoDirModel::RatingRole;
                 qCDebug(GWENVIEW_APP_LOG) << "Sorting according to file manager: rating";
@@ -1519,7 +1519,7 @@ void MainWindow::slotCurrentDirUrlChanged(const QUrl &url)
 {
     if (url.isValid()) {
         d->mUrlNavigator->setLocationUrl(url);
-        d->mGoUpAction->setEnabled(url.path() != "/");
+        d->mGoUpAction->setEnabled(url.path() != QLatin1String("/"));
         if (d->mCurrentMainPageId == BrowseMainPageId) {
             setCaption(d->mUrlNavigator->locationUrl().toDisplayString(QUrl::PreferLocalFile));
         }

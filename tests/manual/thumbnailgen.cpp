@@ -64,9 +64,9 @@ int main(int argc, char **argv)
     }
     const QString imageDirName = args.first();
     ThumbnailGroup::Enum group = ThumbnailGroup::Normal;
-    if (args.last() == "large") {
+    if (args.last() == QLatin1String("large")) {
         group = ThumbnailGroup::Large;
-    } else if (args.last() == "normal") {
+    } else if (args.last() == QLatin1String("normal")) {
         // group is already set to the right value
     } else {
         qFatal("Invalid thumbnail size: %s", qPrintable(args.last()));
