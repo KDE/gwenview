@@ -38,7 +38,7 @@ QTEST_MAIN(PlaceTreeModelTest)
 
 using namespace Gwenview;
 
-const char *BOOKMARKS_XML =
+const QString BOOKMARKS_XML = QStringLiteral(
     "<?xml version='1.0' encoding='UTF-8'?>"
     "<!DOCTYPE xbel>"
     "<xbel xmlns:bookmark='http://www.freedesktop.org/standards/desktop-bookmarks' xmlns:mime='http://www.freedesktop.org/standards/shared-mime-info' "
@@ -67,7 +67,7 @@ const char *BOOKMARKS_XML =
     "   </metadata>"
     "  </info>"
     " </bookmark>"
-    "</xbel>";
+    "</xbel>");
 
 void PlaceTreeModelTest::initTestCase()
 {
@@ -112,7 +112,7 @@ void PlaceTreeModelTest::init()
     Q_ASSERT(bookmarkOpened);
     Q_UNUSED(bookmarkOpened);
 
-    QString xml = QString(BOOKMARKS_XML).arg(mUrl1.url(), mUrl2.url());
+    QString xml = BOOKMARKS_XML.arg(mUrl1.url(), mUrl2.url());
     bookmark.write(xml.toUtf8());
 
 #ifdef KEEP_TEMP_DIR
