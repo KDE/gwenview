@@ -79,7 +79,7 @@ static QString generateThumbnailPath(const QString &uri, ThumbnailGroup::Enum gr
     QString baseDir = ThumbnailProvider::thumbnailBaseDir(group);
     QCryptographicHash md5(QCryptographicHash::Md5);
     md5.addData(QFile::encodeName(uri));
-    return baseDir + QFile::encodeName(QString::fromLatin1(md5.result().toHex())) + QStringLiteral(".png");
+    return baseDir + QString::fromLatin1(md5.result().toHex()) + QStringLiteral(".png");
 }
 
 //------------------------------------------------------------------------
@@ -146,7 +146,7 @@ static void moveThumbnailHelper(const QString &oldUri, const QString &newUri, Th
     }
     thumb.setText(QStringLiteral("Thumb::URI"), newUri);
     thumb.save(newPath, "png");
-    QFile::remove(QFile::encodeName(oldPath));
+    QFile::remove(oldPath);
 }
 
 void ThumbnailProvider::moveThumbnail(const QUrl &oldUrl, const QUrl &newUrl)
