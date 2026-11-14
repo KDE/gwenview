@@ -74,19 +74,21 @@ void PlaceTreeModelTest::initTestCase()
     Q_ASSERT(mTempDir.isValid());
     QDir dir(mTempDir.path());
 
-    const bool dir1created = dir.mkdir("url1");
+    const bool dir1created = dir.mkdir(QStringLiteral("url1"));
     Q_ASSERT(dir1created);
     Q_UNUSED(dir1created);
-    mUrl1 = QUrl::fromLocalFile(dir.filePath("url1"));
+    mUrl1 = QUrl::fromLocalFile(dir.filePath(QStringLiteral("url1")));
 
-    const bool dir2created = dir.mkdir("url2");
+    const bool dir2created = dir.mkdir(QStringLiteral("url2"));
     Q_ASSERT(dir2created);
     Q_UNUSED(dir2created);
-    mUrl2 = QUrl::fromLocalFile(dir.filePath("url2"));
+    mUrl2 = QUrl::fromLocalFile(dir.filePath(QStringLiteral("url2")));
 
-    mUrl1Dirs << "aaa"
-              << "zzz"
-              << "bbb";
+    mUrl1Dirs = {
+        QStringLiteral("aaa"),
+        QStringLiteral("zzz"),
+        QStringLiteral("bbb"),
+    };
     for (const QString &dirName : qAsConst(mUrl1Dirs)) {
         dir.mkdir(QLatin1String("url1/") + dirName);
     }

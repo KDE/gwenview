@@ -48,11 +48,11 @@ int main(int argc, char **argv)
     aboutData->setupCommandLine(&parser);
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addPositionalArgument("image-dir", i18n("Image dir to open"));
-    parser.addPositionalArgument("size", i18n("What size of thumbnails to generate. Can be either 'normal' or 'large'"));
+    parser.addPositionalArgument(QStringLiteral("image-dir"), i18n("Image dir to open"));
+    parser.addPositionalArgument(QStringLiteral("size"), i18n("What size of thumbnails to generate. Can be either 'normal' or 'large'"));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("t") << QStringLiteral("thumbnail-dir"),
                                         i18n("Use <dir> instead of ~/.thumbnails to store thumbnails"),
-                                        "thumbnail-dir"));
+                                        QStringLiteral("thumbnail-dir")));
     parser.process(app);
     aboutData->processCommandLine(&parser);
 

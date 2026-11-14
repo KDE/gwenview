@@ -41,7 +41,11 @@ using namespace Gwenview;
 
 void ImporterTest::init()
 {
-    mDocumentList = QList<QUrl>() << urlForTestFile("import/pict0001.jpg") << urlForTestFile("import/pict0002.jpg") << urlForTestFile("import/pict0003.jpg");
+    mDocumentList = QList<QUrl>({
+        urlForTestFile(QStringLiteral("import/pict0001.jpg")),
+        urlForTestFile(QStringLiteral("import/pict0002.jpg")),
+        urlForTestFile(QStringLiteral("import/pict0003.jpg")),
+    });
 
     mTempDir = std::make_unique<QTemporaryDir>();
 }
@@ -52,7 +56,7 @@ void ImporterTest::testContentsAreIdentical()
     QVERIFY(FileUtils::contentsAreIdentical(mDocumentList[0], mDocumentList[0]));
 
     QUrl url1 = mDocumentList[0];
-    QUrl url2 = urlForTestOutputFile("foo");
+    QUrl url2 = urlForTestOutputFile(QStringLiteral("foo"));
 
     // Test on a copy of a file
     QFile::remove(url2.toLocalFile());
@@ -245,32 +249,36 @@ void ImporterTest::testFileNameFormater_data()
     QTest::addColumn<QString>("format");
     QTest::addColumn<QString>("expected");
 
-    NEW_ROW("PICT0001.JPG", "2009-10-24T22:50:49", "{date}_{time}.{ext}", "2009-10-24_22-50-49.JPG");
-    NEW_ROW("PICT0001.JPG", "2009-10-24T22:50:49", "{date}_{time}.{ext.lower}", "2009-10-24_22-50-49.jpg");
-    NEW_ROW("2009.10.24.JPG", "2009-10-24T22:50:49", "{date}_{time}.{ext.lower}", "2009-10-24_22-50-49.jpg");
-    NEW_ROW("PICT0001.JPG", "2009-10-24T22:50:49", "{name}.{ext}", "PICT0001.JPG");
-    NEW_ROW("PICT0001.JPG", "2009-10-24T22:50:49", "{name.lower}.{ext.lower}", "pict0001.jpg");
-    NEW_ROW("iLikeCurlies", "2009-10-24T22:50:49", "{{{name}}", "{iLikeCurlies}");
-    NEW_ROW("UnknownKeyword", "2009-10-24T22:50:49", "foo{unknown}bar", "foobar");
-    NEW_ROW("MissingClosingCurly", "2009-10-24T22:50:49", "foo{date", "foo");
-    NEW_ROW("PICT0001.JPG", "2009-10-24T22:50:49", "{date}/{name}.{ext}", "2009-10-24/PICT0001.JPG");
+    NEW_ROW("PICT0001.JPG", QStringLiteral("2009-10-24T22:50:49"), QStringLiteral("{date}_{time}.{ext}"), QStringLiteral("2009-10-24_22-50-49.JPG"));
+    NEW_ROW("PICT0001.JPG", QStringLiteral("2009-10-24T22:50:49"), QStringLiteral("{date}_{time}.{ext.lower}"), QStringLiteral("2009-10-24_22-50-49.jpg"));
+    NEW_ROW("2009.10.24.JPG", QStringLiteral("2009-10-24T22:50:49"), QStringLiteral("{date}_{time}.{ext.lower}"), QStringLiteral("2009-10-24_22-50-49.jpg"));
+    NEW_ROW("PICT0001.JPG", QStringLiteral("2009-10-24T22:50:49"), QStringLiteral("{name}.{ext}"), QStringLiteral("PICT0001.JPG"));
+    NEW_ROW("PICT0001.JPG", QStringLiteral("2009-10-24T22:50:49"), QStringLiteral("{name.lower}.{ext.lower}"), QStringLiteral("pict0001.jpg"));
+    NEW_ROW("iLikeCurlies", QStringLiteral("2009-10-24T22:50:49"), QStringLiteral("{{{name}}"), QStringLiteral("{iLikeCurlies}"));
+    NEW_ROW("UnknownKeyword", QStringLiteral("2009-10-24T22:50:49"), QStringLiteral("foo{unknown}bar"), QStringLiteral("foobar"));
+    NEW_ROW("MissingClosingCurly", QStringLiteral("2009-10-24T22:50:49"), QStringLiteral("foo{date"), QStringLiteral("foo"));
+    NEW_ROW("PICT0001.JPG", QStringLiteral("2009-10-24T22:50:49"), QStringLiteral("{date}/{name}.{ext}"), QStringLiteral("2009-10-24/PICT0001.JPG"));
 }
 
 void ImporterTest::testAutoRenameFormat()
 {
-    QStringList dates = QStringList() << "1979-02-23_10-20-00"
-                                      << "2006-04-01_11-30-15"
-                                      << "2009-10-01_21-15-27";
-    QStringList dates2 = QStringList() << "1979-02-23/10-20-00"
-                                       << "2006-04-01/11-30-15"
-                                       << "2009-10-01/21-15-27";
+    const QStringList dates = {
+        QStringLiteral("1979-02-23_10-20-00"),
+        QStringLiteral("2006-04-01_11-30-15"),
+        QStringLiteral("2009-10-01_21-15-27"),
+    };
+    const QStringList dates2 = {
+        QStringLiteral("1979-02-23/10-20-00"),
+        QStringLiteral("2006-04-01/11-30-15"),
+        QStringLiteral("2009-10-01/21-15-27"),
+    };
     QCOMPARE(dates.count(), mDocumentList.count());
     QCOMPARE(dates2.count(), mDocumentList.count());
 
     QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + QLatin1String("/foo"));
 
     Importer importer(nullptr);
-    importer.setAutoRenameFormat("{date}_{time}.{ext}");
+    importer.setAutoRenameFormat(QStringLiteral("{date}_{time}.{ext}"));
     QList<QUrl> list = mDocumentList;
 
     QEventLoop loop;
@@ -289,7 +297,7 @@ void ImporterTest::testAutoRenameFormat()
     }
 
     // Test again with slashes in AutoRenameFormat
-    importer.setAutoRenameFormat("{date}/{time}.{ext}");
+    importer.setAutoRenameFormat(QStringLiteral("{date}/{time}.{ext}"));
     importer.start(list, destUrl);
     loop.exec();
 
@@ -307,7 +315,7 @@ void ImporterTest::testAutoRenameFormat()
 void ImporterTest::testReadOnlyDestination()
 {
     QUrl destUrl = QUrl::fromLocalFile(mTempDir->path() + QLatin1String("/foo"));
-    chmod(QFile::encodeName(mTempDir->path()), 0555);
+    chmod(QFile::encodeName(mTempDir->path()).data(), 0555);
 
     Importer importer(nullptr);
     QSignalSpy errorSpy(&importer, SIGNAL(error(QString)));

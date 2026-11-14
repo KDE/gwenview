@@ -247,7 +247,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
 
         // Button
         // Check if Discover is installed
-        q->mDiscoverAvailable = !QStandardPaths::findExecutable("plasma-discover").isEmpty();
+        q->mDiscoverAvailable = !QStandardPaths::findExecutable(QStringLiteral("plasma-discover")).isEmpty();
         QIcon buttonIcon(q->mDiscoverAvailable ? QIcon::fromTheme(QStringLiteral("plasmadiscover")) : QIcon::fromTheme(QStringLiteral("install")));
         QString buttonText, whatsThisText;
         QString tooltipText(i18nc("@info:tooltip for a button, %1 protocol name", "Launch Discover to install the protocol support library for \"%1\"", scheme));
@@ -480,13 +480,13 @@ void ThumbnailPage::installProtocolSupport() const
     const QString scheme(d->mSrcBaseUrl.scheme());
     // clang-format off
     if (scheme == QLatin1String("camera")) {
-        const QUrl kameraInstallUrl("appstream://org.kde.kamera");
+        const QUrl kameraInstallUrl(QStringLiteral("appstream://org.kde.kamera"));
         if (KIO::DesktopExecParser::hasSchemeHandler(kameraInstallUrl)) {
             QDesktopServices::openUrl(kameraInstallUrl);
         } else {
             KMessageBox::error(d->widget, xi18nc("@info when failing to open the appstream URL", "Opening Discover failed.<nl/>Please check if Discover is installed on your system, or use your system's package manager to install \"Kamera\" package."));
         }
-    } else if (!QProcess::startDetached(QStringLiteral("plasma-discover"), QStringList({"--search", scheme}))) {
+    } else if (!QProcess::startDetached(QStringLiteral("plasma-discover"), QStringList({QStringLiteral("--search"), scheme}))) {
         // For other protocols, search for the protocol name in Discover.
         KMessageBox::error(d->widget, xi18nc("@info when failing to launch plasma-discover, %1 protocol name", "Opening Discover failed.<nl/>Please check if Discover is installed on your system, or use your system's package manager to install the protocol support library for \"%1\".", scheme));
     }

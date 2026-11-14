@@ -58,18 +58,18 @@ void SandBox::initDir()
         job = KIO::del(sandBoxUrl);
         QVERIFY2(job->exec(), "Couldn't delete sandbox");
     }
-    dir.mkpath(".");
+    dir.mkpath(QStringLiteral("."));
 }
 
 void SandBox::fill()
 {
     initDir();
-    createTestImage("red.png", 300, 200, Qt::red);
-    createTestImage("blue.png", 200, 300, Qt::blue);
-    createTestImage("small.png", 50, 50, Qt::green);
+    createTestImage(QStringLiteral("red.png"), 300, 200, Qt::red);
+    createTestImage(QStringLiteral("blue.png"), 200, 300, Qt::blue);
+    createTestImage(QStringLiteral("small.png"), 50, 50, Qt::green);
 
-    copyTestImage("orient6.jpg", 128, 256);
-    copyTestImage("orient6-small.jpg", 32, 64);
+    copyTestImage(QStringLiteral("orient6.jpg"), 128, 256);
+    copyTestImage(QStringLiteral("orient6-small.jpg"), 32, 64);
 }
 
 void SandBox::copyTestImage(const QString &testFileName, int width, int height)
@@ -141,7 +141,7 @@ void ThumbnailProviderTest::testLoadLocal()
     QDir thumbnailDir = ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Normal);
     // There should be one file less because small.png is a png and is too
     // small to have a thumbnail
-    const QStringList entryList = thumbnailDir.entryList(QStringList("*.png"));
+    const QStringList entryList = thumbnailDir.entryList(QStringList(QStringLiteral("*.png")));
     QCOMPARE(entryList.count(), mSandBox.mSizeHash.size() - 1);
 
     // Check thumbnail keys
@@ -150,7 +150,7 @@ void ThumbnailProviderTest::testLoadLocal()
         QImage thumb;
         QVERIFY(thumb.load(thumbnailDir.filePath(name)));
 
-        QUrl url(thumb.text("Thumb::URI"));
+        QUrl url(thumb.text(QStringLiteral("Thumb::URI")));
         KFileItem item = list.findByUrl(url);
         QVERIFY(!item.isNull());
 
@@ -168,11 +168,11 @@ void ThumbnailProviderTest::testLoadLocal()
             QFAIL("Invalid time for test KFileItem");
         }
 
-        QCOMPARE(thumb.text("Thumb::Image::Width"), QString::number(originalSize.width()));
-        QCOMPARE(thumb.text("Thumb::Image::Height"), QString::number(originalSize.height()));
-        QCOMPARE(thumb.text("Thumb::Mimetype"), item.mimetype());
-        QCOMPARE(thumb.text("Thumb::Size"), QString::number(item.size()));
-        QCOMPARE(thumb.text("Thumb::MTime"), QString::number(mtime));
+        QCOMPARE(thumb.text(QStringLiteral("Thumb::Image::Width")), QString::number(originalSize.width()));
+        QCOMPARE(thumb.text(QStringLiteral("Thumb::Image::Height")), QString::number(originalSize.height()));
+        QCOMPARE(thumb.text(QStringLiteral("Thumb::Mimetype")), item.mimetype());
+        QCOMPARE(thumb.text(QStringLiteral("Thumb::Size")), QString::number(item.size()));
+        QCOMPARE(thumb.text(QStringLiteral("Thumb::MTime")), QString::number(mtime));
     }
 
     // Check what was in the thumbnailLoaded() signals
@@ -194,10 +194,10 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
     SandBox sandBox;
     sandBox.initDir();
     // This image is red (0xfe0000) and 256x128 but contains a white 128x64 thumbnail
-    sandBox.copyTestImage("embedded-thumbnail.jpg", 256, 128);
+    sandBox.copyTestImage(QStringLiteral("embedded-thumbnail.jpg"), 256, 128);
 
     KFileItemList list;
-    QUrl url(QLatin1String("file://") + QDir(sandBox.mPath).absoluteFilePath("embedded-thumbnail.jpg"));
+    QUrl url(QLatin1String("file://") + QDir(sandBox.mPath).absoluteFilePath(QStringLiteral("embedded-thumbnail.jpg")));
     list << KFileItem(url);
 
     // Loading a normal thumbnail should bring the white one
@@ -236,7 +236,7 @@ void ThumbnailProviderTest::testUseEmbeddedOrNot()
 
 void ThumbnailProviderTest::testLoadRemote()
 {
-    QUrl url = setUpRemoteTestDir("test.png");
+    QUrl url = setUpRemoteTestDir(QStringLiteral("test.png"));
     if (!url.isValid()) {
         QSKIP("Not running this test: failed to setup remote test dir.");
     }
@@ -256,7 +256,7 @@ void ThumbnailProviderTest::testLoadRemote()
     }
 
     QDir thumbnailDir = ThumbnailProvider::thumbnailBaseDir(ThumbnailGroup::Normal);
-    QStringList entryList = thumbnailDir.entryList(QStringList("*.png"));
+    QStringList entryList = thumbnailDir.entryList(QStringList(QStringLiteral("*.png")));
     QCOMPARE(entryList.count(), 1);
 }
 

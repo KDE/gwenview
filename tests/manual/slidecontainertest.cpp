@@ -38,11 +38,11 @@ public:
         auto container = new SlideContainer(this);
 
         auto inButton = new QPushButton(this);
-        inButton->setText("Slide &In");
+        inButton->setText(QStringLiteral("Slide &In"));
         connect(inButton, &QAbstractButton::clicked, container, &SlideContainer::slideIn);
 
         auto outButton = new QPushButton(this);
-        outButton->setText("Slide &Out");
+        outButton->setText(QStringLiteral("Slide &Out"));
         connect(outButton, &QAbstractButton::clicked, container, &SlideContainer::slideOut);
 
         auto layout = new QVBoxLayout(this);
@@ -51,7 +51,7 @@ public:
         layout->addWidget(container);
 
         auto content = new QLineEdit(container);
-        content->setText("Some long text. Some long text. Some long text. Some long text.");
+        content->setText(QStringLiteral("Some long text. Some long text. Some long text. Some long text."));
         container->setContent(content);
     }
 };

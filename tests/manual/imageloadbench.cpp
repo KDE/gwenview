@@ -50,7 +50,7 @@ int main(int argc, char **argv)
     QBuffer buffer(&data);
 
     qDebug() << "Using Qt loader";
-    bench(&buffer, "qt.png");
+    bench(&buffer, QStringLiteral("qt.png"));
 
     return 0;
 }

@@ -53,10 +53,10 @@ void testModel(const HistoryModel &model, const QUrl &u1, const QUrl &u2)
 
 void HistoryModelTest::testAddUrl()
 {
-    QUrl u1 = QUrl::fromLocalFile("/home");
-    QDateTime d1 = QDateTime::fromString("2008-02-03T12:34:56", Qt::ISODate);
-    QUrl u2 = QUrl::fromLocalFile("/root");
-    QDateTime d2 = QDateTime::fromString("2009-01-29T23:01:47", Qt::ISODate);
+    QUrl u1 = QUrl::fromLocalFile(QStringLiteral("/home"));
+    QDateTime d1 = QDateTime::fromString(QStringLiteral("2008-02-03T12:34:56"), Qt::ISODate);
+    QUrl u2 = QUrl::fromLocalFile(QStringLiteral("/root"));
+    QDateTime d2 = QDateTime::fromString(QStringLiteral("2009-01-29T23:01:47"), Qt::ISODate);
     QTemporaryDir dir;
     {
         HistoryModel model(nullptr, dir.path());
@@ -69,19 +69,19 @@ void HistoryModelTest::testAddUrl()
     testModel(model, u2, u1);
 
     // Make u1 the most recent
-    QDateTime d3 = QDateTime::fromString("2009-03-24T22:42:15", Qt::ISODate);
+    QDateTime d3 = QDateTime::fromString(QStringLiteral("2009-03-24T22:42:15"), Qt::ISODate);
     model.addUrl(u1, d3);
     testModel(model, u1, u2);
 }
 
 void HistoryModelTest::testGarbageCollect()
 {
-    QUrl u1 = QUrl::fromLocalFile("/home");
-    QDateTime d1 = QDateTime::fromString("2008-02-03T12:34:56", Qt::ISODate);
-    QUrl u2 = QUrl::fromLocalFile("/root");
-    QDateTime d2 = QDateTime::fromString("2009-01-29T23:01:47", Qt::ISODate);
-    QUrl u3 = QUrl::fromLocalFile("/usr");
-    QDateTime d3 = QDateTime::fromString("2009-03-24T22:42:15", Qt::ISODate);
+    QUrl u1 = QUrl::fromLocalFile(QStringLiteral("/home"));
+    QDateTime d1 = QDateTime::fromString(QStringLiteral("2008-02-03T12:34:56"), Qt::ISODate);
+    QUrl u2 = QUrl::fromLocalFile(QStringLiteral("/root"));
+    QDateTime d2 = QDateTime::fromString(QStringLiteral("2009-01-29T23:01:47"), Qt::ISODate);
+    QUrl u3 = QUrl::fromLocalFile(QStringLiteral("/usr"));
+    QDateTime d3 = QDateTime::fromString(QStringLiteral("2009-03-24T22:42:15"), Qt::ISODate);
 
     QTemporaryDir dir;
     {
@@ -101,10 +101,10 @@ void HistoryModelTest::testGarbageCollect()
 
 void HistoryModelTest::testRemoveRows()
 {
-    QUrl u1 = QUrl::fromLocalFile("/home");
-    QDateTime d1 = QDateTime::fromString("2008-02-03T12:34:56", Qt::ISODate);
-    QUrl u2 = QUrl::fromLocalFile("/root");
-    QDateTime d2 = QDateTime::fromString("2009-01-29T23:01:47", Qt::ISODate);
+    QUrl u1 = QUrl::fromLocalFile(QStringLiteral("/home"));
+    QDateTime d1 = QDateTime::fromString(QStringLiteral("2008-02-03T12:34:56"), Qt::ISODate);
+    QUrl u2 = QUrl::fromLocalFile(QStringLiteral("/root"));
+    QDateTime d2 = QDateTime::fromString(QStringLiteral("2009-01-29T23:01:47"), Qt::ISODate);
 
     QTemporaryDir dir;
     HistoryModel model(nullptr, dir.path(), 2);
@@ -128,8 +128,8 @@ void HistoryModelTest::testRemoveMissingFolder()
     const QUrl removed = QUrl::fromLocalFile(removedPath + QLatin1Char('/'));
     {
         HistoryModel model(nullptr, storageDir.path());
-        model.addUrl(kept, QDateTime::fromString("2008-02-03T12:34:56", Qt::ISODate));
-        model.addUrl(removed, QDateTime::fromString("2009-01-29T23:01:47", Qt::ISODate));
+        model.addUrl(kept, QDateTime::fromString(QStringLiteral("2008-02-03T12:34:56"), Qt::ISODate));
+        model.addUrl(removed, QDateTime::fromString(QStringLiteral("2009-01-29T23:01:47"), Qt::ISODate));
     }
     QVERIFY(QDir(removedPath).removeRecursively());
 

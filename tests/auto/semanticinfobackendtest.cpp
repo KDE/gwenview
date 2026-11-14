@@ -85,7 +85,7 @@ void SemanticInfoBackEndTest::cleanup()
  */
 void SemanticInfoBackEndTest::testRating()
 {
-    QTemporaryFile temp("XXXXXX.metadatabackendtest");
+    QTemporaryFile temp(QStringLiteral("XXXXXX.metadatabackendtest"));
     QVERIFY(temp.open());
 
     QUrl url;

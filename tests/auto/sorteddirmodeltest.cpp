@@ -36,22 +36,22 @@ QTEST_MAIN(SortedDirModelTest)
 
 void SortedDirModelTest::initTestCase()
 {
-    mSandBoxDir.mkdir("empty_dir");
-    mSandBoxDir.mkdir("dirs_only");
-    mSandBoxDir.mkdir("dirs_only/dir1");
-    mSandBoxDir.mkdir("dirs_only/dir2");
-    mSandBoxDir.mkdir("dirs_and_docs");
-    mSandBoxDir.mkdir("dirs_and_docs/dir");
-    createEmptyFile(mSandBoxDir.absoluteFilePath("dirs_and_docs/file.png"));
-    mSandBoxDir.mkdir("docs_only");
-    createEmptyFile(mSandBoxDir.absoluteFilePath("docs_only/file.png"));
+    mSandBoxDir.mkdir(QStringLiteral("empty_dir"));
+    mSandBoxDir.mkdir(QStringLiteral("dirs_only"));
+    mSandBoxDir.mkdir(QStringLiteral("dirs_only/dir1"));
+    mSandBoxDir.mkdir(QStringLiteral("dirs_only/dir2"));
+    mSandBoxDir.mkdir(QStringLiteral("dirs_and_docs"));
+    mSandBoxDir.mkdir(QStringLiteral("dirs_and_docs/dir"));
+    createEmptyFile(mSandBoxDir.absoluteFilePath(QStringLiteral("dirs_and_docs/file.png")));
+    mSandBoxDir.mkdir(QStringLiteral("docs_only"));
+    createEmptyFile(mSandBoxDir.absoluteFilePath(QStringLiteral("docs_only/file.png")));
 }
 
 void SortedDirModelTest::testHasDocuments_data()
 {
     QTest::addColumn<QString>("dir");
     QTest::addColumn<bool>("hasDocuments");
-#define NEW_ROW(dir, hasDocuments) QTest::newRow(QString(dir).toLocal8Bit().data()) << mSandBoxDir.absoluteFilePath(dir) << hasDocuments
+#define NEW_ROW(dir, hasDocuments) QTest::newRow(dir) << mSandBoxDir.absoluteFilePath(QStringLiteral(dir)) << hasDocuments
     NEW_ROW("empty_dir", false);
     NEW_ROW("dirs_only", false);
     NEW_ROW("dirs_and_docs", true);

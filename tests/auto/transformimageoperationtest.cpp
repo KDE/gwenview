@@ -48,7 +48,7 @@ void TransformImageOperationTest::init()
 
 void TransformImageOperationTest::testRotate90()
 {
-    QUrl url = urlForTestFile("test.png");
+    QUrl url = urlForTestFile(QStringLiteral("test.png"));
     QImage image;
 
     bool ok = image.load(url.toLocalFile());

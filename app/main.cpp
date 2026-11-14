@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("f") << QStringLiteral("fullscreen"), i18n("Start in fullscreen mode")));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("s") << QStringLiteral("slideshow"), i18n("Start in slideshow mode")));
     parser.addOption(QCommandLineOption(QStringList() << QStringLiteral("m") << QStringLiteral("spotlight"), i18n("Start in spotlight mode")));
-    parser.addPositionalArgument("url", i18n("A starting file or folders"));
+    parser.addPositionalArgument(QStringLiteral("url"), i18n("A starting file or folders"));
     parser.process(app);
     aboutData.data()->processCommandLine(&parser);
 

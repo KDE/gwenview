@@ -44,7 +44,7 @@ void ImageMetaInfoModelTest::testCatchExiv2Errors()
 {
     QByteArray data;
     {
-        QString path = pathForTestFile("302350_exiv_0.23_exception.jpg");
+        QString path = pathForTestFile(QStringLiteral("302350_exiv_0.23_exception.jpg"));
         QFile file(path);
         QVERIFY(file.open(QIODevice::ReadOnly));
         data = file.readAll();

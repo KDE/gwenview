@@ -41,30 +41,42 @@ void RecursiveDirModelTest::testBasic_data()
     QTest::addColumn<QStringList>("addedFiles");
     QTest::addColumn<QStringList>("removedFiles");
 #define NEW_ROW(name, initialFiles, addedFiles, removedFiles) QTest::newRow(name) << (initialFiles) << (addedFiles) << (removedFiles)
-    NEW_ROW("empty_dir", QStringList(), QStringList() << "new.jpg", QStringList() << "new.jpg");
+    NEW_ROW("empty_dir", QStringList(), QStringList() << QStringLiteral("new.jpg"), QStringList() << QStringLiteral("new.jpg"));
     NEW_ROW("images_only",
-            QStringList() << "pict01.jpg"
-                          << "pict02.jpg"
-                          << "pict03.jpg",
-            QStringList() << "pict04.jpg",
-            QStringList() << "pict02.jpg");
+            QStringList({
+                QStringLiteral("pict01.jpg"),
+                QStringLiteral("pict02.jpg"),
+                QStringLiteral("pict03.jpg"),
+            }),
+            QStringList() << QStringLiteral("pict04.jpg"),
+            QStringList() << QStringLiteral("pict02.jpg"));
     NEW_ROW("images_in_two_dirs",
-            QStringList() << "d1/pict101.jpg"
-                          << "d1/pict102.jpg"
-                          << "d2/pict201.jpg",
-            QStringList() << "d1/pict103.jpg"
-                          << "d2/pict202.jpg",
-            QStringList() << "d2/pict202.jpg");
+            QStringList({
+                QStringLiteral("d1/pict101.jpg"),
+                QStringLiteral("d1/pict102.jpg"),
+                QStringLiteral("d2/pict201.jpg"),
+            }),
+            QStringList({
+                QStringLiteral("d1/pict103.jpg"),
+                QStringLiteral("d2/pict202.jpg"),
+            }),
+            QStringList() << QStringLiteral("d2/pict202.jpg"));
     NEW_ROW("images_in_two_dirs_w_same_names",
-            QStringList() << "d1/a.jpg"
-                          << "d1/b.jpg"
-                          << "d2/a.jpg"
-                          << "d2/b.jpg",
-            QStringList() << "d3/a.jpg"
-                          << "d3/b.jpg",
-            QStringList() << "d1/a.jpg"
-                          << "d2/a.jpg"
-                          << "d3/a.jpg");
+            QStringList({
+                QStringLiteral("d1/a.jpg"),
+                QStringLiteral("d1/b.jpg"),
+                QStringLiteral("d2/a.jpg"),
+                QStringLiteral("d2/b.jpg"),
+            }),
+            QStringList({
+                QStringLiteral("d3/a.jpg"),
+                QStringLiteral("d3/b.jpg"),
+            }),
+            QStringList({
+                QStringLiteral("d1/a.jpg"),
+                QStringLiteral("d2/a.jpg"),
+                QStringLiteral("d3/a.jpg"),
+            }));
 #undef NEW_ROW
 }
 
@@ -162,22 +174,24 @@ void RecursiveDirModelTest::testBasic()
 void RecursiveDirModelTest::testSetNewUrl()
 {
     TestUtils::SandBoxDir sandBoxDir;
-    sandBoxDir.fill(QStringList() << "d1/a.jpg"
-                                  << "d1/b.jpg"
-                                  << "d1/c.jpg"
-                                  << "d1/d.jpg"
-                                  << "d2/e.jpg"
-                                  << "d2/f.jpg");
+    sandBoxDir.fill(QStringList({
+        QStringLiteral("d1/a.jpg"),
+        QStringLiteral("d1/b.jpg"),
+        QStringLiteral("d1/c.jpg"),
+        QStringLiteral("d1/d.jpg"),
+        QStringLiteral("d2/e.jpg"),
+        QStringLiteral("d2/f.jpg"),
+    }));
 
     RecursiveDirModel model;
     TestUtils::TimedEventLoop loop;
     connect(&model, &RecursiveDirModel::completed, &loop, &QEventLoop::quit);
 
-    model.setUrl(QUrl::fromLocalFile(sandBoxDir.absoluteFilePath("d1")));
+    model.setUrl(QUrl::fromLocalFile(sandBoxDir.absoluteFilePath(QStringLiteral("d1"))));
     loop.exec();
     QCOMPARE(model.rowCount(QModelIndex()), 4);
 
-    model.setUrl(QUrl::fromLocalFile(sandBoxDir.absoluteFilePath("d2")));
+    model.setUrl(QUrl::fromLocalFile(sandBoxDir.absoluteFilePath(QStringLiteral("d2"))));
     loop.exec();
     QCOMPARE(model.rowCount(QModelIndex()), 2);
 }
