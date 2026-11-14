@@ -35,7 +35,7 @@ class SideBarGroup : public QFrame
 {
     Q_OBJECT
 public:
-    SideBarGroup(const QString &title = "");
+    SideBarGroup(const QString &title = QString());
     ~SideBarGroup() override;
 
     void addWidget(QWidget *);
