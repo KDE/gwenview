@@ -121,7 +121,7 @@ struct GvCorePrivate {
 
         QList<KFileFilter> filters;
         for (const QByteArray &mimeName : QImageWriter::supportedMimeTypes()) {
-            filters << KFileFilter::fromMimeType(mimeName);
+            filters << KFileFilter::fromMimeType(QString::fromLatin1(mimeName));
         }
 
         fileWidget->setFilters(filters, KFileFilter::fromMimeType(MimeTypeUtils::urlMimeType(url)));

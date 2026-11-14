@@ -63,7 +63,7 @@ QString protocolForMimeType(const QString &mimeType)
     // of falling back to a protocol. This ensures we read .ora and .svgz correctly
     // before opening them as zips.
     const auto supportedMimeTypes = QImageReader::supportedMimeTypes();
-    if (supportedMimeTypes.contains(mimeType)) {
+    if (supportedMimeTypes.contains(mimeType.toLatin1())) {
         cache.insert(mimeType, QString());
         return {};
     }

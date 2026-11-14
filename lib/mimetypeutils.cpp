@@ -84,7 +84,7 @@ const QStringList &rasterImageMimeTypes()
     if (list.isEmpty()) {
         const auto supported = QImageReader::supportedMimeTypes();
         for (const auto &mime : supported) {
-            const auto resolved = resolveAlias(QString::fromUtf8(mime));
+            const auto resolved = resolveAlias(QString::fromLatin1(mime));
             if (resolved.isEmpty()) {
                 qCDebug(GWENVIEW_LIB_LOG) << "Unresolved mime type " << mime;
             } else {
