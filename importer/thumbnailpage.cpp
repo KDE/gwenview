@@ -277,7 +277,7 @@ struct ThumbnailPagePrivate : public Ui_ThumbnailPage {
             QObject::connect(mInstallProtocolSupportButton, &QAbstractButton::clicked, q, &ThumbnailPage::installProtocolSupport);
         } else {
             QObject::connect(mInstallProtocolSupportButton, &QAbstractButton::clicked, q, [scheme]() {
-                const QString searchKeyword(QUrl::toPercentEncoding(i18nc("@info this text will be used as a search term in an online search engine, %1 protocol name", "How to install protocol support for \"%1\" on Linux", scheme)).constData());
+                const QString searchKeyword = QString::fromLatin1(QUrl::toPercentEncoding(i18nc("@info this text will be used as a search term in an online search engine, %1 protocol name", "How to install protocol support for \"%1\" on Linux", scheme)));
                 const QString searchEngineURL(i18nc("search engine URL, %1 search keyword, and translators can replace duckduckgo with other search engines", "https://duckduckgo.com/?q=%1", searchKeyword));
                 QDesktopServices::openUrl(QUrl(searchEngineURL));
             });
