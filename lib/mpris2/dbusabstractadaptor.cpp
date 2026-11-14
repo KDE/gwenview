@@ -58,7 +58,7 @@ void DBusAbstractAdaptor::emitPropertiesChangeDBusSignal()
 
     QDBusMessage signalMessage =
         QDBusMessage::createSignal(mObjectPath, QStringLiteral("org.freedesktop.DBus.Properties"), QStringLiteral("PropertiesChanged"));
-    signalMessage << dBusInterfaceName << mChangedProperties << QStringList();
+    signalMessage << QLatin1String(dBusInterfaceName) << mChangedProperties << QStringList();
 
     QDBusConnection::sessionBus().send(signalMessage);
 
