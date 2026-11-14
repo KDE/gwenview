@@ -412,7 +412,7 @@ void ThumbnailPage::openUrl(const QUrl &url)
     } else {
         path = QUrl::fromPercentEncoding(path.toUtf8());
         path.replace(QLatin1Char('/'), QLatin1String(" › "));
-        text = QString::fromUtf8("%1 › %2").arg(d->mSrcBaseName, path);
+        text = QStringLiteral("%1 › %2").arg(d->mSrcBaseName, path);
     }
     d->mSrcUrlButton->setText(text);
     d->mRecursiveDirModel->setUrl(url);
