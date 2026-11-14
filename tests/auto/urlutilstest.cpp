@@ -49,8 +49,8 @@ void UrlUtilsTest::testFixUserEnteredUrl_data()
     QString pwd = QDir::currentPath();
 
     NEW_ROW(QStringLiteral("http://example.com"), QStringLiteral("http://example.com"));
-    NEW_ROW(QString(QLatin1String("file://") + pwd + QLatin1String("/example.zip")), QLatin1String("zip:") + pwd + QLatin1String("/example.zip"));
-    NEW_ROW(QString(QLatin1String("file://") + pwd + QLatin1String("/example.cbz")), QLatin1String("zip:") + pwd + QLatin1String("/example.cbz"));
+    NEW_ROW(QString(QLatin1String("file://") + pwd + QLatin1String("/example.zip")), QLatin1String("zip://") + pwd + QLatin1String("/example.zip"));
+    NEW_ROW(QString(QLatin1String("file://") + pwd + QLatin1String("/example.cbz")), QLatin1String("zip://") + pwd + QLatin1String("/example.cbz"));
     NEW_ROW(QString(QLatin1String("file://") + pwd + QLatin1String("/example.jpg")), QLatin1String("file://") + pwd + QLatin1String("/example.jpg"));
     // Check it does not get turned into gzip://...
     NEW_ROW(QString(QLatin1String("file://") + pwd + QLatin1String("/example.svgz")), QLatin1String("file://") + pwd + QLatin1String("/example.svgz"));
