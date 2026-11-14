@@ -1333,7 +1333,7 @@ void MainWindow::openDirUrl(const QUrl &url)
         // thing to do here.
         const QString currentPath = QDir::cleanPath(currentUrl.adjusted(QUrl::StripTrailingSlash).path());
         const QString wantedPath = QDir::cleanPath(url.adjusted(QUrl::StripTrailingSlash).path());
-        const QChar separator('/');
+        const QChar separator = QLatin1Char('/');
         const int slashCount = wantedPath.count(separator);
         const QString pathToSelect = currentPath.section(separator, 0, slashCount + 1);
         QUrl urlToSelect = url;

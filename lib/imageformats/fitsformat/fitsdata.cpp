@@ -410,7 +410,7 @@ bool FITSData::checkDebayer()
         return false;
     }
     QString pattern(bayerPattern);
-    pattern = pattern.remove('\'').trimmed();
+    pattern = pattern.remove(QLatin1Char('\'')).trimmed();
 
     if (pattern == QLatin1String("RGGB")) {
         debayerParams.filter = DC1394_COLOR_FILTER_RGGB;

@@ -78,7 +78,7 @@ QString FileNameFormater::format(const QUrl &url, const QDateTime &dateTime)
                 ++pos;
                 continue;
             }
-            int end = d->mFormat.indexOf('}', pos + 1);
+            int end = d->mFormat.indexOf(QLatin1Char('}'), pos + 1);
             if (end == -1) {
                 // No '}' found, stop here
                 return name;

@@ -190,7 +190,7 @@ struct GvCorePrivate {
             // Default color scheme
             mFullScreenPaletteName = QStandardPaths::locate(QStandardPaths::AppDataLocation, QStringLiteral("color-schemes/fullscreen.colors"));
             config = KSharedConfig::openConfig(mFullScreenPaletteName);
-        } else if (name.contains('/')) {
+        } else if (name.contains(QLatin1Char('/'))) {
             // Full path to a .colors file
             mFullScreenPaletteName = name;
             config = KSharedConfig::openConfig(mFullScreenPaletteName);
@@ -383,7 +383,7 @@ void GvCore::addUrlToRecentFolders(QUrl url)
     }
 
     // For "sftp://localhost", "/" is a different path than "" (bug #312060)
-    if (!url.path().isEmpty() && !url.path().endsWith('/')) {
+    if (!url.path().isEmpty() && !url.path().endsWith(QLatin1Char('/'))) {
         url.setPath(url.path() + QLatin1Char('/'));
     }
 
