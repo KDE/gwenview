@@ -384,7 +384,7 @@ int FITSData::getFITSRecord(QString &recordList, int &nkeys)
         return -1;
     }
 
-    recordList = QString(header);
+    recordList = QString::fromLatin1(header);
 
     free(header);
 
@@ -409,7 +409,7 @@ bool FITSData::checkDebayer()
     if (stats.bitpix != 16 && stats.bitpix != 8) {
         return false;
     }
-    QString pattern(bayerPattern);
+    QString pattern = QString::fromLatin1(bayerPattern);
     pattern = pattern.remove(QLatin1Char('\'')).trimmed();
 
     if (pattern == QLatin1String("RGGB")) {
