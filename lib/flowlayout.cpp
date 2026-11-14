@@ -146,7 +146,7 @@ int FlowLayout::getMargin() const
 QSize FlowLayout::minimumSize() const
 {
     QSize size;
-    for (QLayoutItem *item : qAsConst(itemList))
+    for (QLayoutItem *item : std::as_const(itemList))
         size = size.expandedTo(item->minimumSize());
 
     size += QSize(2 * getMargin(), 2 * getMargin());
@@ -167,7 +167,7 @@ int FlowLayout::doLayout(const QRect &rect, bool testOnly) const
     bool lastItemIsSpacer = false;
     QHash<int, int> widthForY;
 
-    for (QLayoutItem *item : qAsConst(itemList)) {
+    for (QLayoutItem *item : std::as_const(itemList)) {
         const bool itemIsSpacer = item->spacerItem() != nullptr;
         // Don't add invisible items or succeeding spacer items
         if (item->sizeHint().width() == 0 || (itemIsSpacer && lastItemIsSpacer)) {

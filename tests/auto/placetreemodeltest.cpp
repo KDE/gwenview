@@ -89,7 +89,7 @@ void PlaceTreeModelTest::initTestCase()
         QStringLiteral("zzz"),
         QStringLiteral("bbb"),
     };
-    for (const QString &dirName : qAsConst(mUrl1Dirs)) {
+    for (const QString &dirName : std::as_const(mUrl1Dirs)) {
         dir.mkdir(QLatin1String("url1/") + dirName);
     }
 

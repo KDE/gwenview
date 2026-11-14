@@ -79,7 +79,7 @@ void SaveAllHelper::save()
     if (!d->mErrorList.isEmpty()) {
         QString msg = i18ncp("@info", "One document could not be saved:", "%1 documents could not be saved:", d->mErrorList.count());
         msg += QLatin1String("<ul>");
-        for (const QString &item : qAsConst(d->mErrorList)) {
+        for (const QString &item : std::as_const(d->mErrorList)) {
             msg += QLatin1String("<li>") + item + QLatin1String("</li>");
         }
         msg += QLatin1String("</ul>");
@@ -89,7 +89,7 @@ void SaveAllHelper::save()
 
 void SaveAllHelper::slotCanceled()
 {
-    for (DocumentJob *job : qAsConst(d->mJobSet)) {
+    for (DocumentJob *job : std::as_const(d->mJobSet)) {
         job->kill();
     }
 }

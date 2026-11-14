@@ -272,7 +272,7 @@ void FileOpsContextManagerItem::updateSideBarContent()
     const QList<QAction *> itemsToOmit = {mDelAction, mCreateFolderAction, mOpenInNewWindowAction};
 
     QList<QAction *> &list = mInTrash ? mTrashFileActionList : mRegularFileActionList;
-    for (QAction *action : qAsConst(list)) {
+    for (QAction *action : std::as_const(list)) {
         if (action->isEnabled() && !action->isSeparator() && !itemsToOmit.contains(action)) {
             mGroup->addAction(action);
         }
@@ -369,7 +369,7 @@ void FileOpsContextManagerItem::populateOpenMenu()
     updateServiceList();
 
     int idx = -1;
-    for (const KService::Ptr &service : qAsConst(mServiceList)) {
+    for (const KService::Ptr &service : std::as_const(mServiceList)) {
         ++idx;
         if (service->name() == QLatin1String("Gwenview")) {
             continue;

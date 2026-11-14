@@ -367,7 +367,7 @@ void SemanticInfoContextManagerItem::update()
     }
 
     bool enabled = !contextManager()->selectedFileItemList().isEmpty();
-    for (QAction *action : qAsConst(d->mActions)) {
+    for (QAction *action : std::as_const(d->mActions)) {
         action->setEnabled(enabled);
     }
     d->updateTags();
