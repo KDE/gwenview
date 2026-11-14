@@ -37,11 +37,11 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 using namespace std;
 
-const char *ORIENT6_FILE = "orient6.jpg";
-const char *ORIENT1_VFLIP_FILE = "orient1_vflip.jpg";
-const char *CUT_FILE = "cut.jpg";
-const char *TMP_FILE = "tmp.jpg";
-const char *THUMBNAIL_FILE = "test_thumbnail.jpg";
+const QString ORIENT6_FILE = QStringLiteral("orient6.jpg");
+const QString ORIENT1_VFLIP_FILE = QStringLiteral("orient1_vflip.jpg");
+const QString CUT_FILE = QStringLiteral("cut.jpg");
+const QString TMP_FILE = QStringLiteral("tmp.jpg");
+const QString THUMBNAIL_FILE = QStringLiteral("test_thumbnail.jpg");
 
 const int ORIENT6_WIDTH = 128; // This size is the size *after* orientation
 const int ORIENT6_HEIGHT = 256; // has been applied

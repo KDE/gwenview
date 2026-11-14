@@ -60,7 +60,7 @@ namespace Gwenview
 static const int DEFAULT_THUMBNAIL_SIZE = 128;
 static const qreal DEFAULT_THUMBNAIL_ASPECT_RATIO = 3. / 2.;
 
-static const char *URL_FOR_BASE_URL_GROUP = "UrlForBaseUrl";
+static const QString URL_FOR_BASE_URL_GROUP = QStringLiteral("UrlForBaseUrl");
 
 class ImporterThumbnailViewHelper : public AbstractThumbnailViewHelper
 {
