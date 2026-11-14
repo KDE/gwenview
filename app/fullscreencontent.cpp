@@ -522,22 +522,22 @@ void FullScreenContent::setupThumbnailBarStyleSheet()
     // Calculate hover color based on background color in case it changes (matches ViewMainPage thumbnail bar)
     bgHovColor.setHsv(bgHovColor.hue(), (bgHovColor.saturation() / 2), ((bgHovColor.value() + bgColor.value()) / 2));
 
-    QString genCss =
+    QString genCss = QStringLiteral(
         "QListView {"
         "  background-color: %1;"
-        "}";
+        "}");
     genCss = genCss.arg(StyleSheetUtils::rgba(bgColor));
 
-    QString itemSelCss =
+    QString itemSelCss = QStringLiteral(
         "QListView::item:selected {"
         "  background-color: %1;"
-        "}";
+        "}");
     itemSelCss = itemSelCss.arg(StyleSheetUtils::rgba(bgSelColor));
 
-    QString itemHovCss =
+    QString itemHovCss = QStringLiteral(
         "QListView::item:hover:!selected {"
         "  background-color: %1;"
-        "}";
+        "}");
     itemHovCss = itemHovCss.arg(StyleSheetUtils::rgba(bgHovColor));
 
     QString css = genCss + itemSelCss + itemHovCss;

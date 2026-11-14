@@ -45,7 +45,7 @@ const char *THUMBNAIL_FILE = "test_thumbnail.jpg";
 
 const int ORIENT6_WIDTH = 128; // This size is the size *after* orientation
 const int ORIENT6_HEIGHT = 256; // has been applied
-const QString ORIENT6_COMMENT = "a comment";
+const QString ORIENT6_COMMENT = QStringLiteral("a comment");
 
 QTEST_MAIN(JpegContentTest)
 
@@ -187,7 +187,7 @@ void JpegContentTest::testTransform()
 
 void JpegContentTest::testSetComment()
 {
-    QString comment = "test comment";
+    QString comment = QStringLiteral("test comment");
     Gwenview::JpegContent content;
     bool result;
     result = content.load(pathForTestFile(ORIENT6_FILE));

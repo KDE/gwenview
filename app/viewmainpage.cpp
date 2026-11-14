@@ -234,30 +234,30 @@ struct ViewMainPagePrivate {
         QColor rightBorderColor = PaintUtils::adjustedHsv(bgColor, 0, 0, -qMin(40, bgColor.value()));
         QColor borderSelColor = PaintUtils::adjustedHsv(bgSelColor, 0, 0, -qMin(60, bgSelColor.value()));
 
-        QString itemCss =
+        QString itemCss = QStringLiteral(
             "QListView::item {"
             "	background-color: %1;"
             "	border-left: 1px solid %2;"
             "	border-right: 1px solid %3;"
-            "}";
+            "}");
         itemCss = itemCss.arg(StyleSheetUtils::gradient(orientation, bgColor, 46),
                               StyleSheetUtils::gradient(orientation, leftBorderColor, 36),
                               StyleSheetUtils::gradient(orientation, rightBorderColor, 26));
 
-        QString itemSelCss =
+        QString itemSelCss = QStringLiteral(
             "QListView::item:selected {"
             "	background-color: %1;"
             "	border-left: 1px solid %2;"
             "	border-right: 1px solid %2;"
-            "}";
+            "}");
         itemSelCss = itemSelCss.arg(StyleSheetUtils::gradient(orientation, bgSelColor, 56), StyleSheetUtils::rgba(borderSelColor));
 
-        QString itemHovCss =
+        QString itemHovCss = QStringLiteral(
             "QListView::item:hover:!selected {"
             "  background-color: %1;"
             "  border-left: 1px solid %2;"
             "  border-right: 1px solid %3;"
-            "}";
+            "}");
         itemHovCss = itemHovCss.arg(StyleSheetUtils::gradient(orientation, bgHovColor, 56),
                                     StyleSheetUtils::rgba(leftBorderColor),
                                     StyleSheetUtils::rgba(rightBorderColor));

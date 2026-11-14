@@ -72,7 +72,7 @@ bool FITSData::loadFITS(QIODevice &buffer)
     if (fits_open_memfile(&fptr, "", READONLY, reinterpret_cast<void **>(&imageDataBuf), &imageDataSize, 3000, nullptr, &status)) {
         fits_report_error(stderr, status);
         fits_get_errstatus(status, error_status);
-        errMessage = QString("Could not open file %1. Error %2").arg(filename, QString::fromUtf8(error_status));
+        errMessage = QStringLiteral("Could not open file %1. Error %2").arg(filename, QString::fromUtf8(error_status));
         buffer.seek(oldPos);
         return false;
     }
@@ -80,13 +80,13 @@ bool FITSData::loadFITS(QIODevice &buffer)
     if (fits_get_img_param(fptr, 3, &(stats.bitpix), &(stats.ndim), naxes, &status)) {
         fits_report_error(stderr, status);
         fits_get_errstatus(status, error_status);
-        errMessage = QString("FITS file open error (fits_get_img_param): %1").arg(QString::fromUtf8(error_status));
+        errMessage = QStringLiteral("FITS file open error (fits_get_img_param): %1").arg(QString::fromUtf8(error_status));
         buffer.seek(oldPos);
         return false;
     }
 
     if (stats.ndim < 2) {
-        errMessage = "1D FITS images are not supported.";
+        errMessage = QStringLiteral("1D FITS images are not supported.");
         buffer.seek(oldPos);
         return false;
     }
@@ -127,7 +127,7 @@ bool FITSData::loadFITS(QIODevice &buffer)
         stats.bytesPerPixel = sizeof(double);
         break;
     default:
-        errMessage = QString("Bit depth %1 is not supported.").arg(stats.bitpix);
+        errMessage = QStringLiteral("Bit depth %1 is not supported.").arg(stats.bitpix);
         return false;
         break;
     }
@@ -137,7 +137,7 @@ bool FITSData::loadFITS(QIODevice &buffer)
     }
 
     if (naxes[0] == 0 || naxes[1] == 0) {
-        errMessage = QString("Image has invalid dimensions %1x%2").arg(naxes[0], naxes[1]);
+        errMessage = QStringLiteral("Image has invalid dimensions %1x%2").arg(naxes[0], naxes[1]);
         buffer.seek(oldPos);
         return false;
     }
@@ -153,7 +153,7 @@ bool FITSData::loadFITS(QIODevice &buffer)
     if (channels != 1 && channels != 3) {
         // code in both calculateMinMax and convertToQImage assume that images have either
         // 1 channel or 3. File in bug 482615 has two, so bail out better than crashing
-        errMessage = QString("Images with %1 channels are currently not supported.").arg(channels);
+        errMessage = QStringLiteral("Images with %1 channels are currently not supported.").arg(channels);
         buffer.seek(oldPos);
         return false;
     }
@@ -172,7 +172,7 @@ bool FITSData::loadFITS(QIODevice &buffer)
     if (fits_read_img(fptr, data_type, 1, nelements, nullptr, imageBuffer, &anynull, &status)) {
         char errmsg[512];
         fits_get_errstatus(status, errmsg);
-        errMessage = QString("Error reading image: %1").arg(errmsg);
+        errMessage = QStringLiteral("Error reading image: %1").arg(errmsg);
         fits_report_error(stderr, status);
         buffer.seek(oldPos);
         return false;
