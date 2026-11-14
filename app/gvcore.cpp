@@ -420,7 +420,7 @@ void GvCore::save(const QUrl &url)
         KGuiItem saveUsingAnotherFormat = KStandardGuiItem::saveAs();
         saveUsingAnotherFormat.setText(i18n("Save using another format"));
         int result = KMessageBox::warningContinueCancel(d->mMainWindow,
-                                                        i18n("Gwenview cannot save images in '%1' format.", QString(format)),
+                                                        i18n("Gwenview cannot save images in '%1' format.", QLatin1String(format)),
                                                         QString() /* caption */,
                                                         saveUsingAnotherFormat);
         if (result == KMessageBox::Continue) {
