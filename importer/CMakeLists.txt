@@ -43,8 +43,6 @@ kconfig_add_kcfg_files(importer_SRCS
     importerconfig.kcfgc
     )
 
-add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
-
 add_executable(gwenview_importer ${importer_SRCS})
 
 target_link_libraries(gwenview_importer

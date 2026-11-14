@@ -12,8 +12,6 @@ set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake )
 
 set (QT_MIN_VERSION "6.6.0")
 set (KF_MIN_VERSION "6.9.0")
-set(KDE_COMPILERSETTINGS_LEVEL "5.82")
-
 
 find_package(ECM ${KF_MIN_VERSION} REQUIRED NO_MODULE)
 
@@ -100,8 +98,6 @@ set(HAVE_KACTIVITIES ${${KActivitiesPackageName}_FOUND})
 ecm_set_disabled_deprecation_versions(QT 5.14.0 KF 5.99.0
     )
 
-add_definitions(-DQT_NO_FOREACH)
-
 ## Dependencies
 find_package(JPEG)
 set_package_properties(JPEG PROPERTIES URL "http://libjpeg.sourceforge.net/" DESCRIPTION "JPEG image manipulation support" TYPE REQUIRED)
@@ -173,8 +169,6 @@ endif()
 
 configure_file(config-gwenview.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-gwenview.h)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
-
-add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
 
 function(JoinListAsString VALUES GLUE OUTPUT)
     string(REPLACE ";" "${GLUE}" _TMP_STR "${VALUES}")
