@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 02:55+0000\n"
+"POT-Creation-Date: 2026-11-15 01:03+0000\n"
 "PO-Revision-Date: 2024-12-25 19:45+0530\n"
 "Last-Translator: kali <shreekantkalwar@gmail.com>\n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -1211,90 +1211,90 @@ msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr "स्पॉटलाइट मोड"
 
-#: app/mainwindow.cpp:440
+#: app/mainwindow.cpp:441
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "पूर्वतनम्‌"
 
-#: app/mainwindow.cpp:441
+#: app/mainwindow.cpp:442
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "पूर्वप्रतिबिम्बं गच्छन्तु"
 
-#: app/mainwindow.cpp:447
+#: app/mainwindow.cpp:449
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "अग्रिम"
 
-#: app/mainwindow.cpp:448
+#: app/mainwindow.cpp:450
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "अग्रिमचित्रं गच्छन्तु"
 
-#: app/mainwindow.cpp:454
+#: app/mainwindow.cpp:456
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "प्रथमः"
 
-#: app/mainwindow.cpp:455
+#: app/mainwindow.cpp:457
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "प्रथमप्रतिबिम्बं गच्छन्तु"
 
-#: app/mainwindow.cpp:461
+#: app/mainwindow.cpp:463
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "अन्तिमः"
 
-#: app/mainwindow.cpp:462
+#: app/mainwindow.cpp:464
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "अन्तिमप्रतिबिम्बं गच्छन्तु"
 
-#: app/mainwindow.cpp:472
+#: app/mainwindow.cpp:474
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "पृष्ठ प्रारंभ"
 
-#: app/mainwindow.cpp:473
+#: app/mainwindow.cpp:475
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "प्रारम्भपृष्ठं उद्घाटयन्तु"
 
-#: app/mainwindow.cpp:480
+#: app/mainwindow.cpp:482
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "पार्श्वपट्टिका"
 
-#: app/mainwindow.cpp:485
+#: app/mainwindow.cpp:487
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "सम्पादनसाधनं दर्शयतु"
 
-#: app/mainwindow.cpp:520
+#: app/mainwindow.cpp:522
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "संविभागः"
 
-#: app/mainwindow.cpp:529
+#: app/mainwindow.cpp:531
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "साझेदारीकाले त्रुटिः: %1"
 
-#: app/mainwindow.cpp:536
+#: app/mainwindow.cpp:538
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1302,141 +1302,141 @@ msgid ""
 msgstr ""
 "साझाप्रतिबिम्बलिङ्क् ( <a href=\"%1\">%1</a> ) क्लिप्बोर्ड् प्रति प्रतिलिपितः अस्ति ।"
 
-#: app/mainwindow.cpp:586
+#: app/mainwindow.cpp:588
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "विन्यस्तं कुर्वन्तु"
 
-#: app/mainwindow.cpp:601
+#: app/mainwindow.cpp:603
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "सम्पादन"
 
-#: app/mainwindow.cpp:606
+#: app/mainwindow.cpp:608
 #, kde-format
 msgid "Redo"
 msgstr "पुनः करो"
 
-#: app/mainwindow.cpp:614
+#: app/mainwindow.cpp:616
 #, kde-format
 msgid "Undo"
 msgstr "पूर्ववत"
 
-#: app/mainwindow.cpp:641
+#: app/mainwindow.cpp:643
 #, kde-format
 msgid "Folders"
 msgstr "पुटम्"
 
-#: app/mainwindow.cpp:647
+#: app/mainwindow.cpp:649
 #, kde-format
 msgid "Information"
 msgstr "सूचना"
 
-#: app/mainwindow.cpp:686
+#: app/mainwindow.cpp:688
 #, kde-format
 msgid "Operations"
 msgstr "संचालनम्"
 
-#: app/mainwindow.cpp:955
+#: app/mainwindow.cpp:957
 #, kde-format
 msgid "Viewing media"
 msgstr "माध्यमं दृष्ट्वा"
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "पार्श्वपट्टिका गोपयन्तु"
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "पार्श्वपट्टिकां दर्शयतु"
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1793
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "चित्रं उद्घाटयतु"
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1854
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "स्लाइड शो विरामयतु"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "स्लाइड शो पुनः आरभत"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "Start Slideshow"
 msgstr "स्लाइड शो आरभत"
 
-#: app/mainwindow.cpp:1868
+#: app/mainwindow.cpp:1870
 #, kde-format
 msgid "Save All Changes"
 msgstr "सर्वाणि परिवर्तनानि रक्षन्तु"
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "Discard Changes"
 msgstr "परिवर्तनं परित्यजन्तु"
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1872
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "एकं चित्रं परिवर्तितम् अस्ति।"
 msgstr[1] "%1 चित्राणि परिवर्तितानि सन्ति ।"
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1873
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "यदि भवान् इदानीं त्यक्तवान् तर्हि भवतः परिवर्तनं नष्टं भविष्यति।"
 
-#: app/mainwindow.cpp:1914
+#: app/mainwindow.cpp:1916
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr ""
 "एतेन मेनू-पट्टिका पूर्णतया गोपिता भविष्यति । %1 इति टङ्कयित्वा पुनः दर्शयितुं शक्नुवन्ति ।"
 
-#: app/mainwindow.cpp:1917
+#: app/mainwindow.cpp:1919
 #, kde-format
 msgid "Hide menu bar"
 msgstr "मेनू-पट्टिकां गोपयन्तु"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2140
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "भवन्तः प्रथमं दस्तावेजं प्राप्तवन्तः, किं कर्तुम् इच्छन्ति?"
 
-#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
 #, kde-format
 msgid "Stay There"
 msgstr "तत्र तिष्ठतु"
 
-#: app/mainwindow.cpp:2140
+#: app/mainwindow.cpp:2142
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "अन्तिमदस्तावेजं प्रति गच्छन्तु"
 
-#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
+#: app/mainwindow.cpp:2143 app/mainwindow.cpp:2157
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "दस्तावेजसूचौ पुनः गच्छन्तु"
 
-#: app/mainwindow.cpp:2152
+#: app/mainwindow.cpp:2154
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "भवन्तः अन्तिमदस्तावेजं प्राप्तवन्तः, किं कर्तुम् इच्छन्ति?"
 
-#: app/mainwindow.cpp:2154
+#: app/mainwindow.cpp:2156
 #, kde-format
 msgid "Go to the First Document"
 msgstr "प्रथमं दस्तावेजं गच्छन्तु"
@@ -1707,19 +1707,19 @@ msgstr ""
 "शक्यते तथा च चित्राणां बहुपङ्क्तयः सन्ति;<link url='%1'> सेटिङ्ग्स् मध्ये एतान् विकल्पान् "
 "विन्यस्यताम्</link> .</para>"
 
-#: app/viewmainpage.cpp:571
+#: app/viewmainpage.cpp:563
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "पृष्ठभूमि रंग मोड"
 
-#: app/viewmainpage.cpp:763
+#: app/viewmainpage.cpp:755
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "परिवर्तनं परित्यज्य पुनः लोड् कुर्वन्तु"
 
-#: app/viewmainpage.cpp:765
+#: app/viewmainpage.cpp:757
 #, kde-format
 msgctxt "@info"
 msgid ""

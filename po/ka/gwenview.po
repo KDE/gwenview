@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 02:55+0000\n"
+"POT-Creation-Date: 2026-11-15 01:03+0000\n"
 "PO-Revision-Date: 2026-10-13 14:47+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -1206,90 +1206,90 @@ msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr "გამორჩევის რეჟიმი"
 
-#: app/mainwindow.cpp:440
+#: app/mainwindow.cpp:441
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "წინა"
 
-#: app/mainwindow.cpp:441
+#: app/mainwindow.cpp:442
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "წინა გამოსახულებაზე გადასვლა"
 
-#: app/mainwindow.cpp:447
+#: app/mainwindow.cpp:449
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "შემდეგი"
 
-#: app/mainwindow.cpp:448
+#: app/mainwindow.cpp:450
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "შემდეგ გამოსახულებაზე გადასვლა"
 
-#: app/mainwindow.cpp:454
+#: app/mainwindow.cpp:456
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "პირველი"
 
-#: app/mainwindow.cpp:455
+#: app/mainwindow.cpp:457
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "პირველ გამოსახულებაზე გადასვლა"
 
-#: app/mainwindow.cpp:461
+#: app/mainwindow.cpp:463
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "ბოლო"
 
-#: app/mainwindow.cpp:462
+#: app/mainwindow.cpp:464
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "ბოლო გამოსახულებაზე გადასვლა"
 
-#: app/mainwindow.cpp:472
+#: app/mainwindow.cpp:474
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "საწყისი გვერდი"
 
-#: app/mainwindow.cpp:473
+#: app/mainwindow.cpp:475
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "საწყისი გვერდის გახსნა"
 
-#: app/mainwindow.cpp:480
+#: app/mainwindow.cpp:482
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "გვერდითი პანელი"
 
-#: app/mainwindow.cpp:485
+#: app/mainwindow.cpp:487
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "რედაქტორის ხელსაწყოების ჩვენება"
 
-#: app/mainwindow.cpp:520
+#: app/mainwindow.cpp:522
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "გაზიარება"
 
-#: app/mainwindow.cpp:529
+#: app/mainwindow.cpp:531
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "შეცდომა გაზიარებისას: %1"
 
-#: app/mainwindow.cpp:536
+#: app/mainwindow.cpp:538
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1297,140 +1297,140 @@ msgid ""
 msgstr ""
 "გაზიარებული გამოსახულების ბმული (<a href=\"%1\">%1</a>) ბუფერში დაკოპირდა."
 
-#: app/mainwindow.cpp:586
+#: app/mainwindow.cpp:588
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "მორგება"
 
-#: app/mainwindow.cpp:601
+#: app/mainwindow.cpp:603
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "ჩასწორება"
 
-#: app/mainwindow.cpp:606
+#: app/mainwindow.cpp:608
 #, kde-format
 msgid "Redo"
 msgstr "თავიდან"
 
-#: app/mainwindow.cpp:614
+#: app/mainwindow.cpp:616
 #, kde-format
 msgid "Undo"
 msgstr "დაბრუნება"
 
-#: app/mainwindow.cpp:641
+#: app/mainwindow.cpp:643
 #, kde-format
 msgid "Folders"
 msgstr "საქაღალდეები"
 
-#: app/mainwindow.cpp:647
+#: app/mainwindow.cpp:649
 #, kde-format
 msgid "Information"
 msgstr "ინფორმაცია"
 
-#: app/mainwindow.cpp:686
+#: app/mainwindow.cpp:688
 #, kde-format
 msgid "Operations"
 msgstr "ოპერაციები"
 
-#: app/mainwindow.cpp:955
+#: app/mainwindow.cpp:957
 #, kde-format
 msgid "Viewing media"
 msgstr "მედიის დათვალიერება"
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "გვერდითი ზოლის დამალვა"
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "გვერდითა ზოლის ჩვენება"
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1793
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "გამოსახულების გახსნა"
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1854
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "სლაიდშოუს შეჩერება"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "სლაიდშოუს გარძელება"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "Start Slideshow"
 msgstr "სლაიდშოუს დაწყება"
 
-#: app/mainwindow.cpp:1868
+#: app/mainwindow.cpp:1870
 #, kde-format
 msgid "Save All Changes"
 msgstr "ყველა ცვლილების შენახვა"
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "Discard Changes"
 msgstr "ცვლილებების გაუქმება"
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1872
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "შეცვლილია %1 გამოსახულება."
 msgstr[1] "შეცვლილია %1 გამოსახულება."
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1873
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "თუ ახლა გახვალთ, ცვლილებები დაიკარგება."
 
-#: app/mainwindow.cpp:1914
+#: app/mainwindow.cpp:1916
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "ეს მენიუს ზოლს სრულად დამალავს. მისი ჩვენება %1-ზე დაწოლით შეგიძლიათ."
 
-#: app/mainwindow.cpp:1917
+#: app/mainwindow.cpp:1919
 #, kde-format
 msgid "Hide menu bar"
 msgstr "მენიუს ზოლის დამალვა"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2140
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "მიაღწიეთ პირველ დოკუმენტს. რისი გაკეთება გნებავთ?"
 
-#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
 #, kde-format
 msgid "Stay There"
 msgstr "იქ დარჩენა"
 
-#: app/mainwindow.cpp:2140
+#: app/mainwindow.cpp:2142
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "ბოლო დოკუმენტზე გადასვლა"
 
-#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
+#: app/mainwindow.cpp:2143 app/mainwindow.cpp:2157
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "დოკუმენტების სიაზე დაბრუნება"
 
-#: app/mainwindow.cpp:2152
+#: app/mainwindow.cpp:2154
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "მიაღწიეთ ბოლო დოკუმენტს. რისი გაკეთება გნებავთ?"
 
-#: app/mainwindow.cpp:2154
+#: app/mainwindow.cpp:2156
 #, kde-format
 msgid "Go to the First Document"
 msgstr "პირველ დოკუმენტზე გადასვლა"
@@ -1702,19 +1702,19 @@ msgstr ""
 "<link url='%1'>ამ პარამეტრების დაყენება მორგების ფანჯარაში შეგიძლიათ</link>."
 "</para>"
 
-#: app/viewmainpage.cpp:571
+#: app/viewmainpage.cpp:563
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "ფონის ფერის რეჟიმი"
 
-#: app/viewmainpage.cpp:763
+#: app/viewmainpage.cpp:755
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "ცვლილებების გაუქმება და თავიდან ჩატვირთვა"
 
-#: app/viewmainpage.cpp:765
+#: app/viewmainpage.cpp:757
 #, kde-format
 msgctxt "@info"
 msgid ""

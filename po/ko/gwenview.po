@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 02:55+0000\n"
+"POT-Creation-Date: 2026-11-15 01:03+0000\n"
 "PO-Revision-Date: 2026-09-29 00:46+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -1195,229 +1195,229 @@ msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr "스포트라이트 모드"
 
-#: app/mainwindow.cpp:440
+#: app/mainwindow.cpp:441
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "이전"
 
-#: app/mainwindow.cpp:441
+#: app/mainwindow.cpp:442
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "이전 그림으로 가기"
 
-#: app/mainwindow.cpp:447
+#: app/mainwindow.cpp:449
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "다음"
 
-#: app/mainwindow.cpp:448
+#: app/mainwindow.cpp:450
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "다음 그림으로 가기"
 
-#: app/mainwindow.cpp:454
+#: app/mainwindow.cpp:456
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "처음"
 
-#: app/mainwindow.cpp:455
+#: app/mainwindow.cpp:457
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "첫 그림으로 가기"
 
-#: app/mainwindow.cpp:461
+#: app/mainwindow.cpp:463
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "끝"
 
-#: app/mainwindow.cpp:462
+#: app/mainwindow.cpp:464
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "마지막 그림으로 가기"
 
-#: app/mainwindow.cpp:472
+#: app/mainwindow.cpp:474
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "시작 페이지"
 
-#: app/mainwindow.cpp:473
+#: app/mainwindow.cpp:475
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "시작 페이지 열기"
 
-#: app/mainwindow.cpp:480
+#: app/mainwindow.cpp:482
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "사이드바"
 
-#: app/mainwindow.cpp:485
+#: app/mainwindow.cpp:487
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "편집 도구 표시"
 
-#: app/mainwindow.cpp:520
+#: app/mainwindow.cpp:522
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "공유"
 
-#: app/mainwindow.cpp:529
+#: app/mainwindow.cpp:531
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "공유하는 중 오류 발생: %1"
 
-#: app/mainwindow.cpp:536
+#: app/mainwindow.cpp:538
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr "공유된 그림 링크(<a href=\"%1\">%1</a>)를 클립보드에 복사했습니다."
 
-#: app/mainwindow.cpp:586
+#: app/mainwindow.cpp:588
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "설정"
 
-#: app/mainwindow.cpp:601
+#: app/mainwindow.cpp:603
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "편집"
 
-#: app/mainwindow.cpp:606
+#: app/mainwindow.cpp:608
 #, kde-format
 msgid "Redo"
 msgstr "다시 실행"
 
-#: app/mainwindow.cpp:614
+#: app/mainwindow.cpp:616
 #, kde-format
 msgid "Undo"
 msgstr "실행 취소"
 
-#: app/mainwindow.cpp:641
+#: app/mainwindow.cpp:643
 #, kde-format
 msgid "Folders"
 msgstr "폴더"
 
-#: app/mainwindow.cpp:647
+#: app/mainwindow.cpp:649
 #, kde-format
 msgid "Information"
 msgstr "정보"
 
-#: app/mainwindow.cpp:686
+#: app/mainwindow.cpp:688
 #, kde-format
 msgid "Operations"
 msgstr "작업"
 
-#: app/mainwindow.cpp:955
+#: app/mainwindow.cpp:957
 #, kde-format
 msgid "Viewing media"
 msgstr "미디어 표시"
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "사이드바 숨기기"
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "사이드바 표시"
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1793
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "그림 열기"
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1854
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "슬라이드 쇼 일시 정지"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "슬라이드 쇼 다시 시작"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "Start Slideshow"
 msgstr "슬라이드 쇼 시작하기"
 
-#: app/mainwindow.cpp:1868
+#: app/mainwindow.cpp:1870
 #, kde-format
 msgid "Save All Changes"
 msgstr "모든 변경 사항 저장하기"
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "Discard Changes"
 msgstr "변경 사항 취소"
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1872
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "그림 %1개를 수정했습니다."
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1873
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "지금 종료하면 변경 사항이 저장되지 않습니다."
 
-#: app/mainwindow.cpp:1914
+#: app/mainwindow.cpp:1916
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "메뉴 표시줄을 완전히 숨깁니다. %1 키를 눌러서 다시 볼 수 있습니다."
 
-#: app/mainwindow.cpp:1917
+#: app/mainwindow.cpp:1919
 #, kde-format
 msgid "Hide menu bar"
 msgstr "메뉴 표시줄 숨기기"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2140
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "첫 문서에 도달했습니다. 무엇을 하시겠습니까?"
 
-#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
 #, kde-format
 msgid "Stay There"
 msgstr "그대로 있기"
 
-#: app/mainwindow.cpp:2140
+#: app/mainwindow.cpp:2142
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "마지막 문서로 가기"
 
-#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
+#: app/mainwindow.cpp:2143 app/mainwindow.cpp:2157
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "문서 목록으로 가기"
 
-#: app/mainwindow.cpp:2152
+#: app/mainwindow.cpp:2154
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "마지막 문서에 도달했습니다. 무엇을 하시겠습니까?"
 
-#: app/mainwindow.cpp:2154
+#: app/mainwindow.cpp:2156
 #, kde-format
 msgid "Go to the First Document"
 msgstr "첫 문서로 가기"
@@ -1685,19 +1685,19 @@ msgstr ""
 "시줄을 화면 오른쪽으로 이동하여 그림을 여러 줄로 표시할 수도 있습니다. <link "
 "url='%1'>설정에서 변경</link>할 수 있습니다.</para>"
 
-#: app/viewmainpage.cpp:571
+#: app/viewmainpage.cpp:563
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "배경색 모드"
 
-#: app/viewmainpage.cpp:763
+#: app/viewmainpage.cpp:755
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "변경 사항 취소하고 새로 고침"
 
-#: app/viewmainpage.cpp:765
+#: app/viewmainpage.cpp:757
 #, kde-format
 msgctxt "@info"
 msgid ""

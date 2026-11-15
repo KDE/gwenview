@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 02:55+0000\n"
+"POT-Creation-Date: 2026-11-15 01:03+0000\n"
 "PO-Revision-Date: 2026-10-04 11:21+0200\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-l10n-ta@kde.org>\n"
@@ -1205,90 +1205,90 @@ msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr "கவனப் பயன்முறை"
 
-#: app/mainwindow.cpp:440
+#: app/mainwindow.cpp:441
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "முந்தையது"
 
-#: app/mainwindow.cpp:441
+#: app/mainwindow.cpp:442
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "முந்தைய படத்திற்கு செல்"
 
-#: app/mainwindow.cpp:447
+#: app/mainwindow.cpp:449
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "அடுத்தது"
 
-#: app/mainwindow.cpp:448
+#: app/mainwindow.cpp:450
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "அடுத்த படத்திற்கு செல்"
 
-#: app/mainwindow.cpp:454
+#: app/mainwindow.cpp:456
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "முதல்"
 
-#: app/mainwindow.cpp:455
+#: app/mainwindow.cpp:457
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "முதல் படத்திற்கு செல்"
 
-#: app/mainwindow.cpp:461
+#: app/mainwindow.cpp:463
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "கடைசி"
 
-#: app/mainwindow.cpp:462
+#: app/mainwindow.cpp:464
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "கடைசி படத்திற்கு செல்"
 
-#: app/mainwindow.cpp:472
+#: app/mainwindow.cpp:474
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "துவக்கப்பக்கம்"
 
-#: app/mainwindow.cpp:473
+#: app/mainwindow.cpp:475
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "துவக்கப்பக்கத்தை திற"
 
-#: app/mainwindow.cpp:480
+#: app/mainwindow.cpp:482
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "பக்கப்பட்டை"
 
-#: app/mainwindow.cpp:485
+#: app/mainwindow.cpp:487
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "திருத்த கருவிகளை காட்டு"
 
-#: app/mainwindow.cpp:520
+#: app/mainwindow.cpp:522
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "பகிர்"
 
-#: app/mainwindow.cpp:529
+#: app/mainwindow.cpp:531
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "பகிர்வதில் சிக்கல்: %1"
 
-#: app/mainwindow.cpp:536
+#: app/mainwindow.cpp:538
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
@@ -1297,104 +1297,104 @@ msgstr ""
 "பகிரப்பட்ட படத்தின் முகவரி (<a href=\"%1\">%1</a>) பிடிப்புப்பலகைக்கு "
 "நகலெடுக்கப்பட்டுள்ளது."
 
-#: app/mainwindow.cpp:586
+#: app/mainwindow.cpp:588
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "அமை"
 
-#: app/mainwindow.cpp:601
+#: app/mainwindow.cpp:603
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "திருத்து"
 
-#: app/mainwindow.cpp:606
+#: app/mainwindow.cpp:608
 #, kde-format
 msgid "Redo"
 msgstr "மீளச்செய்"
 
-#: app/mainwindow.cpp:614
+#: app/mainwindow.cpp:616
 #, kde-format
 msgid "Undo"
 msgstr "செயல்நீக்கு"
 
-#: app/mainwindow.cpp:641
+#: app/mainwindow.cpp:643
 #, kde-format
 msgid "Folders"
 msgstr "அடைவுகள்"
 
-#: app/mainwindow.cpp:647
+#: app/mainwindow.cpp:649
 #, kde-format
 msgid "Information"
 msgstr "விவரங்கள்"
 
-#: app/mainwindow.cpp:686
+#: app/mainwindow.cpp:688
 #, kde-format
 msgid "Operations"
 msgstr "செயல்பாடுகள்"
 
-#: app/mainwindow.cpp:955
+#: app/mainwindow.cpp:957
 #, kde-format
 msgid "Viewing media"
 msgstr "படங்களைப் பார்ப்பது"
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "பக்கப்பட்டையை மறை"
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "பக்கப்பட்டையை காட்டு"
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1793
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "படத்தை திறத்தல்"
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1854
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "வில்லைக்காட்சியை இடைநிறுத்து"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "வில்லைக்காட்சியை தொடர்"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "Start Slideshow"
 msgstr "வில்லைக்காட்சியை துவக்கு"
 
-#: app/mainwindow.cpp:1868
+#: app/mainwindow.cpp:1870
 #, kde-format
 msgid "Save All Changes"
 msgstr "அனைத்து மாற்றங்களையும் சேமி"
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "Discard Changes"
 msgstr "மாற்றங்களை கைவிடு"
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1872
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
 msgstr[0] "ஒரு படம் மாற்றப்பட்டுள்ளது."
 msgstr[1] "%1 படங்கள் மாற்றப்பட்டுள்ளன."
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1873
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "நீங்கள் இப்போது வெளியேறினால் உங்கள் மாற்றங்களை இழப்பீர்கள்."
 
-#: app/mainwindow.cpp:1914
+#: app/mainwindow.cpp:1916
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
@@ -1402,37 +1402,37 @@ msgstr ""
 "இது பட்டிப் பட்டையை முழுதாக மறைத்துவிடும். %1 என்பதை தட்டி நீங்கள் மறுபடியும் அதை "
 "காட்டலாம்."
 
-#: app/mainwindow.cpp:1917
+#: app/mainwindow.cpp:1919
 #, kde-format
 msgid "Hide menu bar"
 msgstr "பட்டிப் பட்டையை மறை"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2140
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "முதல் ஆவணத்தை அடைந்துவிட்டீர்கள். என்ன செய்ய வேண்டும்?"
 
-#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
 #, kde-format
 msgid "Stay There"
 msgstr "அங்கேயே இரு"
 
-#: app/mainwindow.cpp:2140
+#: app/mainwindow.cpp:2142
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "கடைசி ஆவணத்திற்கு செல்"
 
-#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
+#: app/mainwindow.cpp:2143 app/mainwindow.cpp:2157
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "ஆவணப் பட்டியலுக்கு திரும்ப செல்"
 
-#: app/mainwindow.cpp:2152
+#: app/mainwindow.cpp:2154
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "கடைசி ஆவணத்தை அடைந்துவிட்டீர்கள். என்ன செய்ய வேண்டும்?"
 
-#: app/mainwindow.cpp:2154
+#: app/mainwindow.cpp:2156
 #, kde-format
 msgid "Go to the First Document"
 msgstr "முதல் ஆவணத்திற்கு செல்"
@@ -1703,19 +1703,19 @@ msgstr ""
 "நகர்த்தலாம், மேலும் படங்களை பல வரிசைகளாக காட்டலாம்; <link url='%1'>இத்தேர்வுகளை "
 "அமைப்புகளில் மாற்றியமையுங்கள்</link>.</para>"
 
-#: app/viewmainpage.cpp:571
+#: app/viewmainpage.cpp:563
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "பின்புல நிற பயன்முறை"
 
-#: app/viewmainpage.cpp:763
+#: app/viewmainpage.cpp:755
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "மாற்றங்களை கைவிட்டு மீளேற்று"
 
-#: app/viewmainpage.cpp:765
+#: app/viewmainpage.cpp:757
 #, kde-format
 msgctxt "@info"
 msgid ""

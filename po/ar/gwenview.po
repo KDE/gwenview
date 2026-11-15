@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gwenview\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-08 02:55+0000\n"
+"POT-Creation-Date: 2026-11-15 01:03+0000\n"
 "PO-Revision-Date: 2026-09-23 17:28+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -1247,182 +1247,182 @@ msgctxt "@action"
 msgid "Spotlight Mode"
 msgstr "نمط التركيز"
 
-#: app/mainwindow.cpp:440
+#: app/mainwindow.cpp:441
 #, kde-format
 msgctxt "@action Go to previous image"
 msgid "Previous"
 msgstr "سابق"
 
-#: app/mainwindow.cpp:441
+#: app/mainwindow.cpp:442
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to previous image"
 msgstr "اذهب إلى الصورة السابقة"
 
-#: app/mainwindow.cpp:447
+#: app/mainwindow.cpp:449
 #, kde-format
 msgctxt "@action Go to next image"
 msgid "Next"
 msgstr "التالي"
 
-#: app/mainwindow.cpp:448
+#: app/mainwindow.cpp:450
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to next image"
 msgstr "اذهب إلى الصورة التالية"
 
-#: app/mainwindow.cpp:454
+#: app/mainwindow.cpp:456
 #, kde-format
 msgctxt "@action Go to first image"
 msgid "First"
 msgstr "الأولى"
 
-#: app/mainwindow.cpp:455
+#: app/mainwindow.cpp:457
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to first image"
 msgstr "اذهب إلى الصورة الأولى"
 
-#: app/mainwindow.cpp:461
+#: app/mainwindow.cpp:463
 #, kde-format
 msgctxt "@action Go to last image"
 msgid "Last"
 msgstr "الأخيرة"
 
-#: app/mainwindow.cpp:462
+#: app/mainwindow.cpp:464
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Go to last image"
 msgstr "اذهب إلى الصورة الأخيرة"
 
-#: app/mainwindow.cpp:472
+#: app/mainwindow.cpp:474
 #, kde-format
 msgctxt "@action"
 msgid "Start Page"
 msgstr "صفحة البداية"
 
-#: app/mainwindow.cpp:473
+#: app/mainwindow.cpp:475
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Open the start page"
 msgstr "افتح صفحة البداية"
 
-#: app/mainwindow.cpp:480
+#: app/mainwindow.cpp:482
 #, kde-format
 msgctxt "@action"
 msgid "Sidebar"
 msgstr "الشريط الجانبي"
 
-#: app/mainwindow.cpp:485
+#: app/mainwindow.cpp:487
 #, kde-format
 msgctxt "@action opens crop, rename, etc."
 msgid "Show Editing Tools"
 msgstr "أظهر أدوات التحرير"
 
-#: app/mainwindow.cpp:520
+#: app/mainwindow.cpp:522
 #, kde-format
 msgctxt "@action Share images"
 msgid "Share"
 msgstr "شارِك"
 
-#: app/mainwindow.cpp:529
+#: app/mainwindow.cpp:531
 #, kde-format
 msgid "Error while sharing: %1"
 msgstr "حصل خطأ أثناء المشاركة: %1"
 
-#: app/mainwindow.cpp:536
+#: app/mainwindow.cpp:538
 #, kde-format
 msgid ""
 "The shared image link (<a href=\"%1\">%1</a>) has been copied to the "
 "clipboard."
 msgstr "وصلة الصورة المشاركة بها (<a href=\"%1\">%1</a>) نسخت إلى الحافظة."
 
-#: app/mainwindow.cpp:586
+#: app/mainwindow.cpp:588
 #, kde-format
 msgctxt "@title:menu submenu for actions that open configuration dialogs"
 msgid "Configure"
 msgstr "اضبط"
 
-#: app/mainwindow.cpp:601
+#: app/mainwindow.cpp:603
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
 msgid "Edit"
 msgstr "حرّر"
 
-#: app/mainwindow.cpp:606
+#: app/mainwindow.cpp:608
 #, kde-format
 msgid "Redo"
 msgstr "كرّر"
 
-#: app/mainwindow.cpp:614
+#: app/mainwindow.cpp:616
 #, kde-format
 msgid "Undo"
 msgstr "تراجع"
 
-#: app/mainwindow.cpp:641
+#: app/mainwindow.cpp:643
 #, kde-format
 msgid "Folders"
 msgstr "المجلّدات"
 
-#: app/mainwindow.cpp:647
+#: app/mainwindow.cpp:649
 #, kde-format
 msgid "Information"
 msgstr "المعلومات"
 
-#: app/mainwindow.cpp:686
+#: app/mainwindow.cpp:688
 #, kde-format
 msgid "Operations"
 msgstr "العمليات"
 
-#: app/mainwindow.cpp:955
+#: app/mainwindow.cpp:957
 #, kde-format
 msgid "Viewing media"
 msgstr "يعرض الوسائط"
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Hide sidebar"
 msgstr "اخفِ الشريط الجانبي"
 
-#: app/mainwindow.cpp:1441
+#: app/mainwindow.cpp:1443
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Show sidebar"
 msgstr "أظهر الشريط الجانبي"
 
-#: app/mainwindow.cpp:1791
+#: app/mainwindow.cpp:1793
 #, kde-format
 msgctxt "@title:window"
 msgid "Open Image"
 msgstr "افتح صورة"
 
-#: app/mainwindow.cpp:1852
+#: app/mainwindow.cpp:1854
 #, kde-format
 msgid "Pause Slideshow"
 msgstr "أوقف الشرائح"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "Resume Slideshow"
 msgstr "استأنف الشرائح"
 
-#: app/mainwindow.cpp:1855
+#: app/mainwindow.cpp:1857
 #, kde-format
 msgid "Start Slideshow"
 msgstr "ابدأ عرض الشرائح"
 
-#: app/mainwindow.cpp:1868
+#: app/mainwindow.cpp:1870
 #, kde-format
 msgid "Save All Changes"
 msgstr "احفظ كل التغييرات"
 
-#: app/mainwindow.cpp:1869
+#: app/mainwindow.cpp:1871
 #, kde-format
 msgid "Discard Changes"
 msgstr "تجاهل التغييرات"
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1872
 #, kde-format
 msgid "One image has been modified."
 msgid_plural "%1 images have been modified."
@@ -1433,48 +1433,48 @@ msgstr[3] "%1 صور عدِّلت"
 msgstr[4] "%1 صورة عدِّلت"
 msgstr[5] "%1 صورة عدِّلت"
 
-#: app/mainwindow.cpp:1871
+#: app/mainwindow.cpp:1873
 #, kde-format
 msgid "If you quit now, your changes will be lost."
 msgstr "إذا غادرت الآن، فإن كل التعديلات التي قمت بها ستضيع."
 
-#: app/mainwindow.cpp:1914
+#: app/mainwindow.cpp:1916
 #, kde-format
 msgid ""
 "This will hide the menu bar completely. You can show it again by typing %1."
 msgstr "سيُخفي هذا شريط القوائم بالكامل. يمكنك عرضه مجددًا بطباعة %1."
 
-#: app/mainwindow.cpp:1917
+#: app/mainwindow.cpp:1919
 #, kde-format
 msgid "Hide menu bar"
 msgstr "اخفِ الشريط القائمة"
 
-#: app/mainwindow.cpp:2138
+#: app/mainwindow.cpp:2140
 #, kde-format
 msgid "You reached the first document, what do you want to do?"
 msgstr "لقد وصلت إلى الملف الأول، ماذا تريد أن تفعل؟"
 
-#: app/mainwindow.cpp:2139 app/mainwindow.cpp:2153
+#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
 #, kde-format
 msgid "Stay There"
 msgstr "ابق هناك"
 
-#: app/mainwindow.cpp:2140
+#: app/mainwindow.cpp:2142
 #, kde-format
 msgid "Go to the Last Document"
 msgstr "اذهب إلى المستند الأخير"
 
-#: app/mainwindow.cpp:2141 app/mainwindow.cpp:2155
+#: app/mainwindow.cpp:2143 app/mainwindow.cpp:2157
 #, kde-format
 msgid "Go Back to the Document List"
 msgstr "ارجع إلى لائحة المستندات"
 
-#: app/mainwindow.cpp:2152
+#: app/mainwindow.cpp:2154
 #, kde-format
 msgid "You reached the last document, what do you want to do?"
 msgstr "لقد وصلت إلى المستند الأخير، ماذا تريد أن تفعل؟"
 
-#: app/mainwindow.cpp:2154
+#: app/mainwindow.cpp:2156
 #, kde-format
 msgid "Go to the First Document"
 msgstr "اذهب إلى المستند الأول"
@@ -1749,19 +1749,19 @@ msgstr ""
 "إلى الجانب الأيمن من الشاشة أو يمكن أن يحتوي على صفوف متعددة من الصور؛ <link "
 "url = '%1'> اضبط هذه الخيارات في الإعدادات </link>. </para> "
 
-#: app/viewmainpage.cpp:571
+#: app/viewmainpage.cpp:563
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "نمط لون الخلفية"
 
-#: app/viewmainpage.cpp:763
+#: app/viewmainpage.cpp:755
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "تجاهل التغييرات و أعد التحميل"
 
-#: app/viewmainpage.cpp:765
+#: app/viewmainpage.cpp:757
 #, kde-format
 msgctxt "@info"
 msgid ""
