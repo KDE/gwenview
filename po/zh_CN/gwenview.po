@@ -2085,10 +2085,9 @@ msgid "Listing content of:"
 msgstr "正在列出内容："
 
 #: lib/about.cpp:38
-#, fuzzy, kde-format
-#| msgid "Copyright 2000-2022 Gwenview authors"
+#, kde-format
 msgid "Copyright 2000–%1 Gwenview authors"
-msgstr "Copyright 2000-2022 Gwenview authors"
+msgstr "Copyright 2000–%1 Gwenview authors"
 
 #: lib/about.cpp:40
 #, kde-format
