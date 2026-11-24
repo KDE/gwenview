@@ -836,48 +836,38 @@ void ViewMainPage::slotEnterPressed()
 
 bool ViewMainPage::eventFilter(QObject *watched, QEvent *event)
 {
-    if (watched == d->mDocumentViewContainer && event->type() == QEvent::KeyPress) {
+    if (event->type() == QEvent::KeyPress) {
         auto ke = static_cast<QKeyEvent *>(event);
-        if (ke->modifiers() == Qt::NoModifier) {
+        bool navigate = watched == d->mThumbnailBar;
+        if (watched == d->mDocumentViewContainer && ke->modifiers() == Qt::NoModifier) {
             DocumentView *view = d->currentView();
-            if (view && view->isPlayingMotionPhoto()) {
-                switch (ke->key()) {
-                case Qt::Key_Left:
-                    Q_EMIT previousImageRequested();
-                    return true;
-                case Qt::Key_Right:
-                    Q_EMIT nextImageRequested();
-                    return true;
-                default:
-                    break;
-                }
-            }
+            navigate = view && view->isPlayingMotionPhoto();
         }
-    } else if (watched == d->mThumbnailBar && event->type() == QEvent::KeyPress) {
-        auto ke = static_cast<QKeyEvent *>(event);
-        switch (ke->key()) {
-        case Qt::Key_Left:
-            if (QApplication::isRightToLeft()) {
-                Q_EMIT nextImageRequested();
-            } else {
+        if (navigate) {
+            switch (ke->key()) {
+            case Qt::Key_Left:
+                if (QApplication::isRightToLeft()) {
+                    Q_EMIT nextImageRequested();
+                } else {
+                    Q_EMIT previousImageRequested();
+                }
+                return true;
+            case Qt::Key_Up:
                 Q_EMIT previousImageRequested();
-            }
-            return true;
-        case Qt::Key_Up:
-            Q_EMIT previousImageRequested();
-            return true;
-        case Qt::Key_Right:
-            if (QApplication::isRightToLeft()) {
-                Q_EMIT previousImageRequested();
-            } else {
+                return true;
+            case Qt::Key_Right:
+                if (QApplication::isRightToLeft()) {
+                    Q_EMIT previousImageRequested();
+                } else {
+                    Q_EMIT nextImageRequested();
+                }
+                return true;
+            case Qt::Key_Down:
                 Q_EMIT nextImageRequested();
+                return true;
+            default:
+                break;
             }
-            return true;
-        case Qt::Key_Down:
-            Q_EMIT nextImageRequested();
-            return true;
-        default:
-            break;
         }
     } else if (event->type() == QEvent::ShortcutOverride) {
         const int key = static_cast<QKeyEvent *>(event)->key();

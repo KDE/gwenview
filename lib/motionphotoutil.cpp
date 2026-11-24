@@ -86,14 +86,17 @@ QByteArray extractVideo(const QString &path)
     // ftyp box: [4 bytes big-endian size][4 bytes "ftyp"][...].
     // We scan forward from a safe offset past the JPEG header.
     const qsizetype minOffset = 4096;
-    for (qsizetype i = minOffset; i < fileData.size() - 8; ++i) {
-        if (fileData[i + 4] == 'f' && fileData[i + 5] == 't' && fileData[i + 6] == 'y' && fileData[i + 7] == 'p') {
-            const quint32 boxSize = (quint8(fileData[i]) << 24) | (quint8(fileData[i + 1]) << 16) | (quint8(fileData[i + 2]) << 8) | quint8(fileData[i + 3]);
-            if (boxSize >= 8 && static_cast<qint64>(boxSize) <= fileData.size() - i) {
-                qCDebug(GWENVIEW_LIB_LOG) << "Extracted motion photo video via ftyp scan at offset" << i << "from" << path;
-                return fileData.mid(i);
-            }
+    const QByteArray ftypMarker("ftyp");
+    qsizetype pos = minOffset + 4;
+    while ((pos = fileData.indexOf(ftypMarker, pos)) != -1) {
+        const qsizetype boxStart = pos - 4;
+        const quint32 boxSize = (quint8(fileData[boxStart]) << 24) | (quint8(fileData[boxStart + 1]) << 16) | (quint8(fileData[boxStart + 2]) << 8)
+            | quint8(fileData[boxStart + 3]);
+        if (boxSize >= 8 && static_cast<qint64>(boxSize) <= fileData.size() - boxStart) {
+            qCDebug(GWENVIEW_LIB_LOG) << "Extracted motion photo video via ftyp scan at offset" << boxStart << "from" << path;
+            return fileData.mid(boxStart);
         }
+        ++pos;
     }
 
     qCWarning(GWENVIEW_LIB_LOG) << "Could not extract embedded video from motion photo:" << path;
