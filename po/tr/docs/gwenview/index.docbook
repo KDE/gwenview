@@ -268,7 +268,7 @@
 >Göz At Kipi</title>
 
 <para
->Göz At kipindeyken dosyalarınız ve klasörleriniz arasında kolayca dolaşabilirsiniz. Önizleme penceresi, geçerli klasördeki ve alt klasörlerdeki görsellerin küçük hallerini gösterir. </para>
+>Göz At kipindeyken dosyalarınız ve klasörleriniz arasında kolayca dolaşabilirsiniz. Ön izleme penceresi, geçerli klasördeki ve alt klasörlerdeki görsellerin küçük hallerini gösterir. </para>
 
 <screenshot>
   <screeninfo
@@ -621,7 +621,7 @@
 >Kenar Çubuğu</title>
 
  <para
->Soldaki kenar çubuğu, Göz At ve Görüntüle kiplerinde kullanılabilir; ancak Göz At kipinde öntanımlı olarak görünmez. Görünüşü, <menuchoice
+>Soldaki kenar çubuğu, Göz At ve Görüntüle kiplerinde kullanılabilir; ancak Göz At kipinde varsayılan olarak görünmez. Görünüşü, <menuchoice
 > <shortcut
 > <keycap
 >F4</keycap
