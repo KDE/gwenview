@@ -236,6 +236,7 @@ void rename(const QUrl &oldUrl, QWidget *parent, ContextManager *contextManager)
             if (!job->error()) {
                 contextManager->setCurrentUrl(newUrl);
                 ThumbnailProvider::moveThumbnail(oldUrl, newUrl);
+                contextManager->slotSelectionChanged();
             }
         });
     });
