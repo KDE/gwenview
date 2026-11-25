@@ -82,7 +82,7 @@ struct VideoViewAdapterPrivate {
     {
         mPlayPauseAction = new QAction(q);
         mPlayPauseAction->setShortcut(Qt::Key_P);
-        QObject::connect(mPlayPauseAction, &QAction::triggered, q, &VideoViewAdapter::slotPlayPauseClicked);
+        QObject::connect(mPlayPauseAction, &QAction::triggered, q, &VideoViewAdapter::togglePlayback);
         QObject::connect(mMediaPlayer, &QMediaPlayer::playbackStateChanged, q, &VideoViewAdapter::updatePlayUi);
 
         mMuteAction = new QAction(q);
@@ -308,7 +308,7 @@ void VideoViewAdapter::setSourceDevice(QIODevice *device, const QUrl &url)
     QMetaObject::invokeMethod(this, &VideoViewAdapter::completed, Qt::QueuedConnection);
 }
 
-void VideoViewAdapter::slotPlayPauseClicked()
+void VideoViewAdapter::togglePlayback()
 {
     if (d->isPlaying()) {
         d->mMediaPlayer->pause();

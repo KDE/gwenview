@@ -176,6 +176,8 @@ public Q_SLOTS:
     bool isPlayingMotionPhoto() const;
     bool stopMotionPhoto();
     bool toggleMotionPhoto();
+    bool canTogglePlayback() const;
+    void togglePlayback();
 
 Q_SIGNALS:
     /**

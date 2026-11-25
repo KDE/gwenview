@@ -884,9 +884,12 @@ bool ViewMainPage::eventFilter(QObject *watched, QEvent *event)
                 }
             }
         }
-        if (key == Qt::Key_Space) {
+        if (key == Qt::Key_Space && watched != this && static_cast<QKeyEvent *>(event)->modifiers() == Qt::NoModifier) {
             DocumentView *view = d->currentView();
-            if (view && view->toggleMotionPhoto()) {
+            if (view && view->canTogglePlayback()) {
+                if (!static_cast<QKeyEvent *>(event)->isAutoRepeat()) {
+                    view->togglePlayback();
+                }
                 event->accept();
                 return true;
             }

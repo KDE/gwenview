@@ -55,6 +55,9 @@ public:
      */
     void setSourceDevice(QIODevice *device, const QUrl &url);
 
+public Q_SLOTS:
+    void togglePlayback();
+
 Q_SIGNALS:
     void videoFinished();
 
@@ -62,7 +65,6 @@ protected:
     bool eventFilter(QObject *, QEvent *) override;
 
 private Q_SLOTS:
-    void slotPlayPauseClicked();
     void updatePlayUi();
     void updateTimestamps();
     void slotMuteClicked();

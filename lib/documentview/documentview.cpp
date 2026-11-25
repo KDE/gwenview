@@ -103,6 +103,7 @@ struct DocumentViewPrivate {
     int mSortKey; // Used to sort views when displayed in compare mode
     HudWidget *mHud = nullptr;
     QSharedPointer<QBuffer> mMotionPhotoBuffer;
+    Document::Ptr mMotionPhotoDocument;
     bool mPlayingMotionPhoto = false;
     bool mMotionPhotoAvailable = false;
     BirdEyeView *mBirdEyeView = nullptr;
@@ -182,6 +183,16 @@ struct DocumentViewPrivate {
         }
         if (adapter->rasterImageView()) {
             QObject::connect(adapter->rasterImageView(), &RasterImageView::currentToolChanged, q, &DocumentView::currentToolChanged);
+        }
+    }
+
+    void resetMotionPhotoPlayback()
+    {
+        mMotionPhotoBuffer.reset();
+        mMotionPhotoDocument = nullptr;
+        if (mPlayingMotionPhoto) {
+            mPlayingMotionPhoto = false;
+            Q_EMIT q->motionPhotoPlayingChanged(false);
         }
     }
 
@@ -526,7 +537,7 @@ DocumentView::~DocumentView()
 void DocumentView::createAdapterForDocument()
 {
     const MimeTypeUtils::Kind documentKind = d->mDocument->kind();
-    if (d->mAdapter && documentKind == d->mAdapter->kind() && documentKind != MimeTypeUtils::KIND_UNKNOWN) {
+    if (d->mAdapter && documentKind == d->mAdapter->kind() && documentKind != MimeTypeUtils::KIND_UNKNOWN && !d->mPlayingMotionPhoto) {
         // Do not reuse for KIND_UNKNOWN: we may need to change the message
         LOG("Reusing current adapter");
         return;
@@ -601,11 +612,7 @@ void DocumentView::finishOpenUrl()
         return;
     }
     createAdapterForDocument();
-    if (d->mPlayingMotionPhoto) {
-        d->mPlayingMotionPhoto = false;
-        Q_EMIT motionPhotoPlayingChanged(false);
-    }
-    d->mMotionPhotoBuffer.reset();
+    d->resetMotionPhotoPlayback();
 
     connect(d->mDocument.data(), &Document::loadingFailed, this, &DocumentView::slotLoadingFailed);
     d->mAdapter->setDocument(d->mDocument);
@@ -670,6 +677,7 @@ void DocumentView::slotLoadingFailed()
     QString message = xi18n("Loading <filename>%1</filename> failed", d->mDocument->url().fileName());
     adapter->setErrorMessage(message, d->mDocument->errorString());
     d->setCurrentAdapter(adapter);
+    d->resetMotionPhotoPlayback();
     Q_EMIT completed();
 }
 
@@ -689,6 +697,7 @@ void DocumentView::slotPlayMotionPhoto()
         return;
     }
 
+    d->mMotionPhotoDocument = d->mDocument;
     d->mPlayingMotionPhoto = true;
     Q_EMIT motionPhotoPlayingChanged(true);
 
@@ -697,18 +706,28 @@ void DocumentView::slotPlayMotionPhoto()
     d->mMotionPhotoBuffer->open(QIODevice::ReadOnly);
 
     auto adapter = new VideoViewAdapter;
-    connect(adapter, &VideoViewAdapter::videoFinished, this, &DocumentView::slotStopMotionPhoto);
+    connect(
+        adapter,
+        &VideoViewAdapter::videoFinished,
+        this,
+        [this, guard = QPointer<VideoViewAdapter>(adapter)]() {
+            if (guard && guard == d->mAdapter.data()) {
+                slotStopMotionPhoto();
+            }
+        },
+        Qt::QueuedConnection);
     d->setCurrentAdapter(adapter);
     adapter->setSourceDevice(d->mMotionPhotoBuffer.data(), d->mDocument->url());
 }
 
 void DocumentView::slotStopMotionPhoto()
 {
-    d->mPlayingMotionPhoto = false;
-    Q_EMIT motionPhotoPlayingChanged(false);
+    if (d->mDocument != d->mMotionPhotoDocument) {
+        return;
+    }
 
     createAdapterForDocument();
-    d->mMotionPhotoBuffer.reset();
+    d->resetMotionPhotoPlayback();
     d->mAdapter->setDocument(d->mDocument);
 }
 
@@ -742,6 +761,20 @@ bool DocumentView::toggleMotionPhoto()
         return true;
     }
     return false;
+}
+
+bool DocumentView::canTogglePlayback() const
+{
+    return d->mMotionPhotoAvailable || qobject_cast<VideoViewAdapter *>(d->mAdapter.data());
+}
+
+void DocumentView::togglePlayback()
+{
+    if (auto adapter = qobject_cast<VideoViewAdapter *>(d->mAdapter.data())) {
+        adapter->togglePlayback();
+    } else if (d->mMotionPhotoAvailable) {
+        slotPlayMotionPhoto();
+    }
 }
 
 bool DocumentView::canZoom() const
