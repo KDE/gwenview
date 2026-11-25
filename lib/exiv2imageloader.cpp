@@ -73,6 +73,16 @@ Exiv2ImageLoader::Exiv2ImageLoader()
 {
     // This is a threadsafe way to ensure that we only register it once
     static Exiv2LogHandler handler;
+
+    static const bool namespacesRegistered = [] {
+        try {
+            Exiv2::XmpProperties::registerNs("http://ns.google.com/photos/1.0/camera/", "GCamera");
+        } catch (const Exiv2::Error &error) {
+            qCWarning(GWENVIEW_EXIV2_LOG) << "Failed to register XMP namespace:" << error.what();
+        }
+        return true;
+    }();
+    Q_UNUSED(namespacesRegistered)
 }
 
 Exiv2ImageLoader::~Exiv2ImageLoader()

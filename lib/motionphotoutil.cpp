@@ -21,67 +21,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Self
 #include "motionphotoutil.h"
 
-// Qt
-#include <QFile>
-#include <QString>
-
-// Exiv2
-#include <exiv2/exiv2.hpp>
-
 // Local
+#include "document/document.h"
 #include "gwenview_lib_debug.h"
+#include "imagemetainfomodel.h"
 
 namespace Gwenview
 {
 namespace MotionPhotoUtil
 {
 
-static void ensureNamespacesRegistered()
+bool isMotionPhoto(const Document &document)
 {
-    static bool registered = [] {
-        Exiv2::XmpParser::initialize();
-        Exiv2::XmpProperties::registerNs("http://ns.google.com/photos/1.0/camera/", "GCamera");
-        return true;
-    }();
-    (void)registered;
+    return document.metaInfo()->getValueForKey(QStringLiteral("Xmp.GCamera.MotionPhoto")) == QLatin1String("1");
 }
 
-bool isMotionPhoto(const QString &path)
+QByteArray extractVideo(const QByteArray &fileData)
 {
-    ensureNamespacesRegistered();
-
-    try {
-        QByteArray filePathBytes = QFile::encodeName(path);
-        auto image = Exiv2::ImageFactory::open(filePathBytes.constData());
-        if (!image.get() || !image->good()) {
-            return false;
-        }
-        image->readMetadata();
-
-        auto &xmpData = image->xmpData();
-
-        auto it = xmpData.findKey(Exiv2::XmpKey("Xmp.GCamera.MotionPhoto"));
-        if (it != xmpData.end() && it->toString() == "1") {
-            return true;
-        }
-    } catch (const Exiv2::Error &error) {
-        qCWarning(GWENVIEW_LIB_LOG) << "Exiv2 error reading motion photo metadata:" << QString::fromUtf8(error.what());
-    }
-
-    return false;
-}
-
-QByteArray extractVideo(const QString &path)
-{
-    ensureNamespacesRegistered();
-
-    QFile file(path);
-    if (!file.open(QIODevice::ReadOnly)) {
-        qCWarning(GWENVIEW_LIB_LOG) << "Failed to open motion photo file:" << path;
-        return {};
-    }
-    const QByteArray fileData = file.readAll();
-
     // Motion photos embed the MP4 after the JPEG data. The MP4 starts with a
     // ftyp box: [4 bytes big-endian size][4 bytes "ftyp"][...].
     // We scan forward from a safe offset past the JPEG header.
@@ -93,13 +49,13 @@ QByteArray extractVideo(const QString &path)
         const quint32 boxSize = (quint8(fileData[boxStart]) << 24) | (quint8(fileData[boxStart + 1]) << 16) | (quint8(fileData[boxStart + 2]) << 8)
             | quint8(fileData[boxStart + 3]);
         if (boxSize >= 8 && static_cast<qint64>(boxSize) <= fileData.size() - boxStart) {
-            qCDebug(GWENVIEW_LIB_LOG) << "Extracted motion photo video via ftyp scan at offset" << boxStart << "from" << path;
+            qCDebug(GWENVIEW_LIB_LOG) << "Extracted motion photo video via ftyp scan at offset" << boxStart;
             return fileData.mid(boxStart);
         }
         ++pos;
     }
 
-    qCWarning(GWENVIEW_LIB_LOG) << "Could not extract embedded video from motion photo:" << path;
+    qCWarning(GWENVIEW_LIB_LOG) << "Could not extract embedded video from motion photo";
     return {};
 }
 

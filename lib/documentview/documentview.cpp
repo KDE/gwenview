@@ -47,6 +47,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 
 // KF
 #include <KFileItem>
+#include <KIO/StoredTransferJob>
 #include <KLocalizedString>
 #include <KUrlMimeData>
 
@@ -102,6 +103,7 @@ struct DocumentViewPrivate {
     DocumentView *q = nullptr;
     int mSortKey; // Used to sort views when displayed in compare mode
     HudWidget *mHud = nullptr;
+    QPointer<KIO::StoredTransferJob> mMotionPhotoJob;
     QSharedPointer<QBuffer> mMotionPhotoBuffer;
     Document::Ptr mMotionPhotoDocument;
     bool mPlayingMotionPhoto = false;
@@ -186,8 +188,18 @@ struct DocumentViewPrivate {
         }
     }
 
+    void cancelMotionPhotoJob()
+    {
+        if (mMotionPhotoJob) {
+            mMotionPhotoJob->kill();
+            mMotionPhotoJob = nullptr;
+            hideLoadingIndicator();
+        }
+    }
+
     void resetMotionPhotoPlayback()
     {
+        cancelMotionPhotoJob();
         mMotionPhotoBuffer.reset();
         mMotionPhotoDocument = nullptr;
         if (mPlayingMotionPhoto) {
@@ -525,6 +537,9 @@ DocumentView::DocumentView(QGraphicsScene *scene)
 
 DocumentView::~DocumentView()
 {
+    if (d->mMotionPhotoJob) {
+        d->mMotionPhotoJob->kill();
+    }
     delete d->mTouch;
 #ifndef GWENVIEW_NO_WAYLAND_GESTURES
     delete d->mWaylandGestures;
@@ -575,6 +590,8 @@ void DocumentView::openUrl(const QUrl &url, const DocumentView::Setup &setup)
         }
         disconnect(d->mDocument.data(), nullptr, this, nullptr);
     }
+
+    d->cancelMotionPhotoJob();
 
     // because some loading will be going on right now, also display the indicator after a small delay
     // it will be hidden again in slotBusyChanged()
@@ -643,8 +660,7 @@ void DocumentView::slotCompleted()
 
     bool motionPhotoAvailable = false;
     if (d->mAdapter->kind() == MimeTypeUtils::KIND_RASTER_IMAGE && d->mDocument) {
-        const QString path = d->mDocument->url().toLocalFile();
-        motionPhotoAvailable = !path.isEmpty() && MotionPhotoUtil::isMotionPhoto(path);
+        motionPhotoAvailable = MotionPhotoUtil::isMotionPhoto(*d->mDocument);
     }
     if (motionPhotoAvailable != d->mMotionPhotoAvailable) {
         d->mMotionPhotoAvailable = motionPhotoAvailable;
@@ -683,15 +699,29 @@ void DocumentView::slotLoadingFailed()
 
 void DocumentView::slotPlayMotionPhoto()
 {
-    if (!d->mDocument) {
+    if (!d->mDocument || d->mMotionPhotoJob) {
         return;
     }
 
-    const QString path = d->mDocument->url().toLocalFile();
-    const QByteArray videoData = MotionPhotoUtil::extractVideo(path);
+    d->showLoadingIndicator();
+    d->mMotionPhotoJob = KIO::storedGet(d->mDocument->url(), KIO::NoReload, KIO::HideProgressInfo);
+    connect(d->mMotionPhotoJob.data(), &KJob::result, this, &DocumentView::slotMotionPhotoJobResult);
+}
+
+void DocumentView::slotMotionPhotoJobResult(KJob *job)
+{
+    d->mMotionPhotoJob = nullptr;
+    d->hideLoadingIndicator();
+
+    if (job->error()) {
+        qCWarning(GWENVIEW_LIB_LOG) << "Failed to read motion photo" << d->mDocument->url() << job->errorString();
+        return;
+    }
+
+    const QByteArray videoData = MotionPhotoUtil::extractVideo(static_cast<KIO::StoredTransferJob *>(job)->data());
 
     if (videoData.isEmpty()) {
-        qCWarning(GWENVIEW_LIB_LOG) << "Failed to extract motion photo video from" << path;
+        qCWarning(GWENVIEW_LIB_LOG) << "Failed to extract motion photo video from" << d->mDocument->url();
         d->mMotionPhotoAvailable = false;
         Q_EMIT motionPhotoAvailableChanged(false);
         return;

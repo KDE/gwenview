@@ -32,6 +32,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Local
 #include <lib/document/document.h>
 
+class KJob;
 class QBuffer;
 
 class QPropertyAnimation;
@@ -251,6 +252,7 @@ private Q_SLOTS:
     void slotCompleted();
     void slotLoadingFailed();
     void slotPlayMotionPhoto();
+    void slotMotionPhotoJobResult(KJob *job);
     void slotStopMotionPhoto();
 
     void zoomContinuous(int delta, QPointF center = QPointF(-1, -1));

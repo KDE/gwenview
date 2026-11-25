@@ -26,24 +26,24 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Cambridge, MA 02110-1301, USA
 // Qt
 #include <QByteArray>
 
-class QString;
-
 namespace Gwenview
 {
+class Document;
+
 namespace MotionPhotoUtil
 {
 
 /**
- * Returns true if the file at @p path is a Google Pixel motion photo,
- * detected via XMP GCamera metadata.
+ * Returns true if @p document is a Google Pixel motion photo, detected via
+ * XMP GCamera metadata.
  */
-GWENVIEWLIB_EXPORT bool isMotionPhoto(const QString &path);
+GWENVIEWLIB_EXPORT bool isMotionPhoto(const Document &document);
 
 /**
- * Extracts the embedded MP4 video from a motion photo at @p path.
+ * Extracts the embedded MP4 video from @p fileData.
  * Returns an empty QByteArray if extraction fails.
  */
-GWENVIEWLIB_EXPORT QByteArray extractVideo(const QString &path);
+GWENVIEWLIB_EXPORT QByteArray extractVideo(const QByteArray &fileData);
 
 } // namespace MotionPhotoUtil
 } // namespace Gwenview

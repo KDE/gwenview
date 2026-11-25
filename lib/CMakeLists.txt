@@ -246,7 +246,6 @@ endif()
 
 kde_source_files_enable_exceptions(
     exiv2imageloader.cpp
-    motionphotoutil.cpp
     imagemetainfomodel.cpp
     timeutils.cpp
     cms/cmsprofile.cpp
