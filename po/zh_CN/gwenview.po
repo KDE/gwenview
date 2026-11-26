@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf6-trunk/messages/gwenview/gwenview.pot\n"
-"X-Crowdin-File-ID: 49334\n"
+"X-Crowdin-File: /kf6-stable/messages/gwenview/gwenview.pot\n"
+"X-Crowdin-File-ID: 52492\n"
 
 #, kde-format
 msgctxt "NAME OF TRANSLATORS"
@@ -2085,10 +2085,9 @@ msgid "Listing content of:"
 msgstr "正在列出内容："
 
 #: lib/about.cpp:38
-#, fuzzy, kde-format
-#| msgid "Copyright 2000-2022 Gwenview authors"
+#, kde-format
 msgid "Copyright 2000–%1 Gwenview authors"
-msgstr "Copyright 2000-2022 Gwenview authors"
+msgstr "Copyright 2000–%1 Gwenview authors"
 
 #: lib/about.cpp:40
 #, kde-format
