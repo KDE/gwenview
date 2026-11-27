@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: KDE Frameworks 5 Applications\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2026-11-15 01:03+0000\n"
+"POT-Creation-Date: 2026-11-27 01:01+0000\n"
 "PO-Revision-Date: 2024-10-03 20:40+0700\n"
 "Last-Translator: Wantoyèk <wantoyek@gmail.com>\n"
 "Language-Team: https://t.me/Localizations_KDE_Indonesia\n"
@@ -140,7 +140,7 @@ msgctxt "@action:inmenu a spacer that aligns toolbar buttons with the sidebar"
 msgid "Sidebar Alignment Spacer"
 msgstr "Pemisah Kesejajaran Sidebar"
 
-#: app/browsemainpage.cpp:151 app/mainwindow.cpp:375 app/viewmainpage.cpp:410
+#: app/browsemainpage.cpp:151 app/mainwindow.cpp:375 app/viewmainpage.cpp:445
 #: lib/documentview/documentviewcontroller.cpp:56
 #, kde-format
 msgctxt "@title actions category - means actions changing smth in interface"
@@ -654,7 +654,7 @@ msgctxt "@info:tooltip"
 msgid "Configure full screen mode"
 msgstr "Konfigurasikan mode layar penuh"
 
-#: app/fullscreencontent.cpp:551 app/viewmainpage.cpp:389
+#: app/fullscreencontent.cpp:551 app/viewmainpage.cpp:424
 #, kde-format
 msgctxt "@info:status %1 current document index, %2 total documents"
 msgid "%1 of %2"
@@ -1698,18 +1698,32 @@ msgstr ""
 "Penelusuran berdasarkan tanda tidak tersedia. Pastikan Nepomuk terinstal "
 "dengan benar di komputermu."
 
-#: app/viewmainpage.cpp:148 app/viewmainpage.cpp:432
+#: app/viewmainpage.cpp:150 app/viewmainpage.cpp:472
 #, kde-format
 msgid "Synchronize"
 msgstr "Sinkronisasi"
 
-#: app/viewmainpage.cpp:413
+#: app/viewmainpage.cpp:176 app/viewmainpage.cpp:363
+#, kde-format
+msgctxt "@action:button"
+msgid "Play Motion Photo"
+msgstr ""
+
+#: app/viewmainpage.cpp:359
+#, fuzzy, kde-format
+#| msgctxt "@title:window"
+#| msgid "Save Image"
+msgctxt "@action:button"
+msgid "Back to Image"
+msgstr "Simpan Citra"
+
+#: app/viewmainpage.cpp:448
 #, kde-format
 msgid "Show Thumbnails"
 msgstr "Tampilkan Thumbnail"
 
 #. i18n: For languages that are read right to left, "right side" refers to the left side in this context.
-#: app/viewmainpage.cpp:416
+#: app/viewmainpage.cpp:451
 #, kde-kuit-format
 msgctxt "@info:whatsthis"
 msgid ""
@@ -1727,19 +1741,19 @@ msgstr ""
 "kanan layar dan berisi beberapa baris citra; <link url='%1'>konfigurasi opsi "
 "ini di pengaturan</link>.</para >\""
 
-#: app/viewmainpage.cpp:563
+#: app/viewmainpage.cpp:603
 #, kde-format
 msgctxt "@item:inmenu"
 msgid "Background Color Mode"
 msgstr "Mode Warna Latar Belakang"
 
-#: app/viewmainpage.cpp:755
+#: app/viewmainpage.cpp:795
 #, kde-format
 msgctxt "@action:button"
 msgid "Discard Changes and Reload"
 msgstr "Abaikan Perubahan dan Muat Ulang"
 
-#: app/viewmainpage.cpp:757
+#: app/viewmainpage.cpp:797
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2269,7 +2283,7 @@ msgctxt "@info"
 msgid "Gwenview cannot save this kind of documents."
 msgstr "Gwenview tidak dapat menyimpan dokumen jenis ini."
 
-#: lib/document/loadingdocumentimpl.cpp:139
+#: lib/document/loadingdocumentimpl.cpp:140
 #, kde-format
 msgctxt "@info"
 msgid ""
@@ -2277,19 +2291,19 @@ msgid ""
 "package to gain support for a wider range of media types."
 msgstr ""
 
-#: lib/document/loadingdocumentimpl.cpp:404
+#: lib/document/loadingdocumentimpl.cpp:405
 #, kde-format
 msgctxt "@info"
 msgid "Could not open file %1"
 msgstr "Tidak dapat membuka file %1"
 
-#: lib/document/loadingdocumentimpl.cpp:495
+#: lib/document/loadingdocumentimpl.cpp:496
 #, kde-format
 msgctxt "@info"
 msgid "Loading meta information failed."
 msgstr "Pemuatan informasi meta gagal."
 
-#: lib/document/loadingdocumentimpl.cpp:521
+#: lib/document/loadingdocumentimpl.cpp:522
 #, kde-format
 msgctxt "@info"
 msgid "Loading image failed."
@@ -2320,19 +2334,19 @@ msgstr ""
 "Tidak dapat menimpa file, periksa bahwa anda memiliki hak yang diperlukan "
 "dalam <filename>%1</filename>."
 
-#: lib/documentview/documentview.cpp:212
+#: lib/documentview/documentview.cpp:241
 #, kde-format
 msgctxt "@info:tooltip"
 msgid "Trash"
 msgstr "Tong Sampah"
 
-#: lib/documentview/documentview.cpp:213
+#: lib/documentview/documentview.cpp:242
 #, kde-format
 msgctxt "@action:button"
 msgid "Deselect"
 msgstr "Batalkan pilihan"
 
-#: lib/documentview/documentview.cpp:258 lib/imagemetainfomodel.cpp:440
+#: lib/documentview/documentview.cpp:287 lib/imagemetainfomodel.cpp:440
 #: lib/thumbnailview/previewitemdelegate.cpp:416
 #: lib/thumbnailview/previewitemdelegate.cpp:838
 #, kde-format
@@ -2340,7 +2354,7 @@ msgctxt "@item:intable %1 is image width, %2 is image height"
 msgid "%1x%2"
 msgstr "%1x%2"
 
-#: lib/documentview/documentview.cpp:263 lib/zoomcombobox/zoomcombobox.cpp:317
+#: lib/documentview/documentview.cpp:292 lib/zoomcombobox/zoomcombobox.cpp:317
 #, fuzzy, kde-format
 #| msgctxt "@info:tooltip of custom toolbar button"
 #| msgid "%1"
@@ -2348,12 +2362,12 @@ msgctxt "Percent value"
 msgid "%1%"
 msgstr "%1"
 
-#: lib/documentview/documentview.cpp:542
+#: lib/documentview/documentview.cpp:574
 #, kde-format
 msgid "Gwenview does not know how to display this kind of document"
 msgstr "Gwenview tidak tahu bagaimana menampilkan dokumen jenis ini"
 
-#: lib/documentview/documentview.cpp:648
+#: lib/documentview/documentview.cpp:693
 #, kde-kuit-format
 msgid "Loading <filename>%1</filename> failed"
 msgstr "Pemuatan <filename>%1</filename> gagal"
@@ -2476,6 +2490,20 @@ msgstr "Mode Gelap"
 #, kde-format
 msgid "No document selected"
 msgstr "Tidak ada dokumen terpilih"
+
+#: lib/documentview/videoviewadapter.cpp:415
+#, fuzzy, kde-format
+#| msgid "Loop"
+msgctxt "@info:tooltip"
+msgid "Loop: On"
+msgstr "Putaran"
+
+#: lib/documentview/videoviewadapter.cpp:415
+#, fuzzy, kde-format
+#| msgid "Loop"
+msgctxt "@info:tooltip"
+msgid "Loop: Off"
+msgstr "Putaran"
 
 #: lib/fullscreenbar.cpp:269 lib/statusbartoolbutton.cpp:144
 #, kde-format
@@ -2735,7 +2763,7 @@ msgctxt "@info"
 msgid "No data to store."
 msgstr "Tidak ada data untuk disimpan."
 
-#: lib/print/printhelper.cpp:123
+#: lib/print/printhelper.cpp:145
 #, kde-format
 msgid "Print Image"
 msgstr "Cetak Citra"
