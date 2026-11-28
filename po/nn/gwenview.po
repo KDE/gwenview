@@ -1698,12 +1698,10 @@ msgid "Play Motion Photo"
 msgstr ""
 
 #: app/viewmainpage.cpp:359
-#, fuzzy, kde-format
-#| msgctxt "@title:window"
-#| msgid "Save Image"
+#, kde-format
 msgctxt "@action:button"
 msgid "Back to Image"
-msgstr "Lagra bilete"
+msgstr ""
 
 #: app/viewmainpage.cpp:448
 #, kde-format
@@ -2463,18 +2461,16 @@ msgid "No document selected"
 msgstr "Ingen dokument er merkte"
 
 #: lib/documentview/videoviewadapter.cpp:415
-#, fuzzy, kde-format
-#| msgid "Loop"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Loop: On"
-msgstr "Repeter"
+msgstr ""
 
 #: lib/documentview/videoviewadapter.cpp:415
-#, fuzzy, kde-format
-#| msgid "Loop"
+#, kde-format
 msgctxt "@info:tooltip"
 msgid "Loop: Off"
-msgstr "Repeter"
+msgstr ""
 
 #: lib/fullscreenbar.cpp:269 lib/statusbartoolbutton.cpp:144
 #, kde-format
